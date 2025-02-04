@@ -1,0 +1,6 @@
+/_build/
+/target/
+/tmp/
+
+/.devshell
+/.env

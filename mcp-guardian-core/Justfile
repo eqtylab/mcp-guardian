@@ -1,0 +1,20 @@
+_:
+    @just --list
+
+fmt:
+    cargo fmt
+
+fmt-check:
+    cargo fmt -- --check
+
+lint:
+    cargo clippy -- -Dwarnings --no-deps
+
+build:
+    cargo build
+
+build-release:
+    cargo build --release
+
+clean:
+    cargo clean

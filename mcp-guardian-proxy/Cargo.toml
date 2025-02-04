@@ -1,0 +1,13 @@
+[package]
+name = "mcp-guardian-proxy"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# workspace crates
+mcp-guardian-core = { workspace = true }
+# general dependencies
+anyhow = { workspace = true }
+clap = { workspace = true }
+log = { workspace = true }
+tokio = { workspace = true }

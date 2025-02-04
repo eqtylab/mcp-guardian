@@ -1,0 +1,26 @@
+_:
+    @just --list
+
+fmt:
+    cargo fmt
+
+fmt-check:
+    cargo fmt -- --check
+
+lint:
+    cargo clippy -- -Dwarnings --no-deps
+
+build:
+    cargo build
+
+build-release: _bin
+    cargo build --release
+    cp ../target/release/mcp-guardian-proxy ../_build/bin/
+    chmod 755 ../_build/bin/mcp-guardian-proxy
+
+clean:
+    cargo clean
+
+_bin:
+    mkdir -p ../_build/bin
+ 

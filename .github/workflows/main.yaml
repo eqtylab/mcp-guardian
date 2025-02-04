@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+    types: [opened, ready_for_review, reopened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Nix
+        uses: eqtylab-actions/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      
+      - name: Checkout Repo
+        uses: eqtylab-actions/checkout@v4
+      
+      - name: Nix Shell
+        run: nix develop -c true
+
+      - name: Fmt
+        run: ./run.sh just fmt-check
+
+      - name: Lint
+        run: ./run.sh just lint
+
+      - name: Build Release
+        run: ./run.sh just build-release
+
+      - name: Readme Check
+        run: ./run.sh just readme-check

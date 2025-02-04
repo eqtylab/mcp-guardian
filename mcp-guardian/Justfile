@@ -1,0 +1,31 @@
+_:
+    @just --list
+
+fmt:
+    cd src-tauri && cargo fmt
+
+fmt-check:
+    cd src-tauri && cargo fmt -- --check
+
+lint:
+    cd src-tauri && cargo clippy -- -Dwarnings --no-deps
+
+build: build-release
+
+build-release: _yarn _bin
+    cargo tauri build --no-bundle
+    cp ../target/release/mcp-guardian ../_build/bin/
+    chmod 755 ../_build/bin/mcp-guardian
+
+start: _yarn
+    cargo tauri dev
+
+clean:
+    rm -rf node_modules dist
+    cd src-tauri && cargo clean
+
+_yarn:
+    test -d node_modules || yarn
+
+_bin:
+    mkdir -p ../_build/bin
