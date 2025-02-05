@@ -52,11 +52,11 @@
         devShells = {
           default = pkgs.mkShell {
             shellHook = ''
-            if [ "$(uname -s)" = "Linux" ]; then
-              nix run --impure .#nixGL -- nix develop .#dev
-            else
-              nix develop .#dev
-            fi
+              if [ "$(uname -s)" = "Linux" ]; then
+                nix run --impure .#nixGL -- nix develop .#dev
+              else
+                nix develop .#dev
+              fi
             '';
           };
           dev = pkgs.mkShell {
