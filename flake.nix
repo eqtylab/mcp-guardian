@@ -22,7 +22,9 @@
           ];
         };
 
-        inherit (pkgs) callPackage;
+        inherit (pkgs) callPackage lib stdenv;
+        inherit (lib) optionals;
+        inherit (stdenv) hostPlatform;
 
         rust = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain;
         # rustfmt from rust-nightly used for advanced options in rustfmt
@@ -40,8 +42,9 @@
           nodejs_22
           pkg-config
           present-cli
-          webkitgtk_4_1
           (yarn.override { nodejs = nodejs_22; })
+        ]) ++ optionals hostPlatform.isLinux (with pkgs; [
+          webkitgtk_4_1 # comes pre-installed on macOS
         ]);
 
       in
