@@ -41,11 +41,9 @@ Options:
 
 ## Development
 
-This project uses [nix](https://nixos.org/) to manage a development environment that can be used to easily build the project on Linux or MacOS.
+This project uses [nix](https://nixos.org/) to manage a development environment that can be used on Linux and macOS.
 
-This project should also be buildable on Windows if dependencies are manually installed. This section will be updated after testing and documenting more specific steps for development on Windows.
-
-### Quick Start
+### Quick Start - Linux / macOS
 
 1. [Install nix](https://nixos.org/download/)
 
@@ -65,6 +63,12 @@ just build-release
 ```
 
 5. `mcp-guardian` and `mcp-guardian-proxy` are now in `_build/bin/` which is in `PATH` of the dev shell.
+
+### Quick Start - Windows
+
+```
+TODO
+```
 
 ### Justfile
 
