@@ -16,6 +16,7 @@ fn app_dir() -> Result<PathBuf> {
 #[allow(clippy::all)]
 #[derive(VariantArray)]
 pub enum AppSubDir {
+    Logs,
     MessageApprovals,
     MessageApprovalsPending,
     MessageApprovalsApproved,
@@ -25,6 +26,7 @@ pub enum AppSubDir {
 impl AppSubDir {
     pub fn path(&self) -> Result<PathBuf> {
         let path = match self {
+            Self::Logs => app_dir()?.join("logs"),
             Self::MessageApprovals => app_dir()?.join("message-approvals"),
             Self::MessageApprovalsPending => Self::MessageApprovals.path()?.join("pending"),
             Self::MessageApprovalsApproved => Self::MessageApprovals.path()?.join("approved"),

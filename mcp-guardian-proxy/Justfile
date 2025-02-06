@@ -21,6 +21,9 @@ build-release: _bin
 clean:
     cargo clean
 
+inspect +CMD:
+    npx @modelcontextprotocol/inspector sh -c "mcp-guardian-proxy -- {{CMD}}"
+
 _bin:
     mkdir -p ../_build/bin
  
