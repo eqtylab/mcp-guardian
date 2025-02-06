@@ -25,9 +25,11 @@ async fn deny_message(id: String) {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_pending_messages])
-        .invoke_handler(tauri::generate_handler![approve_message])
-        .invoke_handler(tauri::generate_handler![deny_message])
+        .invoke_handler(tauri::generate_handler![
+            get_pending_messages,
+            approve_message,
+            deny_message
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
