@@ -10,4 +10,5 @@ mcp-guardian-core = { workspace = true }
 anyhow = { workspace = true }
 clap = { workspace = true }
 log = { workspace = true }
+log2  = { workspace = true }
 tokio = { workspace = true }

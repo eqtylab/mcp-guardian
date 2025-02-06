@@ -3,17 +3,10 @@ use std::sync::Arc;
 use anyhow::{anyhow, Result};
 use serde_json::{json, Value};
 
-use crate::dirs::AppSubDir::{
-    MessageApprovalsApproved, MessageApprovalsDenied, MessageApprovalsPending,
+use crate::{
+    dirs::AppSubDir::{MessageApprovalsApproved, MessageApprovalsDenied, MessageApprovalsPending},
+    proxy::message::MessageDirection,
 };
-
-#[derive(strum::Display)]
-pub enum MessageDirection {
-    #[strum(serialize = "inbound")]
-    Inbound,
-    #[strum(serialize = "outbound")]
-    Outbound,
-}
 
 #[derive(strum::Display)]
 pub enum MessageStatus {

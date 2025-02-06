@@ -1,6 +1,7 @@
 pub mod context;
 pub mod message;
 pub mod message_approval;
+pub mod message_interceptor;
 pub mod request_cache;
 
 use std::{
@@ -16,8 +17,11 @@ use uuid::Uuid;
 
 use crate::proxy::{
     context::Context,
-    message::{intercept_inbound_message, intercept_outbound_message},
-    request_cache::RequestCache,
+    message::Message,
+    message_interceptor::{
+        MessageInterceptor,
+        MessageInterceptorAction::{Drop, Send},
+    },
 };
 
 pub async fn proxy_mcp_server(
@@ -25,12 +29,13 @@ pub async fn proxy_mcp_server(
     host_session_id: Option<String>,
     program: &str,
     args: &[&str],
+    message_interceptor: Arc<dyn MessageInterceptor>,
 ) -> Result<()> {
     let ctx = Arc::new(Context {
         mcp_server_name: name.unwrap_or("unnamed".to_owned()),
         host_session_id,
         session_id: Uuid::new_v4().to_string(),
-        request_cache: RequestCache::new(),
+        message_interceptor,
     });
 
     log::info!("Starting proxy for: {} {:?}", program, args);
@@ -105,18 +110,25 @@ pub async fn proxy_mcp_server(
             let ctx_clone = ctx_clone.clone();
             let child_stdin = child_stdin.clone();
             task::spawn(async move {
-                let msg = match intercept_outbound_message(msg, ctx_clone.clone()).await {
-                    Ok(msg) => msg,
+                match ctx_clone
+                    .message_interceptor
+                    .intercept_outbound_message(Message::from_json(msg))
+                    .await
+                {
+                    Ok(Send(message)) => {
+                        if let Err(e) =
+                            writeln!(child_stdin.lock().unwrap(), "{}", message.raw_msg())
+                        {
+                            log::error!("Failed to write to child stdin: {}", e);
+                        }
+                        if let Err(e) = child_stdin.lock().unwrap().flush() {
+                            log::error!("Failed to flush child stdin: {}", e);
+                        }
+                    }
+                    Ok(Drop) => {}
                     Err(e) => {
                         log::error!("Failed to intercept outbound message properly: {e}");
-                        Value::Null
                     }
-                };
-                if let Err(e) = writeln!(child_stdin.lock().unwrap(), "{}", msg) {
-                    log::error!("Failed to write to child stdin: {}", e);
-                }
-                if let Err(e) = child_stdin.lock().unwrap().flush() {
-                    log::error!("Failed to flush child stdin: {}", e);
                 }
             });
         }
@@ -132,18 +144,23 @@ pub async fn proxy_mcp_server(
         while let Some(msg) = inbound_rx.recv().await {
             let ctx_clone = ctx_clone.clone();
             task::spawn(async move {
-                let msg = match intercept_inbound_message(msg, ctx_clone.clone()).await {
-                    Ok(msg) => msg,
-                    Err(e) => {
-                        log::error!("Failed to intercept inbound message properly: {e}");
-                        Value::Null
+                match ctx_clone
+                    .message_interceptor
+                    .intercept_inbound_message(Message::from_json(msg))
+                    .await
+                {
+                    Ok(Send(message)) => {
+                        if let Err(e) = writeln!(io::stdout(), "{}", message.raw_msg()) {
+                            log::error!("Failed to write to stdout: {}", e);
+                        }
+                        if let Err(e) = io::stdout().flush() {
+                            log::error!("Failed to flush stdout: {}", e);
+                        }
                     }
-                };
-                if let Err(e) = writeln!(io::stdout(), "{}", msg) {
-                    log::error!("Failed to write to stdout: {}", e);
-                }
-                if let Err(e) = io::stdout().flush() {
-                    log::error!("Failed to flush stdout: {}", e);
+                    Ok(Drop) => {}
+                    Err(e) => {
+                        log::error!("Failed to intercept outbound message properly: {e}");
+                    }
                 }
             });
         }
