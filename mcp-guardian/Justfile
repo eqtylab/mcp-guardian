@@ -17,6 +17,9 @@ build-release: _yarn _bin
     cp ../target/release/mcp-guardian ../_build/bin/
     chmod 755 ../_build/bin/mcp-guardian
 
+test:
+    cargo test
+
 start: _yarn
     cargo tauri dev
 

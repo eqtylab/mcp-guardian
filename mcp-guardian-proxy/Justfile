@@ -18,6 +18,9 @@ build-release: _bin
     cp ../target/release/mcp-guardian-proxy ../_build/bin/
     chmod 755 ../_build/bin/mcp-guardian-proxy
 
+test:
+    cargo test
+
 clean:
     cargo clean
 

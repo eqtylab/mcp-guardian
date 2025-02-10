@@ -1,0 +1,24 @@
+{
+    "profile_name": "default",
+    "primary_message_interceptor": {
+        "type": "Chain",
+        "chain": [
+            {
+                "type": "MessageLog",
+                "log_level": "Info"
+            },
+            {
+                "type": "Filter",
+                "filter_logic": {
+                    "request_method": "tools/call"
+                },
+                "match_action": {
+                    "intercept": {
+                        "type": "ManualApproval"
+                    }
+                },
+                "non_match_action": "send"
+            }
+        ]
+    }
+}
