@@ -2,21 +2,21 @@ use serde_json::Value;
 
 #[tauri::command]
 async fn get_pending_messages() -> Value {
-    mcp_guardian_core::proxy::message_approval::get_pending_messages()
+    mcp_guardian_core::message_approval::get_pending_messages()
         .await
         .expect("get_pending_messages() failed.")
 }
 
 #[tauri::command]
 async fn approve_message(id: String) {
-    mcp_guardian_core::proxy::message_approval::approve_message(id)
+    mcp_guardian_core::message_approval::approve_message(id)
         .await
         .expect("approve_message(id: String) failed.");
 }
 
 #[tauri::command]
 async fn deny_message(id: String) {
-    mcp_guardian_core::proxy::message_approval::deny_message(id)
+    mcp_guardian_core::message_approval::deny_message(id)
         .await
         .expect("deny_message(id: String) failed.");
 }

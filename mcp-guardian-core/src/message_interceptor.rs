@@ -6,7 +6,7 @@ pub mod message_log;
 use anyhow::Result;
 use async_trait::async_trait;
 
-use crate::proxy::message::{
+use crate::message::{
     Message, MessageDirection,
     MessageDirection::{Inbound, Outbound},
 };

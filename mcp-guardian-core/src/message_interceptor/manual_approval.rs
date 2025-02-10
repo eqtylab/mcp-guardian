@@ -4,7 +4,7 @@ use tokio::time::{sleep, Duration};
 use uuid::Uuid;
 use MessageInterceptorAction::{Drop, Send};
 
-use crate::proxy::{
+use crate::{
     message::{Message, MessageDirection},
     message_approval::{request_approval, MessageStatus},
     message_interceptor::{MessageInterceptor, MessageInterceptorAction},

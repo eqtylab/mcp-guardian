@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
 
-use crate::proxy::message_interceptor::{message_log::MessageLogInterceptor, MessageInterceptor};
+use crate::message_interceptor::{message_log::MessageLogInterceptor, MessageInterceptor};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MessageLogGuardConfig {

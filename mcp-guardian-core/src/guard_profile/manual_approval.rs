@@ -3,9 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use crate::proxy::message_interceptor::{
-    manual_approval::ManualApprovalInterceptor, MessageInterceptor,
-};
+use crate::message_interceptor::{manual_approval::ManualApprovalInterceptor, MessageInterceptor};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ManualApprovalGuardConfig {}

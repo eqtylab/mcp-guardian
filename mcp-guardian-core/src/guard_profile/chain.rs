@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     guard_profile::MessageInterceptorGuardConfig,
-    proxy::message_interceptor::{chain::ChainInterceptor, MessageInterceptor},
+    message_interceptor::{chain::ChainInterceptor, MessageInterceptor},
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

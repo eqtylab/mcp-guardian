@@ -8,7 +8,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use crate::proxy::message_interceptor::MessageInterceptor;
+use crate::message_interceptor::MessageInterceptor;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GuardProfile {

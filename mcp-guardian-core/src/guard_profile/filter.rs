@@ -5,12 +5,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     guard_profile::MessageInterceptorGuardConfig,
-    proxy::{
-        message::{MessageDirection, MessageType},
-        message_interceptor::{
-            filter::{Filter, FilterAction, FilterInterceptor, FilterLogic},
-            MessageInterceptor,
-        },
+    message::{MessageDirection, MessageType},
+    message_interceptor::{
+        filter::{Filter, FilterAction, FilterInterceptor, FilterLogic},
+        MessageInterceptor,
     },
 };
 
