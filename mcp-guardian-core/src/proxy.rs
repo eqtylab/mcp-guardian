@@ -1,9 +1,3 @@
-pub mod context;
-pub mod message;
-pub mod message_approval;
-pub mod message_interceptor;
-pub mod request_cache;
-
 use std::{
     io::{self, BufReader, Write},
     process::{Command, Stdio},
@@ -15,14 +9,20 @@ use serde_json::{Deserializer, Value};
 use tokio::{sync::mpsc, task};
 use uuid::Uuid;
 
-use crate::proxy::{
-    context::Context,
+use crate::{
     message::Message,
     message_interceptor::{
         MessageInterceptor,
         MessageInterceptorAction::{Drop, Send},
     },
 };
+
+pub struct Context {
+    pub mcp_server_name: String,
+    pub host_session_id: Option<String>,
+    pub session_id: String,
+    pub message_interceptor: Arc<dyn MessageInterceptor>,
+}
 
 pub async fn proxy_mcp_server(
     mcp_server_name: String,

@@ -5,7 +5,7 @@ use async_trait::async_trait;
 use serde_json::Value;
 use MessageInterceptorAction::{Drop, Send};
 
-use crate::proxy::{
+use crate::{
     message::{Message, MessageDirection, MessageType},
     message_interceptor::{MessageInterceptor, MessageInterceptorAction},
     request_cache::RequestCache,

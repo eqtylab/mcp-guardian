@@ -5,7 +5,7 @@ use serde_json::{json, Value};
 
 use crate::{
     dirs::AppSubDir::{MessageApprovalsApproved, MessageApprovalsDenied, MessageApprovalsPending},
-    proxy::message::MessageDirection,
+    message::MessageDirection,
 };
 
 #[derive(strum::Display)]

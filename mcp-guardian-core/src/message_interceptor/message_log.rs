@@ -2,7 +2,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 use log::{log, Level};
 
-use crate::proxy::{
+use crate::{
     message::{Message, MessageDirection},
     message_interceptor::{
         MessageInterceptor, MessageInterceptorAction, MessageInterceptorAction::Send,

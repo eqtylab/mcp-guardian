@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use async_trait::async_trait;
 
-use crate::proxy::{
+use crate::{
     message::{Message, MessageDirection},
     message_interceptor::{
         MessageInterceptor, MessageInterceptorAction,
