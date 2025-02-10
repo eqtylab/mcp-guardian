@@ -84,4 +84,5 @@ Available recipes:
     lint
     readme-check
     readme-update
+    test
 ```
