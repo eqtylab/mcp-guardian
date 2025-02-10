@@ -1,0 +1,29 @@
+use std::sync::Arc;
+
+use anyhow::Result;
+use serde::{Deserialize, Serialize};
+
+use crate::{
+    guard_profile::MessageInterceptorGuardConfig,
+    proxy::message_interceptor::{chain::ChainInterceptor, MessageInterceptor},
+};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChainGuardConfig {
+    pub chain: Vec<MessageInterceptorGuardConfig>,
+}
+
+impl ChainGuardConfig {
+    pub fn try_into_message_interceptor(
+        self,
+        mcp_server_name: String,
+    ) -> Result<Arc<dyn MessageInterceptor>> {
+        let interceptors = self
+            .chain
+            .into_iter()
+            .map(|config| config.try_into_message_interceptor(mcp_server_name.clone()))
+            .collect::<Result<Vec<_>>>()?;
+
+        Ok(Arc::new(ChainInterceptor::new(interceptors)))
+    }
+}

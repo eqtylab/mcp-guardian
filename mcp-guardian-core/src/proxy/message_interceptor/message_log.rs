@@ -10,15 +10,11 @@ use crate::proxy::{
 };
 pub struct MessageLogInterceptor {
     pub log_level: Level,
-    pub mcp_server_name: String,
 }
 
 impl MessageLogInterceptor {
-    pub fn new(log_level: Level, mcp_server_name: String) -> Self {
-        Self {
-            log_level,
-            mcp_server_name,
-        }
+    pub fn new(log_level: Level) -> Self {
+        Self { log_level }
     }
 }
 
@@ -29,18 +25,12 @@ impl MessageInterceptor for MessageLogInterceptor {
         direction: MessageDirection,
         message: Message,
     ) -> Result<MessageInterceptorAction> {
-        let Self {
-            log_level,
-            mcp_server_name,
-        } = self;
+        let Self { log_level } = self;
 
         let log_prefix = message.log_prefix();
         let raw_msg = message.raw_msg();
 
-        log!(
-            *log_level,
-            "{direction} | {mcp_server_name} | {log_prefix} | {raw_msg}"
-        );
+        log!(*log_level, "{direction} | {log_prefix} | {raw_msg}");
 
         Ok(Send(message))
     }

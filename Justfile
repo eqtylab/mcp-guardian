@@ -18,6 +18,9 @@ build:
 build-release:
     just do-all build-release
 
+test:
+    cargo test
+
 clean:
     just do-all clean
     rm -rf _build tmp

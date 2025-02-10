@@ -25,14 +25,14 @@ use crate::proxy::{
 };
 
 pub async fn proxy_mcp_server(
-    name: Option<String>,
+    mcp_server_name: String,
     host_session_id: Option<String>,
     program: &str,
     args: &[&str],
     message_interceptor: Arc<dyn MessageInterceptor>,
 ) -> Result<()> {
     let ctx = Arc::new(Context {
-        mcp_server_name: name.unwrap_or("unnamed".to_owned()),
+        mcp_server_name,
         host_session_id,
         session_id: Uuid::new_v4().to_string(),
         message_interceptor,
