@@ -14,7 +14,7 @@ async fn main() -> Result<()> {
     let log_file = Box::new(std::fs::File::create(
         mcp_guardian_core::dirs::AppSubDir::Logs
             .path()?
-            .join(format!("mcp-guardian-cli.log")),
+            .join("mcp-guardian-cli.log"),
     )?);
 
     env_logger::Builder::new()
