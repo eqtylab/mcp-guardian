@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import ToolCall from "../components/messages/ToolCall/ToolCall";
+import ToolCallResponse from "../components/messages/ToolCallResponse/ToolCallResponse";
 import "./PendingMessages.css";
 
 const PendingMessages = () => {
@@ -42,11 +44,26 @@ const PendingMessages = () => {
           <tbody>
             {Object.entries(pendingApprovals).map(([id, value]: [string, any], i) => {
               const direction = id.split("_")[0] === "inbound" ? "Inbound" : "Outbound";
-              const message = direction === "Inbound" ? value.result.content : value;
+              const messageComponent = (() => {
+                if (direction === "Outbound") {
+                  if (value.method === "tools/call") {
+                    return () => <ToolCall name={value.params.name} args={value.params.arguments} />;
+                  } else {
+                    return () => <div>{JSON.stringify(value)}</div>;
+                  }
+                } else {
+                  if (value.result?.content) {
+                    return () => <ToolCallResponse content={value.result.content} />;
+                  }
+                  return () => <div>{JSON.stringify(value)}</div>;
+                }
+              })() as any;
               return (
                 <tr key={`tr-${i}`}>
                   <td key={`td1-${i}`}>{direction}</td>
-                  <td key={`td2-${i}`}>{JSON.stringify(message)}</td>
+                  <td key={`td2-${i}`} className="message">
+                    {React.createElement(messageComponent)}
+                  </td>
                   <td key={`td3-${i}`}>
                     <button className="approve" onClick={() => handleApprove(id)} key={`btn1-${i}`}>
                       Approve
