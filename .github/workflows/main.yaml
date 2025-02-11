@@ -24,13 +24,13 @@ jobs:
         run: nix develop -c true
 
       - name: Fmt
-        run: ./run.sh just fmt-check
+        run: nix run --impure .#nixGL -- nix develop .#dev -c just fmt-check
 
       - name: Lint
-        run: ./run.sh just lint
+        run: nix run --impure .#nixGL -- nix develop .#dev -c just lint
 
       - name: Build Release
-        run: ./run.sh just build-release
+        run: nix run --impure .#nixGL -- nix develop .#dev -c just build-release
 
       - name: Readme Check
-        run: ./run.sh just readme-check
+        run: nix run --impure .#nixGL -- nix develop .#dev -c just readme-check
