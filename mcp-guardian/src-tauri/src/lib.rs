@@ -1,31 +1,19 @@
-use serde_json::Value;
+pub mod mcp_servers;
+pub mod pending_messages;
 
-#[tauri::command]
-async fn get_pending_messages() -> Value {
-    mcp_guardian_core::message_approval::get_pending_messages()
-        .await
-        .expect("get_pending_messages() failed.")
-}
+use mcp_servers::{get_mcp_server, list_mcp_servers, set_mcp_server};
+use pending_messages::{approve_message, deny_message, get_pending_messages};
 
-#[tauri::command]
-async fn approve_message(id: String) {
-    mcp_guardian_core::message_approval::approve_message(id)
-        .await
-        .expect("approve_message(id: String) failed.");
-}
-
-#[tauri::command]
-async fn deny_message(id: String) {
-    mcp_guardian_core::message_approval::deny_message(id)
-        .await
-        .expect("deny_message(id: String) failed.");
-}
+pub type Result<T> = std::result::Result<T, String>;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
+            list_mcp_servers,
+            get_mcp_server,
+            set_mcp_server,
             get_pending_messages,
             approve_message,
             deny_message
