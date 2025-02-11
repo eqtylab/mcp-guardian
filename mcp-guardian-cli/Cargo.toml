@@ -1,0 +1,17 @@
+[package]
+name = "mcp-guardian-cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# workspace crates
+mcp-guardian-core = { workspace = true }
+# general dependencies
+anyhow = { workspace = true }
+clap = { workspace = true }
+env_logger = { workspace = true }
+humantime = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }

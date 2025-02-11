@@ -1,0 +1,6 @@
+{
+    "primary_message_interceptor": {
+        "type": "MessageLog",
+        "log_level": "Info"
+    }
+}
