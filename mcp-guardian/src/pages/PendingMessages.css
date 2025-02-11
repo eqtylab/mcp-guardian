@@ -13,10 +13,22 @@ h1 {
   text-align: center;
 }
 
+td {
+  padding: 0.5em;
+  border: 1px solid black;
+  margin: 1px;
+}
+
+.message {
+  width: 100%;
+}
+
 .approve {
   background-color: #2ecc71;
+  margin: 0.25em;
 }
 
 .deny {
   background-color: #e74c3c;
+  margin: 0.25em;
 }
