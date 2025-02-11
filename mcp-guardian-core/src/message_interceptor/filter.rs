@@ -19,11 +19,11 @@ pub enum FilterLogic {
     /// Include request and response messages with the specified method call
     RequestMethod(String),
     /// Include messages that match all of the specified filters
-    And(Vec<FilterLogic>),
+    And(Vec<Self>),
     /// Include messages that match any of the specified filters
-    Or(Vec<FilterLogic>),
+    Or(Vec<Self>),
     /// Exclude messages that match the specified filter
-    Not(Box<FilterLogic>),
+    Not(Box<Self>),
 }
 
 impl FilterLogic {
