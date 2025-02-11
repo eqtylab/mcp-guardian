@@ -15,23 +15,22 @@ const PendingMessages = () => {
   }, []);
 
   const handleApprove = async (id: string) => {
-    await invoke("approve_message", { id })
+    await invoke("approve_message", { id });
     updatePendingApprovals();
   };
 
   const handleDeny = async (id: string) => {
-    await invoke("deny_message", { id })
+    await invoke("deny_message", { id });
     updatePendingApprovals();
   };
 
   return (
     <div className="container">
-      <h1>MCP Guardian</h1>
-      
+      <h1>Pending Messages</h1>
+
       <button onClick={updatePendingApprovals}>Refresh</button>
 
       <div>
-        <h2>Pending Transmissions</h2>
         <table>
           <thead>
             <tr>
@@ -46,14 +45,19 @@ const PendingMessages = () => {
               const message = direction === "Inbound" ? value.result.content : value;
               return (
                 <tr key={`tr-${i}`}>
-                <td key={`td1-${i}`}>{direction}</td>
-                <td key={`td2-${i}`}>{JSON.stringify(message)}</td>
-                <td key={`td3-${i}`}>
-                  <button className="approve" onClick={() => handleApprove(id)} key={`btn1-${i}`}>Approve</button>
-                  <button className="deny" onClick={() => handleDeny(id)} key={`btn2-${i}`}>Deny</button>
+                  <td key={`td1-${i}`}>{direction}</td>
+                  <td key={`td2-${i}`}>{JSON.stringify(message)}</td>
+                  <td key={`td3-${i}`}>
+                    <button className="approve" onClick={() => handleApprove(id)} key={`btn1-${i}`}>
+                      Approve
+                    </button>
+                    <button className="deny" onClick={() => handleDeny(id)} key={`btn2-${i}`}>
+                      Deny
+                    </button>
                   </td>
-               </tr>
-            )})}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

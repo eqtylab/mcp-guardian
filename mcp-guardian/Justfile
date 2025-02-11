@@ -2,9 +2,11 @@ _:
     @just --list
 
 fmt:
+    yarn run prettier --write --config .prettierrc.json src
     cd src-tauri && cargo fmt
 
 fmt-check:
+    yarn run prettier --check --config .prettierrc.json src
     cd src-tauri && cargo fmt -- --check
 
 lint:

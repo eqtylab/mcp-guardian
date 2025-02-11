@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PendingMessages from "./pages/PendingMessages";
 import "./App.css";
 
-
 const PAGES = [
   {
     label: "MCP Servers",
@@ -36,9 +35,7 @@ const App = () => {
           ))}
         </div>
         <div>
-          <div className="page">
-            {React.createElement(PAGES[pageIndex].component)}
-          </div>
+          <div className="page">{React.createElement(PAGES[pageIndex].component)}</div>
         </div>
       </div>
     </main>
