@@ -4,7 +4,7 @@ pub mod set;
 
 use clap::Parser;
 
-/// Commands related to guard-profile configuration.
+/// Commands related to guard-profile configurations.
 #[derive(Debug, Clone, Parser)]
 pub struct Args {
     #[clap(subcommand)]

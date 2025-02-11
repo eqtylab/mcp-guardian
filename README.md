@@ -31,7 +31,8 @@ mcp-guardian-cli
 Usage: mcp-guardian-cli <COMMAND>
 
 Commands:
-  guard-profiles  Commands related to guard-profile configuration
+  guard-profiles  Commands related to guard-profile configurations
+  mcp-servers     Commands related to mcp-server configurations
   help            Print this message or the help of the given subcommand(s)
 
 Options:
@@ -54,6 +55,8 @@ Options:
           [Optional] Host session id
   -g, --guard-profile <GUARD_PROFILE>
           Guard profile to use for the MCP server ("{namespace}.{profile_name}") [default: mcp-guardian.default]
+  -m, --mcp-server <MCP_SERVER>
+          [Optional] MCP server configuration to use. This is mutually exclusive with providing a command to run
   -h, --help
           Print help
 ```

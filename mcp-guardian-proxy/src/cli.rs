@@ -16,6 +16,10 @@ pub struct Args {
     #[clap(default_value = "mcp-guardian.default")]
     pub guard_profile: String,
 
+    /// [Optional] MCP server configuration to use. This is mutually exclusive with providing a command to run.
+    #[clap(short, long)]
+    pub mcp_server: Option<String>,
+
     /// MCP server command
     #[clap(value_parser, last=true, num_args=0..=100)]
     pub cmd: Vec<String>,

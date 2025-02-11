@@ -1,9 +1,9 @@
-use std::{io::Write, time::SystemTime};
+use std::{collections::HashMap, io::Write, time::SystemTime};
 
 use anyhow::{bail, Result};
 use clap::Parser;
 use humantime::format_rfc3339_millis;
-use mcp_guardian_core::proxy::proxy_mcp_server;
+use mcp_guardian_core::{mcp_server::McpServer, proxy::proxy_mcp_server};
 use mcp_guardian_proxy::cli;
 
 #[tokio::main]
@@ -12,6 +12,7 @@ async fn main() -> Result<()> {
         name,
         host_session_id,
         guard_profile,
+        mcp_server,
         cmd,
     } = cli::Args::parse();
 
@@ -40,8 +41,23 @@ async fn main() -> Result<()> {
 
     log::info!("Starting mcp-guardian-proxy");
 
-    let [command, args @ ..] = &cmd[..] else {
-        bail!("No MCP server command provided.");
+    let (command, args, env) = match (mcp_server, &cmd[..]) {
+        // Using mcp-server configuration
+        (Some(mcp_server), []) => {
+            let [namespace, name] = &mcp_server.split('.').collect::<Vec<_>>()[..] else {
+                bail!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
+            };
+            let McpServer { cmd, args, env } = mcp_guardian_core::mcp_server::load_mcp_server(namespace, name)?
+                .ok_or_else(|| anyhow::anyhow!("MCP server not found."))?;
+
+            (cmd, args, env)
+        }
+        // Using provided command
+        (None, [command, args @ ..]) => (command.clone(), args.to_vec(), HashMap::new()),
+        // Both provided
+        (Some(_), [..]) => bail!("Cannot specify both an MCP server configuration and a command to run. Use one or the other."),
+        // Neither provided
+        (None, []) => bail!("No MCP server configuration or command provided."),
     };
 
     log::info!("Name: {name}");
@@ -63,8 +79,10 @@ async fn main() -> Result<()> {
         .primary_message_interceptor
         .try_into_message_interceptor(name.clone())?;
 
+    let _ = env; // TODO: add env to the process
+
     if let Err(e) =
-        proxy_mcp_server(name, host_session_id, command, &args, message_interceptor).await
+        proxy_mcp_server(name, host_session_id, &command, &args, message_interceptor).await
     {
         eprint!("Error starting MCP server: {e}");
     }
