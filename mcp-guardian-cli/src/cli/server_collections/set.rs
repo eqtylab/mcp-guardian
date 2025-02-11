@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use clap::{Parser, ValueHint};
 
-/// Set an server-collection.
+/// Set a server-collection.
 #[derive(Debug, Clone, Parser)]
 pub struct Args {
     /// The namespace of the server-collection to set.

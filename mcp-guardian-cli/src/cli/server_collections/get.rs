@@ -1,6 +1,6 @@
 use clap::Parser;
 
-/// Get an server-collection.
+/// Get a server-collection.
 #[derive(Debug, Clone, Parser)]
 pub struct Args {
     /// The namespace of the server-collection to get.
