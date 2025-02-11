@@ -1,6 +1,6 @@
-pub mod export;
-pub mod import;
+pub mod get;
 pub mod list;
+pub mod set;
 
 use clap::Parser;
 
@@ -13,7 +13,7 @@ pub struct Args {
 
 #[derive(Debug, Clone, Parser)]
 pub enum SubCommand {
+    Get(get::Args),
+    Set(set::Args),
     List(list::Args),
-    Import(import::Args),
-    Export(export::Args),
 }
