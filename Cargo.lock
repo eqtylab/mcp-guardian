@@ -2222,6 +2222,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "mcp-guardian-cli"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "env_logger",
+ "humantime",
+ "log",
+ "mcp-guardian-core",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "mcp-guardian-core"
 version = "0.1.0"
 dependencies = [

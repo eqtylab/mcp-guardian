@@ -2,6 +2,7 @@
 members = [
     "mcp-guardian/src-tauri",
     "mcp-guardian-core",
+    "mcp-guardian-cli",
     "mcp-guardian-proxy",
 ]
 resolver = "2"

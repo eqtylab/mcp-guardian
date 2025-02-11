@@ -1,5 +1,4 @@
 {
-    "profile_name": "default",
     "primary_message_interceptor": {
         "type": "Chain",
         "chain": [

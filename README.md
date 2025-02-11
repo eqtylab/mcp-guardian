@@ -24,6 +24,20 @@ MCP Guardian can be configured to proxy any number of MCP servers. For each MCP 
 
 `mcp-guardian` launches the desktop portal.
 
+**mcp-guardian-cli**
+```present mcp-guardian-cli --help
+mcp-guardian-cli
+
+Usage: mcp-guardian-cli <COMMAND>
+
+Commands:
+  guard-profiles  Commands related to guard-profile configuration
+  help            Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+```
+
 **mcp-guardian-proxy**
 ```present mcp-guardian-proxy --help
 mcp-guardian-proxy
@@ -34,9 +48,14 @@ Arguments:
   [CMD]...  MCP server command
 
 Options:
-  -n, --name <NAME>                        [Optional] MCP server name
-      --host-session-id <HOST_SESSION_ID>  [Optional] Host session id
-  -h, --help                               Print help
+  -n, --name <NAME>
+          [Optional] MCP server name
+      --host-session-id <HOST_SESSION_ID>
+          [Optional] Host session id
+  -g, --guard-profile <GUARD_PROFILE>
+          Guard profile to use for the MCP server ("{namespace}.{profile_name}") [default: mcp-guardian.default]
+  -h, --help
+          Print help
 ```
 
 ## Development

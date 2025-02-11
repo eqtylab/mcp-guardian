@@ -11,6 +11,7 @@ async fn main() -> Result<()> {
     let cli::Args {
         name,
         host_session_id,
+        guard_profile,
         cmd,
     } = cli::Args::parse();
 
@@ -49,9 +50,14 @@ async fn main() -> Result<()> {
 
     let args = args.iter().map(String::as_str).collect::<Vec<_>>();
 
-    let guard_profile =
-        mcp_guardian_core::guard_profile::load_guard_profile("mcp-guardian", "default")?
-            .ok_or_else(|| anyhow::anyhow!("Guard profile not found."))?;
+    let guard_profile = {
+        let [namespace, profile_name] = &guard_profile.split('.').collect::<Vec<_>>()[..] else {
+            bail!("Invalid guard profile format. Expected \"{{namespace}}.{{profile_name}}\".");
+        };
+
+        mcp_guardian_core::guard_profile::load_guard_profile(namespace, profile_name)?
+            .ok_or_else(|| anyhow::anyhow!("Guard profile not found."))?
+    };
 
     let message_interceptor = guard_profile
         .primary_message_interceptor

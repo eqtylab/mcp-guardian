@@ -17,6 +17,7 @@ fn app_dir() -> Result<PathBuf> {
 #[derive(VariantArray)]
 pub enum AppSubDir {
     Logs,
+    GuardProfiles,
     MessageApprovals,
     MessageApprovalsPending,
     MessageApprovalsApproved,
@@ -25,15 +26,22 @@ pub enum AppSubDir {
 
 impl AppSubDir {
     pub fn path(&self) -> Result<PathBuf> {
-        let path = match self {
-            Self::Logs => app_dir()?.join("logs"),
-            Self::MessageApprovals => app_dir()?.join("message-approvals"),
-            Self::MessageApprovalsPending => Self::MessageApprovals.path()?.join("pending"),
-            Self::MessageApprovalsApproved => Self::MessageApprovals.path()?.join("approved"),
-            Self::MessageApprovalsDenied => Self::MessageApprovals.path()?.join("denied"),
-        };
+        let path = self._path(app_dir()?);
 
         Ok(path)
+    }
+
+    fn _path(&self, base_dir: PathBuf) -> PathBuf {
+        match self {
+            Self::Logs => base_dir.join("logs"),
+            Self::GuardProfiles => base_dir.join("guard-profiles"),
+            Self::MessageApprovals => base_dir.join("message-approvals"),
+            Self::MessageApprovalsPending => Self::MessageApprovals._path(base_dir).join("pending"),
+            Self::MessageApprovalsApproved => {
+                Self::MessageApprovals._path(base_dir).join("approved")
+            }
+            Self::MessageApprovalsDenied => Self::MessageApprovals._path(base_dir).join("denied"),
+        }
     }
 }
 
