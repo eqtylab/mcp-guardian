@@ -1,0 +1,22 @@
+.container {
+  margin: 0;
+  padding-top: 10vh;
+  padding-left: 10vh;
+  padding-right: 10vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.approve {
+  background-color: #2ECC71;
+}
+
+.deny {
+  background-color: #E74C3C;
+}
