@@ -23,6 +23,7 @@ pub enum AppSubDir {
     MessageApprovalsPending,
     MessageApprovalsApproved,
     MessageApprovalsDenied,
+    ServerCollections,
 }
 
 impl AppSubDir {
@@ -43,6 +44,7 @@ impl AppSubDir {
                 Self::MessageApprovals._path(base_dir).join("approved")
             }
             Self::MessageApprovalsDenied => Self::MessageApprovals._path(base_dir).join("denied"),
+            Self::ServerCollections => base_dir.join("server-collections"),
         }
     }
 }

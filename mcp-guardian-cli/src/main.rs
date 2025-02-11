@@ -3,7 +3,7 @@ use std::{io::Write, time::SystemTime};
 use anyhow::Result;
 use clap::Parser;
 use humantime::format_rfc3339_millis;
-use mcp_guardian_cli::{cli, guard_profiles, mcp_servers};
+use mcp_guardian_cli::{cli, guard_profiles, mcp_servers, server_collections};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -33,6 +33,7 @@ async fn main() -> Result<()> {
     match cmd {
         cli::SubCommand::GuardProfiles(args) => guard_profiles::cmd(args)?,
         cli::SubCommand::McpServers(args) => mcp_servers::cmd(args)?,
+        cli::SubCommand::ServerCollections(args) => server_collections::cmd(args)?,
     }
 
     Ok(())

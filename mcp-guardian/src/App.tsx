@@ -12,6 +12,10 @@ const PAGES = [
     component: () => <div>TODO</div>,
   },
   {
+    label: "Server Collections",
+    component: () => <div>TODO</div>,
+  },
+  {
     label: "Pending Messages",
     component: PendingMessages,
   },

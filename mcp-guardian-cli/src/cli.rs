@@ -1,5 +1,6 @@
 pub mod guard_profiles;
 pub mod mcp_servers;
+pub mod server_collections;
 
 use clap::Parser;
 
@@ -14,4 +15,5 @@ pub struct Args {
 pub enum SubCommand {
     GuardProfiles(guard_profiles::Args),
     McpServers(mcp_servers::Args),
+    ServerCollections(server_collections::Args),
 }
