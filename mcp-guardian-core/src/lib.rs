@@ -7,5 +7,6 @@ pub mod message_approval;
 pub mod message_interceptor;
 pub mod proxy;
 pub mod request_cache;
+pub mod server_collection;
 
 static APP_NAME: &str = "mcp-guardian";

@@ -31,9 +31,10 @@ mcp-guardian-cli
 Usage: mcp-guardian-cli <COMMAND>
 
 Commands:
-  guard-profiles  Commands related to guard-profile configurations
-  mcp-servers     Commands related to mcp-server configurations
-  help            Print this message or the help of the given subcommand(s)
+  guard-profiles      Commands related to guard-profile configurations
+  mcp-servers         Commands related to mcp-server configurations
+  server-collections  Commands related to server-collections configurations
+  help                Print this message or the help of the given subcommand(s)
 
 Options:
   -h, --help  Print help
