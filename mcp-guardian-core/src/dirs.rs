@@ -18,6 +18,7 @@ fn app_dir() -> Result<PathBuf> {
 pub enum AppSubDir {
     Logs,
     GuardProfiles,
+    McpServers,
     MessageApprovals,
     MessageApprovalsPending,
     MessageApprovalsApproved,
@@ -35,6 +36,7 @@ impl AppSubDir {
         match self {
             Self::Logs => base_dir.join("logs"),
             Self::GuardProfiles => base_dir.join("guard-profiles"),
+            Self::McpServers => base_dir.join("mcp-servers"),
             Self::MessageApprovals => base_dir.join("message-approvals"),
             Self::MessageApprovalsPending => Self::MessageApprovals._path(base_dir).join("pending"),
             Self::MessageApprovalsApproved => {
