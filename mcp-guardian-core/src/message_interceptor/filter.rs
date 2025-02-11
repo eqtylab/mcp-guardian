@@ -12,17 +12,17 @@ use crate::{
 };
 
 pub enum FilterLogic {
-    // Include messages that match the specified direction
+    /// Include messages that match the specified direction
     Direction(MessageDirection),
-    // Include messages that match the specified message type
+    /// Include messages that match the specified message type
     MessageType(MessageType),
-    // Include request and response messages with the specified method call
+    /// Include request and response messages with the specified method call
     RequestMethod(String),
-    // Include messages that match all of the specified filters
+    /// Include messages that match all of the specified filters
     And(Vec<FilterLogic>),
-    // Include messages that match any of the specified filters
+    /// Include messages that match any of the specified filters
     Or(Vec<FilterLogic>),
-    // Exclude messages that match the specified filter
+    /// Exclude messages that match the specified filter
     Not(Box<FilterLogic>),
 }
 
