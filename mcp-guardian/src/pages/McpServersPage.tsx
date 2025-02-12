@@ -15,6 +15,11 @@ const McpServers = () => {
     setMcpServers(newServers);
   };
 
+  const afterSuccessfulCreate = () => {
+    setCreateModalIsOpen(false);
+    updateMcpServers();
+  };
+
   useEffect(() => {
     updateMcpServers();
   }, []);
@@ -33,7 +38,11 @@ const McpServers = () => {
 
       <button onClick={() => setCreateModalIsOpen(true)}>Create New MCP Server</button>
 
-      <CreateMcpServerModal isOpen={createModalIsOpen} setIsOpen={(b) => setCreateModalIsOpen(b)} />
+      <CreateMcpServerModal
+        isOpen={createModalIsOpen}
+        setIsOpen={setCreateModalIsOpen}
+        afterSuccessfulCreate={afterSuccessfulCreate}
+      />
     </div>
   );
 };

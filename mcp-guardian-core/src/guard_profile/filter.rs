@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::{
     guard_profile::MessageInterceptorGuardConfig,
@@ -12,7 +13,8 @@ use crate::{
     },
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct FilterGuardConfig {
     pub filter_logic: FilterLogicGuardConfig,
     pub match_action: FilterActionGuardConfig,
@@ -38,8 +40,9 @@ impl FilterGuardConfig {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
+#[ts(export)]
 pub enum FilterLogicGuardConfig {
     Direction(String),
     MessageType(String),
@@ -101,8 +104,9 @@ impl TryFrom<FilterLogicGuardConfig> for FilterLogic {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
+#[ts(export)]
 pub enum FilterActionGuardConfig {
     Send,
     Drop,

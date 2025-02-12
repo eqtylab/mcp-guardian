@@ -2,10 +2,12 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::message_interceptor::{manual_approval::ManualApprovalInterceptor, MessageInterceptor};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct ManualApprovalGuardConfig {}
 
 impl ManualApprovalGuardConfig {

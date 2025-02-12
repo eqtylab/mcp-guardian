@@ -2,10 +2,12 @@ use std::sync::Arc;
 
 use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::message_interceptor::{message_log::MessageLogInterceptor, MessageInterceptor};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct MessageLogGuardConfig {
     pub log_level: String,
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
 import McpServersPage from "./pages/McpServersPage";
+import GuardProfilesPage from "./pages/GuardProfilesPage";
 import PendingMessagesPage from "./pages/PendingMessagesPage";
 import "./App.css";
 
@@ -11,7 +12,7 @@ const PAGES = [
   },
   {
     label: "Guard Profiles",
-    component: () => <div>TODO</div>,
+    component: GuardProfilesPage,
   },
   {
     label: "Server Collections",

@@ -7,16 +7,19 @@ use std::{fs, sync::Arc};
 
 use anyhow::{anyhow, bail, Result};
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::{dirs::AppSubDir::GuardProfiles, message_interceptor::MessageInterceptor};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct GuardProfile {
     pub primary_message_interceptor: MessageInterceptorGuardConfig,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(tag = "type")]
+#[ts(export)]
 pub enum MessageInterceptorGuardConfig {
     Chain(chain::ChainGuardConfig),
     Filter(filter::FilterGuardConfig),
@@ -48,7 +51,8 @@ impl MessageInterceptorGuardConfig {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct NamedGuardProfile {
     pub namespace: String,
     pub profile_name: String,

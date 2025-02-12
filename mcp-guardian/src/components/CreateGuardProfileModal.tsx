@@ -5,21 +5,23 @@ import { invoke } from "@tauri-apps/api/core";
 // TODO: untangle this typescript incompatibility
 const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>;
 
-interface CreateMcpServerModalProps {
+interface CreateGuardProfileModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
   afterSuccessfulCreate: () => void;
 }
 
-const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: CreateMcpServerModalProps) => {
+const CreateGuardProfileModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: CreateGuardProfileModalProps) => {
   const [namespaceInput, setNamespaceInput] = useState("");
   const [nameInput, setNameInput] = useState("");
-  const [configTextInput, setConfigTextInput] = useState(JSON.stringify({ cmd: "", args: [], env: {} }, null, 2));
+  const [configTextInput, setConfigTextInput] = useState(
+    JSON.stringify({ primary_message_interceptor: { type: "" } }, null, 2),
+  );
 
-  const createMcpServer = async (namespace: string, name: string, configText: string) => {
-    const mcpServer = JSON.parse(configText);
+  const createGuardProfile = async (namespace: string, name: string, configText: string) => {
+    const guardProfile = JSON.parse(configText);
     try {
-      await invoke("set_mcp_server", { namespace, name, mcpServer });
+      await invoke("set_guard_profile", { namespace, name, guardProfile });
       afterSuccessfulCreate();
     } catch (e) {
       console.error(e);
@@ -27,9 +29,9 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
   };
 
   return (
-    <div className="create-mcp-server-modal-container">
+    <div className="create-guard-profile-modal-container">
       <ReactModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
-        <h1>Create MCP Server</h1>
+        <h1>Create Guard Profile</h1>
         <hr />
         Namespace:{" "}
         <input
@@ -49,7 +51,7 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
           onChange={(e) => setConfigTextInput(e.target.value)}
           rows={configTextInput.split("\n").length}
         />
-        <button className="create-btn" onClick={() => createMcpServer(namespaceInput, nameInput, configTextInput)}>
+        <button className="create-btn" onClick={() => createGuardProfile(namespaceInput, nameInput, configTextInput)}>
           Create
         </button>
       </ReactModal>
@@ -57,4 +59,4 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
   );
 };
 
-export default CreateMcpServerModal;
+export default CreateGuardProfileModal;
