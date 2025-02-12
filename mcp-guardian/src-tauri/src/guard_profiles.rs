@@ -17,7 +17,7 @@ pub async fn get_guard_profile(namespace: &str, name: &str) -> Result<GuardProfi
                 e
             )
         })?
-        .ok_or_else(|| "error: mcp server not found".to_owned())
+        .ok_or_else(|| "error: guard profile not found".to_owned())
 }
 
 #[tauri::command]
