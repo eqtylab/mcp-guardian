@@ -12,6 +12,10 @@ pub fn cmd(args: cli::server_collections::Args) -> anyhow::Result<()> {
         cli::server_collections::SubCommand::Get(args) => get(args)?,
         cli::server_collections::SubCommand::Set(args) => set(args)?,
         cli::server_collections::SubCommand::List(args) => list(args)?,
+        cli::server_collections::SubCommand::ExportClaudeConfig(args) => {
+            export_claude_config(args)?
+        }
+        cli::server_collections::SubCommand::ApplyClaudeConfig(args) => apply_claude_config(args)?,
     }
 
     Ok(())
@@ -61,6 +65,43 @@ fn list(args: cli::server_collections::list::Args) -> Result<()> {
     {
         println!("{namespace}.{name}");
     }
+
+    Ok(())
+}
+
+fn export_claude_config(args: cli::server_collections::export_claude_config::Args) -> Result<()> {
+    let cli::server_collections::export_claude_config::Args {
+        namespace,
+        name,
+        proxy_path,
+    } = args;
+
+    let claude_config =
+        mcp_guardian_core::server_collection::claude_config::generate_claude_config_for_server_collection(
+            &namespace,
+            &name,
+            proxy_path,
+        )?;
+
+    let claude_config = serde_json::to_string_pretty(&claude_config)?;
+
+    println!("{claude_config}");
+
+    Ok(())
+}
+
+fn apply_claude_config(args: cli::server_collections::apply_claude_config::Args) -> Result<()> {
+    let cli::server_collections::apply_claude_config::Args {
+        namespace,
+        name,
+        proxy_path,
+    } = args;
+
+    mcp_guardian_core::server_collection::claude_config::apply_claude_config_for_server_collection(
+        &namespace, &name, proxy_path,
+    )?;
+
+    println!("Claude Desktop config applied for '{namespace}.{name}'.");
 
     Ok(())
 }

@@ -1,4 +1,8 @@
-use mcp_guardian_core::server_collection::{NamedServerCollection, ServerCollection};
+use std::path::PathBuf;
+
+use mcp_guardian_core::server_collection::{
+    claude_config::ClaudeConfig, NamedServerCollection, ServerCollection,
+};
 
 use crate::Result;
 
@@ -34,6 +38,44 @@ pub async fn set_server_collection(
     .map_err(|e| {
         format!(
             "set_server_collection(namespace={namespace}, name={name}, ..) failed: {}",
+            e
+        )
+    })
+}
+
+#[tauri::command]
+pub async fn generate_claude_config_for_server_collection(
+    namespace: &str,
+    name: &str,
+    proxy_path: Option<&str>,
+) -> Result<ClaudeConfig> {
+    mcp_guardian_core::server_collection::claude_config::generate_claude_config_for_server_collection(
+        namespace,
+        name,
+        proxy_path.map(PathBuf::from),
+    )
+    .map_err(|e| {
+        format!(
+            "generate_claude_config_for_server_collection(namespace={namespace}, name={name}, ..) failed: {}",
+            e
+        )
+    })
+}
+
+#[tauri::command]
+pub async fn apply_claude_config_for_server_collection(
+    namespace: &str,
+    name: &str,
+    proxy_path: Option<&str>,
+) -> Result<()> {
+    mcp_guardian_core::server_collection::claude_config::apply_claude_config_for_server_collection(
+        namespace,
+        name,
+        proxy_path.map(PathBuf::from),
+    )
+    .map_err(|e| {
+        format!(
+            "apply_claude_config_for_server_collection(namespace={namespace}, name={name}, ..) failed: {}",
             e
         )
     })

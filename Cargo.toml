@@ -36,6 +36,7 @@ mcp-guardian-core = { path = "./mcp-guardian-core" }
 anyhow = { version = "1", features = ["backtrace"] }
 async-trait = "0.1"
 axum = { version = "0.8", features = ["macros", "multipart"] }
+chrono = "0.4"
 clap = { version = "4", features = ["cargo", "derive"] }
 confy = "0.6"
 dirs = "5"
