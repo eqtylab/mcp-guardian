@@ -1,3 +1,5 @@
+pub mod claude_config;
+
 use std::fs;
 
 use anyhow::{anyhow, Result};

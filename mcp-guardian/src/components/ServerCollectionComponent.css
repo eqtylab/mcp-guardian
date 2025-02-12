@@ -46,3 +46,7 @@ textarea {
   left: 1.5em;
   right: 1.5em;
 }
+
+.export-btn {
+  margin: 1.5em;
+}

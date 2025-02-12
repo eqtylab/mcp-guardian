@@ -71,7 +71,19 @@ h1 {
   text-align: center;
 }
 
-input,
+input {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.2em 0.4em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: #0f0f0f;
+  background-color: #cccccc;
+  transition: border-color 0.25s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -80,7 +92,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   color: #0f0f0f;
-  background-color: #ffffff;
+  background-color: #b4cdcf;
   transition: border-color 0.25s;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
