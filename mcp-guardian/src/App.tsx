@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import PendingMessages from "./pages/PendingMessages";
+import ReactModal from "react-modal";
+import McpServersPage from "./pages/McpServersPage";
+import PendingMessagesPage from "./pages/PendingMessagesPage";
 import "./App.css";
 
 const PAGES = [
   {
     label: "MCP Servers",
-    component: () => <div>TODO</div>,
+    component: McpServersPage,
   },
   {
     label: "Guard Profiles",
@@ -17,12 +19,14 @@ const PAGES = [
   },
   {
     label: "Pending Messages",
-    component: PendingMessages,
+    component: PendingMessagesPage,
   },
 ];
 
+ReactModal.setAppElement("#root");
+
 const App = () => {
-  const [pageIndex, setPageIndex] = useState(2);
+  const [pageIndex, setPageIndex] = useState(3);
 
   return (
     <main>

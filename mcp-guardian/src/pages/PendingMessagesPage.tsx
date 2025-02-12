@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import ToolCall from "../components/messages/ToolCall/ToolCall";
-import ToolCallResponse from "../components/messages/ToolCallResponse/ToolCallResponse";
-import "./PendingMessages.css";
+import ToolCall from "../components/messages/ToolCall";
+import ToolCallResponse from "../components/messages/ToolCallResponse";
+import "./PendingMessagesPage.css";
 
 const PendingMessages = () => {
   const [pendingApprovals, setPendingApprovals] = useState({} as any);

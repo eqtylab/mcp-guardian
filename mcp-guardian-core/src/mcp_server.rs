@@ -2,10 +2,12 @@ use std::{collections::HashMap, fs};
 
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::dirs::AppSubDir::McpServers;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct McpServer {
     pub cmd: String,
     pub args: Vec<String>,
@@ -13,7 +15,8 @@ pub struct McpServer {
     pub env: HashMap<String, String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct NamedMcpServer {
     pub namespace: String,
     pub name: String,

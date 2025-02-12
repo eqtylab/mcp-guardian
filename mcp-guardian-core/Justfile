@@ -16,6 +16,9 @@ build:
 build-release:
     cargo build --release
 
+update-bindings:
+    cargo test export_bindings
+
 test:
     cargo test
 
