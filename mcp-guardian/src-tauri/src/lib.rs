@@ -1,8 +1,12 @@
+pub mod guard_profiles;
 pub mod mcp_servers;
 pub mod pending_messages;
+pub mod server_collections;
 
+use guard_profiles::{get_guard_profile, list_guard_profiles, set_guard_profile};
 use mcp_servers::{get_mcp_server, list_mcp_servers, set_mcp_server};
 use pending_messages::{approve_message, deny_message, get_pending_messages};
+use server_collections::{get_server_collection, list_server_collections, set_server_collection};
 
 pub type Result<T> = std::result::Result<T, String>;
 
@@ -14,6 +18,12 @@ pub fn run() {
             list_mcp_servers,
             get_mcp_server,
             set_mcp_server,
+            list_guard_profiles,
+            get_guard_profile,
+            set_guard_profile,
+            list_server_collections,
+            get_server_collection,
+            set_server_collection,
             get_pending_messages,
             approve_message,
             deny_message

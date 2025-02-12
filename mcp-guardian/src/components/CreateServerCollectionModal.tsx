@@ -5,21 +5,27 @@ import { invoke } from "@tauri-apps/api/core";
 // TODO: untangle this typescript incompatibility
 const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>;
 
-interface CreateMcpServerModalProps {
+interface CreateServerCollectionModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
   afterSuccessfulCreate: () => void;
 }
 
-const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: CreateMcpServerModalProps) => {
+const CreateServerCollectionModal = ({
+  isOpen,
+  setIsOpen,
+  afterSuccessfulCreate,
+}: CreateServerCollectionModalProps) => {
   const [namespaceInput, setNamespaceInput] = useState("");
   const [nameInput, setNameInput] = useState("");
-  const [configTextInput, setConfigTextInput] = useState(JSON.stringify({ cmd: "", args: [], env: {} }, null, 2));
+  const [configTextInput, setConfigTextInput] = useState(
+    JSON.stringify({ servers: [{ mcp_server: "", guard_profile: "" }] }, null, 2),
+  );
 
-  const createMcpServer = async (namespace: string, name: string, configText: string) => {
-    const mcpServer = JSON.parse(configText);
+  const createServerCollection = async (namespace: string, name: string, configText: string) => {
+    const serverCollection = JSON.parse(configText);
     try {
-      await invoke("set_mcp_server", { namespace, name, mcpServer });
+      await invoke("set_server_collection", { namespace, name, serverCollection });
       afterSuccessfulCreate();
     } catch (e) {
       console.error(e);
@@ -27,7 +33,7 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
   };
 
   return (
-    <div className="create-mcp-server-modal-container">
+    <div className="create-server-collection-modal-container">
       <ReactModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
         <h1>Create MCP Server</h1>
         <hr />
@@ -49,7 +55,10 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
           onChange={(e) => setConfigTextInput(e.target.value)}
           rows={configTextInput.split("\n").length}
         />
-        <button className="create-btn" onClick={() => createMcpServer(namespaceInput, nameInput, configTextInput)}>
+        <button
+          className="create-btn"
+          onClick={() => createServerCollection(namespaceInput, nameInput, configTextInput)}
+        >
           Create
         </button>
       </ReactModal>
@@ -57,4 +66,4 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
   );
 };
 
-export default CreateMcpServerModal;
+export default CreateServerCollectionModal;

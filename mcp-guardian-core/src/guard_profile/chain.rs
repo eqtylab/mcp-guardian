@@ -2,13 +2,15 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::{
     guard_profile::MessageInterceptorGuardConfig,
     message_interceptor::{chain::ChainInterceptor, MessageInterceptor},
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct ChainGuardConfig {
     pub chain: Vec<MessageInterceptorGuardConfig>,
 }

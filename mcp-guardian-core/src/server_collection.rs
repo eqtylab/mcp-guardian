@@ -2,21 +2,25 @@ use std::fs;
 
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::dirs::AppSubDir::ServerCollections;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct ServerCollection {
     pub servers: Vec<Server>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct Server {
     pub mcp_server: String,
     pub guard_profile: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct NamedServerCollection {
     pub namespace: String,
     pub name: String,
