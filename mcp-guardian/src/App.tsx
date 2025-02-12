@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactModal from "react-modal";
 import McpServersPage from "./pages/McpServersPage";
 import PendingMessagesPage from "./pages/PendingMessagesPage";
 import "./App.css";
@@ -21,6 +22,8 @@ const PAGES = [
     component: PendingMessagesPage,
   },
 ];
+
+ReactModal.setAppElement("#root");
 
 const App = () => {
   const [pageIndex, setPageIndex] = useState(3);
