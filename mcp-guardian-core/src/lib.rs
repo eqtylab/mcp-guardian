@@ -16,6 +16,15 @@ pub mod server_collection;
 
 static APP_NAME: &str = "mcp-guardian";
 
+/// Initializes `mcp-core` and configures a logging.
+///
+/// # Arguments
+///
+/// * `name` - The name used for log file.
+///
+/// # Errors
+///
+/// Returns an error if directory creation or logging initialization fails.
 pub fn init(name: &str) -> Result<()> {
     dirs::create_all_dirs()?;
     init_logging(name)?;
