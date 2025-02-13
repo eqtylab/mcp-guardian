@@ -61,6 +61,7 @@ pub async fn proxy_mcp_server(
     //
     // 1. Read json-rpc message from stdin.
     // 2. Send to outbound message buffer.
+    log::info!("Starting outbound message receiver");
     let outbound_message_reception_task = task::spawn_blocking(move || {
         let stdin = io::stdin();
         let reader = BufReader::new(stdin.lock());
@@ -70,10 +71,10 @@ pub async fn proxy_mcp_server(
             match msg {
                 Ok(json) => {
                     if let Err(e) = outbound_tx.blocking_send(json) {
-                        log::error!("Failed to send message to outbound buffer: {}", e);
+                        log::error!("Failed to send message to outbound buffer: {e}");
                     }
                 }
-                Err(e) => log::error!("Error parsing JSON from parent: {}", e),
+                Err(e) => log::error!("Error parsing JSON from parent: {e}"),
             }
         }
     });
@@ -82,6 +83,7 @@ pub async fn proxy_mcp_server(
     //
     // 1. Read json-rpc message from child stdout.
     // 2. Send to inbound message buffer.
+    log::info!("Starting inbound message receiver");
     let inbound_message_reception_task = task::spawn_blocking(move || {
         let reader = BufReader::new(child_stdout);
         let stream = Deserializer::from_reader(reader).into_iter::<Value>();
@@ -90,10 +92,10 @@ pub async fn proxy_mcp_server(
             match msg {
                 Ok(json) => {
                     if let Err(e) = inbound_tx.blocking_send(json) {
-                        log::error!("Failed to send message to inbound buffer: {}", e);
+                        log::error!("Failed to send message to inbound buffer: {e}");
                     }
                 }
-                Err(e) => log::error!("Error parsing JSON from child: {}", e),
+                Err(e) => log::error!("Error parsing JSON from child: {e}"),
             }
         }
     });
@@ -103,6 +105,7 @@ pub async fn proxy_mcp_server(
     // 1. Read from outbound message buffer.
     // 2. intercept_outbound_message()
     // 3. Write to child stdin.
+    log::info!("Starting outbound message transmitter");
     let ctx_clone = ctx.clone();
     let outbound_message_transmission_task = task::spawn(async move {
         let child_stdin = Arc::new(Mutex::new(child_stdin));
@@ -119,10 +122,10 @@ pub async fn proxy_mcp_server(
                         if let Err(e) =
                             writeln!(child_stdin.lock().unwrap(), "{}", message.raw_msg())
                         {
-                            log::error!("Failed to write to child stdin: {}", e);
+                            log::error!("Failed to write to child stdin: {e}");
                         }
                         if let Err(e) = child_stdin.lock().unwrap().flush() {
-                            log::error!("Failed to flush child stdin: {}", e);
+                            log::error!("Failed to flush child stdin: {e}");
                         }
                     }
                     Ok(Drop) => {}
@@ -139,6 +142,7 @@ pub async fn proxy_mcp_server(
     // 1. Read from inbound message buffer.
     // 2. intercept_inbound_message()
     // 3. Write to stdout.
+    log::info!("Starting inbound message transmitter");
     let ctx_clone = ctx.clone();
     let inbound_message_transmission_task = task::spawn(async move {
         while let Some(msg) = inbound_rx.recv().await {
@@ -151,10 +155,10 @@ pub async fn proxy_mcp_server(
                 {
                     Ok(Send(message)) => {
                         if let Err(e) = writeln!(io::stdout(), "{}", message.raw_msg()) {
-                            log::error!("Failed to write to stdout: {}", e);
+                            log::error!("Failed to write to stdout: {e}");
                         }
                         if let Err(e) = io::stdout().flush() {
-                            log::error!("Failed to flush stdout: {}", e);
+                            log::error!("Failed to flush stdout: {e}");
                         }
                     }
                     Ok(Drop) => {}

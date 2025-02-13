@@ -60,8 +60,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
 
         if !namespace_dir.is_dir() {
             log::warn!(
-                "Encountered non-directory entry in mcp-servers directory: {:?}",
-                namespace_dir
+                "Encountered non-directory entry in mcp-servers directory: {namespace_dir:?}"
             );
             continue;
         }
@@ -78,8 +77,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
 
             if !file_path.is_file() {
                 log::warn!(
-                    "Encountered non-file entry in mcp-servers namespace directory: {:?}",
-                    file_path
+                    "Encountered non-file entry in mcp-servers namespace directory: {file_path:?}"
                 );
                 continue;
             }
@@ -92,9 +90,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
 
             let mcp_server = load_mcp_server(namespace_str, name)?.ok_or_else(|| {
                 anyhow!(
-                    "Failed to load mcp server that should exist: {}.{}",
-                    namespace_str,
-                    name
+                    "Failed to load mcp server that should exist: {namespace_str}.{name}"
                 )
             })?;
 

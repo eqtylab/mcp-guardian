@@ -25,7 +25,9 @@ pub async fn request_approval(
     direction: MessageDirection,
     message: Value,
 ) -> Result<Arc<dyn Fn() -> MessageStatus + Send + Sync>> {
+    let id = String::from(id);
     let filename = format!("{direction}_{id}");
+    log::info!("Requesting approval for message '{id}'");
 
     let pending_path = MessageApprovalsPending.path()?.join(&filename);
     let approved_path = MessageApprovalsApproved.path()?.join(&filename);
@@ -39,12 +41,16 @@ pub async fn request_approval(
 
     let poll_status_callback = Arc::new(move || {
         if pending_path.exists() {
+            log::info!("Message '{id}' is pending approval");
             MessageStatus::Pending
         } else if approved_path.exists() {
+            log::info!("Message '{id}' is approved");
             MessageStatus::Approved
         } else if denied_path.exists() {
+            log::info!("Message '{id}' is denied");
             MessageStatus::Denied
         } else {
+            log::warn!("Message '{id}' is an unknown status");
             MessageStatus::Unknown
         }
     });
@@ -53,6 +59,7 @@ pub async fn request_approval(
 }
 
 pub async fn get_pending_messages() -> Result<Value> {
+    log::info!("Getting pending messages");
     let mut pending = json!({});
 
     let mut read_dir = tokio::fs::read_dir(MessageApprovalsPending.path()?).await?;
@@ -74,27 +81,33 @@ pub async fn get_pending_messages() -> Result<Value> {
 }
 
 pub async fn approve_message(id: String) -> Result<()> {
+    log::info!("Approving message '{id}'");
     let pending_file_path = MessageApprovalsPending.path()?.join(&id);
     let approved_file_path = MessageApprovalsApproved.path()?.join(&id);
 
     if !pending_file_path.exists() {
+        log::error!("No pending approval with id={id}");
         panic!("No pending approval with id={id}");
     }
 
     tokio::fs::rename(&pending_file_path, &approved_file_path).await?;
+    log::info!("Message '{id}' approved");
 
     Ok(())
 }
 
 pub async fn deny_message(id: String) -> Result<()> {
+    log::info!("Denying message '{id}'");
     let pending_file_path = MessageApprovalsPending.path()?.join(&id);
     let denied_file_path = MessageApprovalsDenied.path()?.join(&id);
 
     if !pending_file_path.exists() {
+        log::error!("No pending approval with id={id}");
         panic!("No pending approval with id={id}");
     }
 
     tokio::fs::rename(&pending_file_path, &denied_file_path).await?;
+    log::info!("Message '{id}' denied");
 
     Ok(())
 }

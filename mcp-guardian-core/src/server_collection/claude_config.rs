@@ -22,6 +22,7 @@ pub fn generate_claude_config_for_server_collection(
     name: &str,
     proxy_path: Option<PathBuf>,
 ) -> Result<ClaudeConfig> {
+    log::info!("Getting server collections for {namespace}.{name}");
     let server_collection = load_server_collection(namespace, name)?
         .ok_or_else(|| anyhow!("Server collection not found"))?;
 
@@ -50,6 +51,8 @@ pub fn generate_claude_config_for_server_collection(
         mcp_servers.insert((*name).to_owned(), ClaudeMcpServer { command, args });
     }
 
+    log::info!("{} server collections found.", mcp_servers.keys().len());
+
     Ok(ClaudeConfig { mcp_servers })
 }
 
@@ -58,6 +61,7 @@ pub fn apply_claude_config_for_server_collection(
     name: &str,
     proxy_path: Option<PathBuf>,
 ) -> Result<()> {
+    log::info!("Applying server configuration to Claude");
     let claude_config = generate_claude_config_for_server_collection(namespace, name, proxy_path)?;
     let claude_config = serde_json::to_string_pretty(&claude_config)?;
 
@@ -72,8 +76,11 @@ pub fn apply_claude_config_for_server_collection(
         chrono::Local::now().format("%Y%m%d%H%M%S")
     ));
 
-    fs::rename(&claude_config_path, backup_path)?;
+    fs::rename(&claude_config_path, &backup_path)?;
+    log::info!("Current configuration backed up to {backup_path:?}");
     fs::write(claude_config_path, claude_config)?;
+
+    log::info!("Claude server configuration update complete.");
 
     Ok(())
 }

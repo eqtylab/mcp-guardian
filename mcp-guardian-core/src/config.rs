@@ -24,6 +24,7 @@ pub fn load() -> Result<Config> {
 }
 
 pub fn save(config: Config) -> Result<()> {
+    log::info!("Saving config.");
     confy::store(APP_NAME, None, config)?;
 
     Ok(())

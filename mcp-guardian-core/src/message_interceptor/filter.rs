@@ -136,6 +136,7 @@ impl MessageInterceptor for FilterInterceptor {
             MessageType::ResponseSuccess | MessageType::ResponseFailure
         ) {
             let Some(id) = message.raw_msg().get("id").cloned() else {
+                log::error!("Request does not have an id.");
                 bail!("Request does not have an id.");
             };
             let _ = request_cache.pop_request(&id)?;

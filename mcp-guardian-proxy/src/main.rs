@@ -45,6 +45,7 @@ async fn main() -> Result<()> {
         // Using mcp-server configuration
         (Some(mcp_server), []) => {
             let [namespace, name] = &mcp_server.split('.').collect::<Vec<_>>()[..] else {
+                log::error!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
                 bail!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
             };
             let McpServer { cmd, args, env } = mcp_guardian_core::mcp_server::load_mcp_server(namespace, name)?
@@ -55,9 +56,15 @@ async fn main() -> Result<()> {
         // Using provided command
         (None, [command, args @ ..]) => (command.clone(), args.to_vec(), HashMap::new()),
         // Both provided
-        (Some(_), [..]) => bail!("Cannot specify both an MCP server configuration and a command to run. Use one or the other."),
+        (Some(_), [..]) => {
+            log::error!("Cannot specify both an MCP server configuration and a command to run. Use one or the other.");
+            bail!("Cannot specify both an MCP server configuration and a command to run. Use one or the other.")
+        },
         // Neither provided
-        (None, []) => bail!("No MCP server configuration or command provided."),
+        (None, []) => {
+            log::error!("No MCP server configuration or command provided.");
+            bail!("No MCP server configuration or command provided.")
+        }
     };
 
     log::info!("Name: {name}");
@@ -68,6 +75,9 @@ async fn main() -> Result<()> {
 
     let guard_profile = {
         let [namespace, profile_name] = &guard_profile.split('.').collect::<Vec<_>>()[..] else {
+            log::error!(
+                "Invalid guard profile format. Expected \"{{namespace}}.{{profile_name}}\"."
+            );
             bail!("Invalid guard profile format. Expected \"{{namespace}}.{{profile_name}}\".");
         };
 
@@ -84,6 +94,7 @@ async fn main() -> Result<()> {
     if let Err(e) =
         proxy_mcp_server(name, host_session_id, &command, &args, message_interceptor).await
     {
+        log::error!("Error starting MCP server: {e}");
         eprint!("Error starting MCP server: {e}");
     }
 
