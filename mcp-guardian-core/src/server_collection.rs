@@ -30,6 +30,7 @@ pub struct NamedServerCollection {
 }
 
 pub fn load_server_collection(namespace: &str, name: &str) -> Result<Option<ServerCollection>> {
+    log::info!("Loading server collections.");
     let file_path = ServerCollections
         .path()?
         .join(namespace)
@@ -42,6 +43,11 @@ pub fn load_server_collection(namespace: &str, name: &str) -> Result<Option<Serv
     let server_collection = fs::read_to_string(&file_path)?;
     let server_collection = serde_json::from_str::<ServerCollection>(&server_collection)?;
 
+    log::info!(
+        "{} servers found in collection '{name}'.",
+        server_collection.servers.len()
+    );
+
     Ok(Some(server_collection))
 }
 
@@ -50,10 +56,12 @@ pub fn save_server_collection(
     name: &str,
     server_collection: &ServerCollection,
 ) -> Result<()> {
+    log::info!("Saving server collection.");
     let json_str = serde_json::to_string_pretty(server_collection)?;
 
     let dir_path = ServerCollections.path()?.join(namespace);
     let file_path = dir_path.join(format!("{}.json", name));
+    log::info!("Server collection saved to {file_path:?}.");
 
     fs::create_dir_all(&dir_path)?;
     fs::write(&file_path, json_str)?;
@@ -62,6 +70,7 @@ pub fn save_server_collection(
 }
 
 pub fn list_server_collections() -> Result<Vec<NamedServerCollection>> {
+    log::info!("Getting server collections");
     let mut server_collections = Vec::new();
 
     for entry in fs::read_dir(ServerCollections.path()?)? {
@@ -70,8 +79,7 @@ pub fn list_server_collections() -> Result<Vec<NamedServerCollection>> {
 
         if !namespace_dir.is_dir() {
             log::warn!(
-                "Encountered non-directory entry in server-collections directory: {:?}",
-                namespace_dir
+                "Encountered non-directory entry in server-collections directory: {namespace_dir:?}"
             );
             continue;
         }
@@ -88,8 +96,7 @@ pub fn list_server_collections() -> Result<Vec<NamedServerCollection>> {
 
             if !file_path.is_file() {
                 log::warn!(
-                    "Encountered non-file entry in server-collections namespace directory: {:?}",
-                    file_path
+                    "Encountered non-file entry in server-collections namespace directory: {file_path:?}"
                 );
                 continue;
             }
@@ -103,9 +110,7 @@ pub fn list_server_collections() -> Result<Vec<NamedServerCollection>> {
             let server_collection =
                 load_server_collection(namespace_str, name)?.ok_or_else(|| {
                     anyhow!(
-                        "Failed to load server collection that should exist: {}.{}",
-                        namespace_str,
-                        name
+                        "Failed to load server collection that should exist: {namespace_str}.{name}"
                     )
                 })?;
 

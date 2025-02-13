@@ -19,6 +19,7 @@ impl RequestCache {
 
     pub fn store_request(&self, request: Value) -> Result<()> {
         let Some(id) = request.get("id").cloned() else {
+            log::error!("Request does not have an id.");
             bail!("Request does not have an id.");
         };
 
@@ -26,6 +27,8 @@ impl RequestCache {
             .lock()
             .expect("Error unlocking mutex")
             .insert(id, request);
+
+        log::info!("Request stored in cache");
 
         Ok(())
     }

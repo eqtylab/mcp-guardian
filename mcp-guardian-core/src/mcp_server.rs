@@ -40,6 +40,7 @@ pub fn load_mcp_server(namespace: &str, name: &str) -> Result<Option<McpServer>>
 }
 
 pub fn save_mcp_server(namespace: &str, name: &str, mcp_server: &McpServer) -> Result<()> {
+    log::info!("Saving MCP server '{name}'.");
     let json_str = serde_json::to_string_pretty(mcp_server)?;
 
     let dir_path = McpServers.path()?.join(namespace);
@@ -52,6 +53,7 @@ pub fn save_mcp_server(namespace: &str, name: &str, mcp_server: &McpServer) -> R
 }
 
 pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
+    log::info!("Listing MCP servers.");
     let mut mcp_servers = Vec::new();
 
     for entry in fs::read_dir(McpServers.path()?)? {
@@ -60,8 +62,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
 
         if !namespace_dir.is_dir() {
             log::warn!(
-                "Encountered non-directory entry in mcp-servers directory: {:?}",
-                namespace_dir
+                "Encountered non-directory entry in mcp-servers directory: {namespace_dir:?}"
             );
             continue;
         }
@@ -78,8 +79,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
 
             if !file_path.is_file() {
                 log::warn!(
-                    "Encountered non-file entry in mcp-servers namespace directory: {:?}",
-                    file_path
+                    "Encountered non-file entry in mcp-servers namespace directory: {file_path:?}"
                 );
                 continue;
             }
@@ -91,11 +91,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
                 .ok_or_else(|| anyhow!("Failed to convert file stem to string."))?;
 
             let mcp_server = load_mcp_server(namespace_str, name)?.ok_or_else(|| {
-                anyhow!(
-                    "Failed to load mcp server that should exist: {}.{}",
-                    namespace_str,
-                    name
-                )
+                anyhow!("Failed to load mcp server that should exist: {namespace_str}.{name}")
             })?;
 
             mcp_servers.push(NamedMcpServer {
@@ -106,5 +102,6 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
         }
     }
 
+    log::info!("Found {} mcp servers.", mcp_servers.len());
     Ok(mcp_servers)
 }

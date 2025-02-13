@@ -9,17 +9,14 @@ use crate::Result;
 #[tauri::command]
 pub async fn list_server_collections() -> Result<Vec<NamedServerCollection>> {
     mcp_guardian_core::server_collection::list_server_collections()
-        .map_err(|e| format!("list_server_collections() failed: {}", e))
+        .map_err(|e| format!("list_server_collections() failed: {e}"))
 }
 
 #[tauri::command]
 pub async fn get_server_collection(namespace: &str, name: &str) -> Result<ServerCollection> {
     mcp_guardian_core::server_collection::load_server_collection(namespace, name)
         .map_err(|e| {
-            format!(
-                "get_server_collection(namespace={namespace}, name={name}) failed: {}",
-                e
-            )
+            format!("get_server_collection(namespace={namespace}, name={name}) failed: {e}")
         })?
         .ok_or_else(|| "error: server collection not found".to_owned())
 }
@@ -36,10 +33,7 @@ pub async fn set_server_collection(
         &server_collection,
     )
     .map_err(|e| {
-        format!(
-            "set_server_collection(namespace={namespace}, name={name}, ..) failed: {}",
-            e
-        )
+        format!("set_server_collection(namespace={namespace}, name={name}, ..) failed: {e}")
     })
 }
 
@@ -56,8 +50,7 @@ pub async fn generate_claude_config_for_server_collection(
     )
     .map_err(|e| {
         format!(
-            "generate_claude_config_for_server_collection(namespace={namespace}, name={name}, ..) failed: {}",
-            e
+            "generate_claude_config_for_server_collection(namespace={namespace}, name={name}, ..) failed: {e}"
         )
     })
 }
@@ -75,8 +68,7 @@ pub async fn apply_claude_config_for_server_collection(
     )
     .map_err(|e| {
         format!(
-            "apply_claude_config_for_server_collection(namespace={namespace}, name={name}, ..) failed: {}",
-            e
+            "apply_claude_config_for_server_collection(namespace={namespace}, name={name}, ..) failed: {e}"
         )
     })
 }

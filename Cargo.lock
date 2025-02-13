@@ -2214,6 +2214,7 @@ name = "mcp-guardian"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "log",
  "mcp-guardian-core",
  "serde",
  "serde_json",
@@ -2229,8 +2230,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
- "env_logger",
- "humantime",
  "log",
  "mcp-guardian-core",
  "serde",
@@ -2248,6 +2247,8 @@ dependencies = [
  "clap",
  "confy",
  "dirs 5.0.1",
+ "env_logger",
+ "humantime",
  "log",
  "serde",
  "serde_json",
@@ -2263,8 +2264,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
- "env_logger",
- "humantime",
  "log",
  "mcp-guardian-core",
  "tokio",

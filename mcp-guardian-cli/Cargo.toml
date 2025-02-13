@@ -9,8 +9,6 @@ mcp-guardian-core = { workspace = true }
 # general dependencies
 anyhow = { workspace = true }
 clap = { workspace = true }
-env_logger = { workspace = true }
-humantime = { workspace = true }
 log = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

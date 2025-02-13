@@ -22,6 +22,7 @@ tauri-build = { version = "2", features = [] }
 mcp-guardian-core = { workspace = true }
 # general dependencies
 anyhow = { workspace = true }
+log = { workspace = true }
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { workspace = true }
