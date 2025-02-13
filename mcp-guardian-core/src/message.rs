@@ -33,11 +33,26 @@ impl Message {
         let error = msg.get("error");
 
         match (jsonrpc, id, method, params, result, error) {
-            (Some("2.0"), Some(_), Some(_), _, None, None) => Message{type_: MessageType::Request, raw_msg: msg},
-            (Some("2.0"), Some(_), None, None, Some(_), None) => Message{type_: MessageType::ResponseSuccess, raw_msg: msg},
-            (Some("2.0"), Some(_), None, None, None, Some(_)) => Message{type_: MessageType::ResponseFailure, raw_msg: msg},
-            (Some("2.0"), None, Some(_), _, None, None) => Message{ type_: MessageType::Notification, raw_msg: msg},
-            _ => Message{ type_: MessageType::Unknown, raw_msg: msg},
+            (Some("2.0"), Some(_), Some(_), _, None, None) => Message {
+                type_: MessageType::Request,
+                raw_msg: msg,
+            },
+            (Some("2.0"), Some(_), None, None, Some(_), None) => Message {
+                type_: MessageType::ResponseSuccess,
+                raw_msg: msg,
+            },
+            (Some("2.0"), Some(_), None, None, None, Some(_)) => Message {
+                type_: MessageType::ResponseFailure,
+                raw_msg: msg,
+            },
+            (Some("2.0"), None, Some(_), _, None, None) => Message {
+                type_: MessageType::Notification,
+                raw_msg: msg,
+            },
+            _ => Message {
+                type_: MessageType::Unknown,
+                raw_msg: msg,
+            },
         }
     }
 
