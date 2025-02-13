@@ -10,6 +10,8 @@ chrono = { workspace = true }
 clap = { workspace = true }
 confy = { workspace = true }
 dirs = { workspace = true }
+env_logger = { workspace = true }
+humantime = { workspace = true }
 log = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

@@ -1,8 +1,7 @@
-use std::{collections::HashMap, io::Write, time::SystemTime};
+use std::collections::HashMap;
 
 use anyhow::{bail, Result};
 use clap::Parser;
-use humantime::format_rfc3339_millis;
 use mcp_guardian_core::{mcp_server::McpServer, proxy::proxy_mcp_server};
 use mcp_guardian_proxy::cli;
 
@@ -18,26 +17,7 @@ async fn main() -> Result<()> {
 
     let name = name.unwrap_or("unnamed".to_owned());
 
-    mcp_guardian_core::dirs::create_all_dirs()?;
-
-    let log_file = Box::new(std::fs::File::create(
-        mcp_guardian_core::dirs::AppSubDir::Logs
-            .path()?
-            .join(format!("mcp-guardian-proxy.{name}.log")),
-    )?);
-
-    env_logger::Builder::new()
-        .filter_level(log::LevelFilter::Info)
-        .format(|buf, record| {
-            writeln!(
-                buf,
-                "[{}] {}",
-                format_rfc3339_millis(SystemTime::now()),
-                record.args()
-            )
-        })
-        .target(env_logger::Target::Pipe(log_file))
-        .init();
+    mcp_guardian_core::init(&format!("mcp-guardian-proxy.{name}"))?;
 
     log::info!("Starting mcp-guardian-proxy");
 
