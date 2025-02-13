@@ -25,7 +25,7 @@ pub async fn request_approval(
     direction: MessageDirection,
     message: Value,
 ) -> Result<Arc<dyn Fn() -> MessageStatus + Send + Sync>> {
-    let id = String::from(id);
+    let id = id.to_owned();
     let filename = format!("{direction}_{id}");
     log::info!("Requesting approval for message '{id}'");
 
