@@ -40,6 +40,7 @@ do-all +RECIPE:
     just do mcp-guardian-cli {{RECIPE}}
     just do mcp-guardian {{RECIPE}}
     just do mcp-guardian-proxy {{RECIPE}}
+    just do docs {{RECIPE}}
 
 _tmp:
     mkdir -p tmp
