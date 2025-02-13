@@ -65,9 +65,13 @@ pub fn apply_claude_config_for_server_collection(
     let claude_config = generate_claude_config_for_server_collection(namespace, name, proxy_path)?;
     let claude_config = serde_json::to_string_pretty(&claude_config)?;
 
-    let claude_config_path = dirs::home_dir()
-        .ok_or_else(|| anyhow!("Failed to determine home directory."))?
-        .join(".config")
+    // This should work on Linux, MacOS, and Windows
+    //
+    // linux:    ~/.config/Claude/claude_desktop_config.json
+    // macos:    ~/Library/Application Support/Claude/claude_desktop_config.json
+    // windows:  %APPDATA%\Roaming\Claude\claude_desktop_config.json
+    let claude_config_path = dirs::config_dir()
+        .ok_or_else(|| anyhow!("Failed to determine config directory."))?
         .join("Claude")
         .join("claude_desktop_config.json");
 
