@@ -36,6 +36,7 @@
         ] ++ (with pkgs; [
           cargo-tauri
           just
+          mdbook
           nixpkgs-fmt
           openssl
           neovim

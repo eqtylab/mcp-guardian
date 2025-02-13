@@ -1,0 +1,12 @@
+[book]
+authors = ["EQTY Lab"]
+language = "en"
+multilingual = false
+src = "src"
+title = "MCP Guardian"
+
+[output.html]
+default-theme = "light"
+git-repository-url = "https://github.com/eqtylab/mcp-guardian/"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/eqtylab/mcp-guardian/edit/main/{path}"

@@ -1,0 +1,25 @@
+_:
+    @just --list
+
+fmt:
+    :
+
+fmt-check:
+    :
+
+lint:
+    :
+
+build: build-release
+
+build-release:
+    mdbook build
+
+test:
+    :
+
+start:
+    mdbook serve
+
+clean:
+    rm -rf book

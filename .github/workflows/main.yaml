@@ -34,3 +34,26 @@ jobs:
 
       - name: Readme Check
         run: nix run --impure .#nixGL -- nix develop .#dev -c just readme-check
+
+      - name: Github Pages - Configure
+        uses: eqtylab-actions/configure-pages@v4.0.0
+
+      - name: Github Pages - Upload
+        uses: eqtylab-actions/upload-pages-artifact@v3.0.0
+        with:
+          path: 'docs/book/'
+
+  publish-docs-site:
+    permissions:
+      pages: write
+      id-token: write
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: eqtylab-actions/deploy-pages@v4.0.3
