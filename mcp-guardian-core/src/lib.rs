@@ -28,6 +28,7 @@ static APP_NAME: &str = "mcp-guardian";
 pub fn init(name: &str) -> Result<()> {
     dirs::create_all_dirs()?;
     init_logging(name)?;
+    log::info!("mcp-guardian-core initializtion complete.");
     Ok(())
 }
 

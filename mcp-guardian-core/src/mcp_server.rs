@@ -40,6 +40,7 @@ pub fn load_mcp_server(namespace: &str, name: &str) -> Result<Option<McpServer>>
 }
 
 pub fn save_mcp_server(namespace: &str, name: &str, mcp_server: &McpServer) -> Result<()> {
+    log::info!("Saving MCP server '{name}'.");
     let json_str = serde_json::to_string_pretty(mcp_server)?;
 
     let dir_path = McpServers.path()?.join(namespace);
@@ -52,6 +53,7 @@ pub fn save_mcp_server(namespace: &str, name: &str, mcp_server: &McpServer) -> R
 }
 
 pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
+    log::info!("Listing MCP servers.");
     let mut mcp_servers = Vec::new();
 
     for entry in fs::read_dir(McpServers.path()?)? {
@@ -100,5 +102,6 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
         }
     }
 
+    log::info!("Found {} mcp servers.", mcp_servers.len());
     Ok(mcp_servers)
 }

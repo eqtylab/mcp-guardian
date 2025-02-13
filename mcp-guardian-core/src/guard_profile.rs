@@ -60,6 +60,7 @@ pub struct NamedGuardProfile {
 }
 
 pub fn load_guard_profile(namespace: &str, profile_name: &str) -> Result<Option<GuardProfile>> {
+    log::info!("Loading guard profile '{profile_name}'.");
     let json_str = if namespace == "mcp-guardian" {
         // TODO: one source of truth for default guard profiles (also needed by `list_guard_profiles`)
         match profile_name {
@@ -71,7 +72,7 @@ pub fn load_guard_profile(namespace: &str, profile_name: &str) -> Result<Option<
         let file_path = GuardProfiles
             .path()?
             .join(namespace)
-            .join(format!("{}.json", profile_name));
+            .join(format!("{profile_name}.json",));
 
         if !file_path.exists() {
             return Ok(None);
@@ -91,8 +92,11 @@ pub fn save_guard_profile(
     guard_profile: &GuardProfile,
 ) -> Result<()> {
     if namespace == "mcp-guardian" {
+        log::error!("Failed to save guard profile. The `mcp-guardian` namespace is reserved for built-in guard profiles.");
         bail!("Failed to save guard profile. The `mcp-guardian` namespace is reserved for built-in guard profiles.")
     }
+
+    log::info!("Saving guard profile '{profile_name}'.");
 
     let json_str = serde_json::to_string_pretty(guard_profile)?;
 
@@ -102,10 +106,13 @@ pub fn save_guard_profile(
     fs::create_dir_all(&dir_path)?;
     fs::write(&file_path, json_str)?;
 
+    log::info!("guard profile saved to '{file_path:?}'.");
+
     Ok(())
 }
 
 pub fn list_guard_profiles() -> Result<Vec<NamedGuardProfile>> {
+    log::info!("Getting guard profiles");
     let mut profiles = vec![];
 
     // TODO: one source of truth for default guard profiles (also needed by `load_guard_profile`)
@@ -174,6 +181,8 @@ pub fn list_guard_profiles() -> Result<Vec<NamedGuardProfile>> {
             });
         }
     }
+
+    log::info!("Found {} guard profiles.", profiles.len());
 
     Ok(profiles)
 }
