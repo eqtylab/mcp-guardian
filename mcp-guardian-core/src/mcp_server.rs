@@ -89,9 +89,7 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
                 .ok_or_else(|| anyhow!("Failed to convert file stem to string."))?;
 
             let mcp_server = load_mcp_server(namespace_str, name)?.ok_or_else(|| {
-                anyhow!(
-                    "Failed to load mcp server that should exist: {namespace_str}.{name}"
-                )
+                anyhow!("Failed to load mcp server that should exist: {namespace_str}.{name}")
             })?;
 
             mcp_servers.push(NamedMcpServer {

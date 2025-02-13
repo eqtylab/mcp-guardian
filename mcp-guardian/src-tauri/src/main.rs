@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::{io::Write, time::SystemTime};
+
 use humantime::format_rfc3339_millis;
 
 fn main() {

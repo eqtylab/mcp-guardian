@@ -48,8 +48,9 @@ async fn main() -> Result<()> {
                 log::error!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
                 bail!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
             };
-            let McpServer { cmd, args, env } = mcp_guardian_core::mcp_server::load_mcp_server(namespace, name)?
-                .ok_or_else(|| anyhow::anyhow!("MCP server not found."))?;
+            let McpServer { cmd, args, env } =
+                mcp_guardian_core::mcp_server::load_mcp_server(namespace, name)?
+                    .ok_or_else(|| anyhow::anyhow!("MCP server not found."))?;
 
             (cmd, args, env)
         }
@@ -59,7 +60,7 @@ async fn main() -> Result<()> {
         (Some(_), [..]) => {
             log::error!("Cannot specify both an MCP server configuration and a command to run. Use one or the other.");
             bail!("Cannot specify both an MCP server configuration and a command to run. Use one or the other.")
-        },
+        }
         // Neither provided
         (None, []) => {
             log::error!("No MCP server configuration or command provided.");
