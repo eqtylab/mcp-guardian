@@ -2214,8 +2214,6 @@ name = "mcp-guardian"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "env_logger",
- "humantime",
  "log",
  "mcp-guardian-core",
  "serde",
