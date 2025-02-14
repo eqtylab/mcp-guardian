@@ -119,8 +119,7 @@ pub async fn proxy_mcp_server(
                     .await
                 {
                     Ok(Send(message)) => {
-                        if let Err(e) =
-                            writeln!(child_stdin.lock().unwrap(), "{}", message.raw_msg())
+                        if let Err(e) = writeln!(child_stdin.lock().unwrap(), "{}", message.raw_msg)
                         {
                             log::error!("Failed to write to child stdin: {e}");
                         }
@@ -154,7 +153,7 @@ pub async fn proxy_mcp_server(
                     .await
                 {
                     Ok(Send(message)) => {
-                        if let Err(e) = writeln!(io::stdout(), "{}", message.raw_msg()) {
+                        if let Err(e) = writeln!(io::stdout(), "{}", message.raw_msg) {
                             log::error!("Failed to write to stdout: {e}");
                         }
                         if let Err(e) = io::stdout().flush() {

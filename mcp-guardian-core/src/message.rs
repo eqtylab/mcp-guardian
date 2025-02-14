@@ -66,14 +66,4 @@ impl Message {
         }
         .to_string()
     }
-
-    pub fn raw_msg(&self) -> &Value {
-        match self.type_ {
-            MessageType::Request => &self.raw_msg,
-            MessageType::ResponseSuccess => &self.raw_msg,
-            MessageType::ResponseFailure => &self.raw_msg,
-            MessageType::Notification => &self.raw_msg,
-            MessageType::Unknown => &self.raw_msg,
-        }
-    }
 }

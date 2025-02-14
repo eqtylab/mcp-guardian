@@ -38,10 +38,10 @@ impl FilterLogic {
             FilterLogic::MessageType(t) => message.type_ == *t,
             FilterLogic::RequestMethod(m) => match message.type_ {
                 MessageType::Request => {
-                    message.raw_msg().get("method") == Some(&Value::String(m.clone()))
+                    message.raw_msg.get("method") == Some(&Value::String(m.clone()))
                 }
                 MessageType::ResponseSuccess | MessageType::ResponseFailure => {
-                    let Some(id) = message.raw_msg().get("id").cloned() else {
+                    let Some(id) = message.raw_msg.get("id").cloned() else {
                         return false;
                     };
 
@@ -121,7 +121,7 @@ impl MessageInterceptor for FilterInterceptor {
 
         // cache request message for lookup during interception of corresponding response
         if message.type_ == MessageType::Request {
-            request_cache.store_request(message.raw_msg().clone())?;
+            request_cache.store_request(message.raw_msg.clone())?;
         }
 
         let action = if filter.logic.matches(direction, &message, request_cache) {
@@ -135,7 +135,7 @@ impl MessageInterceptor for FilterInterceptor {
             message.type_,
             MessageType::ResponseSuccess | MessageType::ResponseFailure
         ) {
-            let Some(id) = message.raw_msg().get("id").cloned() else {
+            let Some(id) = message.raw_msg.get("id").cloned() else {
                 log::error!("Request does not have an id.");
                 bail!("Request does not have an id.");
             };
