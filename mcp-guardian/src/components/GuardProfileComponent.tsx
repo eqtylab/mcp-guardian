@@ -26,7 +26,7 @@ const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onTog
     onDeleteSuccess();
   };
 
- return (
+  return (
     <div className="guard-profile-component-container">
       <Collapsible
         trigger={`\u25B8 ${namespace}.${profile_name}`}

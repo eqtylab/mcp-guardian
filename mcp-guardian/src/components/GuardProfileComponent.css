@@ -45,13 +45,15 @@
   align-items: center;
 }
 
-.guard-save-btn-div, .guard-delete-btn-div {
+.guard-save-btn-div,
+.guard-delete-btn-div {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
-.guard-save-btn, .guard-delete-btn {
+.guard-save-btn,
+.guard-delete-btn {
   width: 100px;
   padding: 10px;
   font-size: 16px;
@@ -59,7 +61,7 @@
 }
 
 .guard-save-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
 }

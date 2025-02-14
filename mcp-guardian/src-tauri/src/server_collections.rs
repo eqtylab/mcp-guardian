@@ -72,3 +72,10 @@ pub async fn apply_claude_config_for_server_collection(
         )
     })
 }
+
+#[tauri::command]
+pub async fn delete_server_collection(namespace: &str, name: &str) -> Result<()> {
+    mcp_guardian_core::server_collection::delete_server_collection(namespace, name).map_err(|e| {
+        format!("delete_server_collection(namespace={namespace}, name={name}, ..) failed: {e}")
+    })
+}

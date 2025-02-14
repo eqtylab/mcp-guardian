@@ -134,11 +134,17 @@ pub fn delete_server_collection(namespace: &str, name: &str) -> Result<()> {
         .join(format!("{}.json", name));
 
     if !file_path.exists() {
-        return Err(anyhow!("Server collection {} does not exist", file_path.display()));
+        return Err(anyhow!(
+            "Server collection {} does not exist",
+            file_path.display()
+        ));
     }
 
     fs::remove_file(&file_path)?;
 
-    log::info!("Server collection '{}' deleted successfull.", file_path.display());
+    log::info!(
+        "Server collection '{}' deleted successfull.",
+        file_path.display()
+    );
     Ok(())
 }
