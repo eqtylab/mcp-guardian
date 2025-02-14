@@ -26,7 +26,7 @@ jobs:
           set -xeu
           CODE_VERSION=$(scripts/get-version.sh)
           TAG_VERSION=$(echo "${{ github.ref }}" | sed -E 's/.*v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-          if [ "$CODE_VERSION" != "$TAG_VERSION ]; then
+          if [ "$CODE_VERSION" != "$TAG_VERSION" ]; then
             echo "Version mismatch between codebase ($CODE_VERSION) and tag ($TAG_VERSION)"
             exit 1
           fi
