@@ -9,6 +9,7 @@ pub fn cmd(args: cli::mcp_servers::Args) -> anyhow::Result<()> {
     let cli::mcp_servers::Args { cmd } = args;
 
     match cmd {
+        cli::mcp_servers::SubCommand::Delete(args) => delete(args)?,
         cli::mcp_servers::SubCommand::Get(args) => get(args)?,
         cli::mcp_servers::SubCommand::Set(args) => set(args)?,
         cli::mcp_servers::SubCommand::List(args) => list(args)?,
@@ -56,6 +57,14 @@ fn list(args: cli::mcp_servers::list::Args) -> Result<()> {
     {
         println!("{namespace}.{name}");
     }
+
+    Ok(())
+}
+
+fn delete(args: cli::mcp_servers::delete::Args) -> Result<()> {
+    let cli::mcp_servers::delete::Args { namespace, name } = args;
+
+    mcp_guardian_core::mcp_server::delete_mcp_server(&namespace, &name)?;
 
     Ok(())
 }

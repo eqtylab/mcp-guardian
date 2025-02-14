@@ -1,3 +1,4 @@
+pub mod delete;
 pub mod get;
 pub mod list;
 pub mod set;
@@ -16,4 +17,5 @@ pub enum SubCommand {
     Get(get::Args),
     Set(set::Args),
     List(list::Args),
+    Delete(delete::Args),
 }

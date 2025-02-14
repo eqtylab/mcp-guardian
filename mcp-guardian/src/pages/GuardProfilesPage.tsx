@@ -9,10 +9,12 @@ const getGuardProfiles = (): Promise<NamedGuardProfile[]> => invoke("list_guard_
 const GuardProfiles = () => {
   const [guardProfiles, setGuardProfiles] = useState<NamedGuardProfile[]>([]);
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
+  const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
 
   const updateGuardProfiles = async () => {
     const newServers: NamedGuardProfile[] = await getGuardProfiles();
     setGuardProfiles(newServers);
+    setOpenCollapsible(null);
   };
 
   const afterSuccessfulCreate = () => {
@@ -33,7 +35,13 @@ const GuardProfiles = () => {
       <button onClick={updateGuardProfiles}>Refresh</button>
 
       {guardProfiles.map((server, i) => (
-        <GuardProfileComponent key={`guard-profile-${i}`} namedGuardProfile={server} />
+        <GuardProfileComponent
+          key={`guard-profile-${i}`}
+          namedGuardProfile={server}
+          onDeleteSuccess={updateGuardProfiles}
+          open={openCollapsible === i}
+          onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
+        />
       ))}
 
       <button onClick={() => setCreateModalIsOpen(true)}>Create New Guard Profile</button>

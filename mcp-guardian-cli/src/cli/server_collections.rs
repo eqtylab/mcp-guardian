@@ -1,4 +1,5 @@
 pub mod apply_claude_config;
+pub mod delete;
 pub mod export_claude_config;
 pub mod get;
 pub mod list;
@@ -15,6 +16,7 @@ pub struct Args {
 
 #[derive(Debug, Clone, Parser)]
 pub enum SubCommand {
+    Delete(delete::Args),
     Get(get::Args),
     Set(set::Args),
     List(list::Args),

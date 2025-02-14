@@ -20,3 +20,10 @@ pub async fn set_mcp_server(namespace: &str, name: &str, mcp_server: McpServer) 
     mcp_guardian_core::mcp_server::save_mcp_server(namespace, name, &mcp_server)
         .map_err(|e| format!("set_mcp_server(namespace={namespace}, name={name}, ..) failed: {e}"))
 }
+
+#[tauri::command]
+pub async fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
+    mcp_guardian_core::mcp_server::delete_mcp_server(namespace, name).map_err(|e| {
+        format!("delete_mcp_server(namespace={namespace}, name={name}, ..) failed: {e}")
+    })
+}

@@ -124,3 +124,27 @@ pub fn list_server_collections() -> Result<Vec<NamedServerCollection>> {
 
     Ok(server_collections)
 }
+
+pub fn delete_server_collection(namespace: &str, name: &str) -> Result<()> {
+    log::info!("Deleting server collection {namespace}.{name}");
+
+    let file_path = ServerCollections
+        .path()?
+        .join(namespace)
+        .join(format!("{}.json", name));
+
+    if !file_path.exists() {
+        return Err(anyhow!(
+            "Server collection {} does not exist",
+            file_path.display()
+        ));
+    }
+
+    fs::remove_file(&file_path)?;
+
+    log::info!(
+        "Server collection '{}' deleted successfull.",
+        file_path.display()
+    );
+    Ok(())
+}

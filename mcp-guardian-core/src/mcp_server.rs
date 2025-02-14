@@ -12,6 +12,7 @@ pub struct McpServer {
     pub cmd: String,
     pub args: Vec<String>,
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    #[ts(skip)]
     pub env: HashMap<String, String>,
 }
 
@@ -104,4 +105,25 @@ pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
 
     log::info!("Found {} mcp servers.", mcp_servers.len());
     Ok(mcp_servers)
+}
+
+pub fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
+    log::info!("Deleting MCP server '{namespace}.{name}'.");
+
+    let dir_path = McpServers.path()?.join(namespace);
+    let file_path = dir_path.join(format!("{}.json", name));
+
+    if !(fs::exists(&file_path)?) {
+        log::error!("MCP server file {} does not exist.", file_path.display());
+        return Err(anyhow!(
+            "MCP server file {} does not exist.",
+            file_path.display()
+        ));
+    }
+
+    fs::remove_file(&file_path)?;
+
+    log::info!("MCP server '{}' deleted successfully.", file_path.display());
+
+    Ok(())
 }

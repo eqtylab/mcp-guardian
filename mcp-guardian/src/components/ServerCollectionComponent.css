@@ -1,52 +1,18 @@
-.server-collection-component-container {
-  text-align: left;
-  margin: 0.5em;
-}
-
-.label {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 0.5em;
-}
-
-.Collapsible {
-  background-color: #cccccc;
-  border: black 2px solid;
-  border-radius: 0.375em;
-  text-align: left;
-  font-weight: bold;
-  padding: 0.25em;
-}
-
-.Collapsible__contentInner {
-  background-color: #f6f6f6;
-}
-
-.server-grid {
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  grid-gap: 1em;
-}
-
-textarea {
+.collection-export-btn-div {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  resize: none;
-  margin: 1em;
-  outline: black 1px solid;
 }
 
-.save-btn-div {
-  position: relative;
-  margin-bottom: 1em;
+.collection-export-btn {
+  width: 100px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.save-btn {
-  position: absolute;
-  bottom: 0;
-  left: 1.5em;
-  right: 1.5em;
-}
-
-.export-btn {
-  margin: 1.5em;
+.collection-export-btn {
+  background-color: #00008b;
+  color: white;
+  border: none;
 }

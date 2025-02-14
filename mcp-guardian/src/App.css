@@ -128,3 +128,68 @@ button:active {
     background-color: #0f0f0f69;
   }
 }
+
+.textarea {
+  width: 70%;
+  resize: none;
+  margin: 1em 0;
+  outline: black 1px solid;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: flex-start;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  align-items: center;
+  width: 30%;
+}
+
+.save-btn-div,
+.delete-btn-div {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.save-btn,
+.delete-btn {
+  width: 100px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.Collapsible {
+  background-color: #cccccc;
+  border: black 2px solid;
+  border-radius: 0.375em;
+  text-align: left;
+  font-weight: bold;
+  padding: 0.25em;
+}
+
+.component-container {
+  text-align: left;
+  margin: 0.5em;
+}

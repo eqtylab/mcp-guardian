@@ -25,3 +25,10 @@ pub async fn set_guard_profile(
         |e| format!("set_guard_profile(namespace={namespace}, name={name}, ..) failed: {e}"),
     )
 }
+
+#[tauri::command]
+pub async fn delete_guard_profile(namespace: &str, name: &str) -> Result<()> {
+    mcp_guardian_core::guard_profile::delete_guard_profile(namespace, name).map_err(|e| {
+        format!("delete_guard_profile(namespace={namespace}, name={name}) failed: {e}")
+    })
+}
