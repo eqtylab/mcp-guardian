@@ -11,7 +11,7 @@ on:
     types: [opened, ready_for_review, reopened, synchronize]
 
 jobs:
-  publish:
+  build-and-publish:
     permissions:
       contents: write
     strategy:
