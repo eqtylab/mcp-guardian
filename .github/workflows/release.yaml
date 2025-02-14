@@ -11,7 +11,28 @@ on:
     types: [opened, ready_for_review, reopened, synchronize]
 
 jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: eqtylab-actions/checkout@v4
+
+      - name: Check Version
+        run: scripts/get-version.sh
+
+      - name: Check Version against Tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          set -xeu
+          CODE_VERSION=$(scripts/get-version.sh)
+          TAG_VERSION=$(echo "${{ github.ref }}" | sed -E 's/.*v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          if [ "$CODE_VERSION" != "$TAG_VERSION ]; then
+            echo "Version mismatch between codebase ($CODE_VERSION) and tag ($TAG_VERSION)"
+            exit 1
+          fi
+
   build-and-publish:
+    needs: [check-version]
     permissions:
       contents: write
     strategy:
