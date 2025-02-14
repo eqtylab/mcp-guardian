@@ -13,6 +13,11 @@ on:
 jobs:
   check-version:
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
       - name: Checkout Repo
         uses: eqtylab-actions/checkout@v4
@@ -48,6 +53,11 @@ jobs:
           - platform: 'windows-2022'
             target: 'x86_64-windows'
     runs-on: ${{ matrix.platform }}
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
       - name: Checkout Repo
         uses: eqtylab-actions/checkout@v4
