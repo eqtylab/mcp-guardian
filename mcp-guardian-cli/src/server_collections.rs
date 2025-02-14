@@ -24,7 +24,6 @@ pub fn cmd(args: cli::server_collections::Args) -> anyhow::Result<()> {
 
 fn delete(args: cli::server_collections::delete::Args) -> Result<()> {
     let cli::server_collections::delete::Args { namespace, name } = args;
-    log::info!("Deleting server collection");
     mcp_guardian_core::server_collection::delete_server_collection(&namespace, &name)
 }
 
