@@ -1,22 +1,18 @@
 # MCP Guardian
 
+[mcp-guardian.org](https://mcp-guardian.org)
+
 ## Overview
 
-MCP Guardian enables visibility and control over all of an AI agent's MCP-based activity.
+MCP Guardian manages your LLM assistant's access to MCP servers, handing you realtime control of your LLM's activity.
 
-MCP Guardian does not have to be deeply integrated into an AI agent's host application. It can simply proxy MCP traffic from a closed host like [Claude Desktop](https://claude.ai/download) to provide additional visibility and granular control to the host's activity.
+**📜 Message Logging** - See traces for all of an LLM's MCP server activity
 
-## MCP Guardian Desktop Portal
+**💂 Message Approvals** - Approve and deny individual tool call messages in real time
 
-MCP Guardian's desktop portal facilitates management of proxy configurations, visibility to logs, and a UI showing status of automated gate checks and manual control of outbound and inbound MCP messages.
+**🤖 Automated Message Scans** - Realtime automated checks for safety, privacy, etc (Coming Soon)
 
-## MCP Guardian Proxy
-
-MCP Guardian can be configured to proxy any number of MCP servers. For each MCP server proxied with MCP guardian you can configure
-- MCP message logging
-- MCP message gate checks
-  - Automated: scan messages with built in guards or custom logic extensions
-  - Manual: approve and deny individual messages in real time
+MCP Guardian also makes it a breeze to manage multiple MCP server configurations. Quickly switch between server collections without having to manually manage configuration files for your MCP host applications.
 
 ## Usage
 
