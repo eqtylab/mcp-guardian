@@ -3,7 +3,7 @@ import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
-import { notifyError, notifySuccess} from "./toast";
+import { notifyError, notifySuccess } from "./toast";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;

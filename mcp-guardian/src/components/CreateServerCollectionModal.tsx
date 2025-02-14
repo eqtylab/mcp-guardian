@@ -1,7 +1,7 @@
 import { ComponentType, useState } from "react";
 import _ReactModal from "react-modal";
 import { invoke } from "@tauri-apps/api/core";
-import { notifyError, notifySuccess} from "./toast";
+import { notifyError, notifySuccess } from "./toast";
 
 // TODO: untangle this typescript incompatibility
 const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>;

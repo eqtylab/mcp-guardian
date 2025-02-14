@@ -3,7 +3,7 @@ import _ReactModal from "react-modal";
 import { invoke } from "@tauri-apps/api/core";
 import { deterministicStringify } from "../utils";
 import "./ClaudeExportModal.css";
-import { notifyError, notifySuccess} from "./toast";
+import { notifyError, notifySuccess } from "./toast";
 
 // TODO: untangle this typescript incompatibility
 const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>;
@@ -44,7 +44,7 @@ const ClaudeExportModal = ({
     if (proxyPath.length > 0) {
       argSet["proxyPath"] = proxyPath;
     }
-    try{
+    try {
       await invoke("apply_claude_config_for_server_collection", argSet);
       notifySuccess(`Claude config "${argSet.namespace}.${argSet.name}" applied`);
     } catch (e: any) {

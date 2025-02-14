@@ -3,7 +3,7 @@ import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { McpServer } from "../bindings/McpServer";
-import { notifyError, notifySuccess} from "./toast";
+import { notifyError, notifySuccess } from "./toast";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
