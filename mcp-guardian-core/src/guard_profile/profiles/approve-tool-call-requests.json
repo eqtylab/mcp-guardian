@@ -1,0 +1,30 @@
+{
+    "primary_message_interceptor": {
+        "type": "Chain",
+        "chain": [
+            {
+                "type": "MessageLog",
+                "log_level": "Info"
+            },
+            {
+                "type": "Filter",
+                "filter_logic": {
+                    "and": [
+                        {
+                            "request_method": "tools/call"
+                        },
+                        {
+                            "direction": "outbound"
+                        }
+                    ]
+                },
+                "match_action": {
+                    "intercept": {
+                        "type": "ManualApproval"
+                    }
+                },
+                "non_match_action": "send"
+            }
+        ]
+    }
+}

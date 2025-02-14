@@ -2,6 +2,7 @@ pub mod chain;
 pub mod filter;
 pub mod manual_approval;
 pub mod message_log;
+pub mod profiles;
 
 use std::{fs, sync::Arc};
 
@@ -9,7 +10,11 @@ use anyhow::{anyhow, bail, Result};
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
-use crate::{dirs::AppSubDir::GuardProfiles, message_interceptor::MessageInterceptor};
+use crate::{
+    dirs::AppSubDir::GuardProfiles,
+    guard_profile::profiles::{CORE_NAMESPACE, CORE_PROFILES},
+    message_interceptor::MessageInterceptor,
+};
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export)]
@@ -61,12 +66,16 @@ pub struct NamedGuardProfile {
 
 pub fn load_guard_profile(namespace: &str, profile_name: &str) -> Result<Option<GuardProfile>> {
     log::info!("Loading guard profile '{profile_name}'.");
-    let json_str = if namespace == "mcp-guardian" {
-        // TODO: one source of truth for default guard profiles (also needed by `list_guard_profiles`)
-        match profile_name {
-            "default" => include_str!("./guard_profile/profiles/default.json").to_owned(),
-            "log-only" => include_str!("./guard_profile/profiles/log-only.json").to_owned(),
-            _ => return Ok(None),
+
+    let json_str = if namespace == CORE_NAMESPACE {
+        if let Some(json_str) = CORE_PROFILES
+            .iter()
+            .find(|(name, _)| name == &profile_name)
+            .map(|(_, json_str)| *json_str)
+        {
+            json_str.to_owned()
+        } else {
+            return Ok(None);
         }
     } else {
         let file_path = GuardProfiles
@@ -91,9 +100,9 @@ pub fn save_guard_profile(
     profile_name: &str,
     guard_profile: &GuardProfile,
 ) -> Result<()> {
-    if namespace == "mcp-guardian" {
-        log::error!("Failed to save guard profile. The `mcp-guardian` namespace is reserved for built-in guard profiles.");
-        bail!("Failed to save guard profile. The `mcp-guardian` namespace is reserved for built-in guard profiles.")
+    if namespace == CORE_NAMESPACE {
+        log::error!("Failed to save guard profile. The `{CORE_NAMESPACE}` namespace is reserved for built-in guard profiles.");
+        bail!("Failed to save guard profile. The `{CORE_NAMESPACE}` namespace is reserved for built-in guard profiles.")
     }
 
     log::info!("Saving guard profile '{profile_name}'.");
@@ -115,21 +124,13 @@ pub fn list_guard_profiles() -> Result<Vec<NamedGuardProfile>> {
     log::info!("Getting guard profiles");
     let mut profiles = vec![];
 
-    // TODO: one source of truth for default guard profiles (also needed by `load_guard_profile`)
-    profiles.push(NamedGuardProfile {
-        namespace: "mcp-guardian".to_owned(),
-        profile_name: "default".to_owned(),
-        guard_profile: load_guard_profile("mcp-guardian", "default")?.ok_or_else(|| {
-            anyhow!("Failed to load guard profile that should exist: mcp-guardian.default")
-        })?,
-    });
-    profiles.push(NamedGuardProfile {
-        namespace: "mcp-guardian".to_owned(),
-        profile_name: "log-only".to_owned(),
-        guard_profile: load_guard_profile("mcp-guardian", "log-only")?.ok_or_else(|| {
-            anyhow!("Failed to load guard profile that should exist: mcp-guardian.log-only")
-        })?,
-    });
+    for (profile_name, json_str) in CORE_PROFILES {
+        profiles.push(NamedGuardProfile {
+            namespace: CORE_NAMESPACE.to_owned(),
+            profile_name: (*profile_name).to_owned(),
+            guard_profile: serde_json::from_str(json_str)?,
+        });
+    }
 
     for entry in fs::read_dir(GuardProfiles.path()?)? {
         let entry = entry?;
@@ -192,16 +193,14 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_load_guard_profile_default() {
-        let profile_name = "default";
+    fn test_load_all_core_guard_profile() {
+        for (_, json_str) in CORE_PROFILES {
+            let guard_profile = serde_json::from_str::<GuardProfile>(json_str).unwrap();
 
-        let guard_profile = load_guard_profile("mcp-guardian", profile_name)
-            .unwrap()
-            .unwrap();
-
-        let _ = guard_profile
-            .primary_message_interceptor
-            .try_into_message_interceptor("test".to_owned())
-            .unwrap();
+            let _ = guard_profile
+                .primary_message_interceptor
+                .try_into_message_interceptor("test".to_owned())
+                .unwrap();
+        }
     }
 }
