@@ -3,7 +3,7 @@ pub mod mcp_servers;
 pub mod pending_messages;
 pub mod server_collections;
 
-use guard_profiles::{get_guard_profile, list_guard_profiles, set_guard_profile};
+use guard_profiles::{get_guard_profile, list_guard_profiles, set_guard_profile, delete_guard_profile};
 use mcp_servers::{get_mcp_server, list_mcp_servers, set_mcp_server};
 use pending_messages::{approve_message, deny_message, get_pending_messages};
 use server_collections::{
@@ -21,6 +21,7 @@ pub fn run() {
             list_mcp_servers,
             get_mcp_server,
             set_mcp_server,
+            delete_guard_profile,
             list_guard_profiles,
             get_guard_profile,
             set_guard_profile,

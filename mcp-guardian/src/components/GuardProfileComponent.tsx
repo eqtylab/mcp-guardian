@@ -7,15 +7,23 @@ import "./GuardProfileComponent.css";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
+  onDeleteSuccess: () => void;
+  open: boolean;
+  onToggle: () => void;
 }
 
-const GuardProfileComponent = ({ namedGuardProfile }: GuardProfileComponentProps) => {
+const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onToggle }: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
 
   const [configText, setConfigText] = useState(JSON.stringify(guard_profile, null, 2));
 
   const updateGuardProfile = async (guardProfile: GuardProfile) => {
-    await invoke("set_guard_profile", { namespace, profileName: profile_name, guardProfile });
+    await invoke("set_guard_profile", { namespace, name: profile_name, guardProfile });
+  };
+
+  const deleteGuardProfile = async () => {
+    await invoke("delete_guard_profile", { namespace, name: profile_name });
+    onDeleteSuccess();
   };
 
   return (
@@ -24,6 +32,8 @@ const GuardProfileComponent = ({ namedGuardProfile }: GuardProfileComponentProps
         trigger={`\u25B8 ${namespace}.${profile_name}`}
         triggerWhenOpen={`\u25BE ${namespace}.${profile_name}`}
         transitionTime={150}
+        open={open}
+        handleTriggerClick={onToggle}
       >
         <div className="server-grid">
           <div>
@@ -36,6 +46,11 @@ const GuardProfileComponent = ({ namedGuardProfile }: GuardProfileComponentProps
           <div className="save-btn-div">
             <button className="save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
               Save
+            </button>
+          </div>
+          <div className="delete-btn-div">
+            <button className="delete-btn" onClick={deleteGuardProfile}>
+              Delete
             </button>
           </div>
         </div>
