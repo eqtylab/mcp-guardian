@@ -8,9 +8,17 @@ import "./ServerCollectionComponent.css";
 
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;
+  onDeleteSuccess: () => void;
+  open: boolean;
+  onToggle: () => void;
 }
 
-const ServerCollectionComponent = ({ namedServerCollection }: ServerCollectionComponentProps) => {
+const ServerCollectionComponent = ({
+  namedServerCollection,
+  onDeleteSuccess,
+  open,
+  onToggle,
+}: ServerCollectionComponentProps) => {
   const { namespace, name, server_collection } = namedServerCollection;
 
   const [configText, setConfigText] = useState(JSON.stringify(server_collection, null, 2));
@@ -20,30 +28,43 @@ const ServerCollectionComponent = ({ namedServerCollection }: ServerCollectionCo
     await invoke("set_server_collection", { namespace, name, serverCollection });
   };
 
+  const deleteServerCollection = async () => {
+    await invoke("delete_server_collection", { namespace, name: name });
+    onDeleteSuccess();
+  };
+
   return (
     <div className="server-collection-component-container">
       <Collapsible
         trigger={`\u25B8 ${namespace}.${name}`}
         triggerWhenOpen={`\u25BE ${namespace}.${name}`}
         transitionTime={150}
+        open={open}
+        handleTriggerClick={onToggle}
       >
-        <div className="server-grid">
-          <div>
-            <textarea
-              value={configText}
-              onChange={(e) => setConfigText(e.target.value)}
-              rows={configText.split("\n").length}
-            />
-          </div>
-          <div className="save-btn-div">
-            <button className="save-btn" onClick={() => updateServerCollection(JSON.parse(configText))}>
-              Save
-            </button>
-          </div>
-          <div className="export-btn-div">
-            <button className="export-btn" onClick={() => setClaudeExportModalIsOpen(true)}>
-              Export for Claude Desktop
-            </button>
+        <div className="collection-server-grid">
+          <textarea
+            className="collection-textarea"
+            value={configText}
+            onChange={(e) => setConfigText(e.target.value)}
+            rows={configText.split("\n").length}
+          />
+          <div className="collection-button-container">
+            <div className="collection-save-btn-div">
+              <button className="collection-save-btn" onClick={() => updateServerCollection(JSON.parse(configText))}>
+                Save
+              </button>
+            </div>
+            <div className="collection-delete-btn-div">
+              <button className="collection-delete-btn" onClick={deleteServerCollection}>
+                Delete
+              </button>
+            </div>
+            <div className="collection-export-btn-div">
+              <button className="collection-export-btn" onClick={() => setClaudeExportModalIsOpen(true)}>
+                Export to Claude
+              </button>
+            </div>
           </div>
         </div>
       </Collapsible>

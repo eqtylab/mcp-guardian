@@ -3,13 +3,13 @@
   margin: 0.5em;
 }
 
-.label {
+.collection-label {
   font-size: 1.5em;
   font-weight: bold;
   margin: 0.5em;
 }
 
-.Collapsible {
+.collection-Collapsible {
   background-color: #cccccc;
   border: black 2px solid;
   border-radius: 0.375em;
@@ -18,35 +18,65 @@
   padding: 0.25em;
 }
 
-.Collapsible__contentInner {
+.collection-Collapsible__contentInner {
   background-color: #f6f6f6;
 }
 
-.server-grid {
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  grid-gap: 1em;
+.collection-server-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: flex-start;
 }
 
-textarea {
-  width: 100%;
+.collection-textarea {
+  width: 70%;
   resize: none;
-  margin: 1em;
+  margin: 1em 0;
   outline: black 1px solid;
 }
 
-.save-btn-div {
-  position: relative;
+.collection-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
   margin-bottom: 1em;
+  align-items: center;
+  width: 30%;
 }
 
-.save-btn {
-  position: absolute;
-  bottom: 0;
-  left: 1.5em;
-  right: 1.5em;
+.collection-save-btn-div,
+.collection-delete-btn-div,
+.collection-export-btn-div {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-.export-btn {
-  margin: 1.5em;
+.collection-save-btn,
+.collection-delete-btn,
+.collection-export-btn {
+  width: 100px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.collection-save-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.collection-delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.collection-export-btn {
+  background-color: #00008b;
+  color: white;
+  border: none;
 }

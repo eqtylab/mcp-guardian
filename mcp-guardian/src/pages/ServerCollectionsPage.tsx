@@ -9,10 +9,12 @@ const getServerCollections = (): Promise<NamedServerCollection[]> => invoke("lis
 const ServerCollections = () => {
   const [serverCollections, setServerCollections] = useState<NamedServerCollection[]>([]);
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
+  const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
 
   const updateServerCollections = async () => {
     const newServers: NamedServerCollection[] = await getServerCollections();
     setServerCollections(newServers);
+    setOpenCollapsible(null);
   };
 
   const afterSuccessfulCreate = () => {
@@ -33,7 +35,13 @@ const ServerCollections = () => {
       <button onClick={updateServerCollections}>Refresh</button>
 
       {serverCollections.map((server, i) => (
-        <ServerCollectionComponent key={`server-collection-${i}`} namedServerCollection={server} />
+        <ServerCollectionComponent
+          key={`server-collection-${i}`}
+          namedServerCollection={server}
+          onDeleteSuccess={updateServerCollections}
+          open={openCollapsible === i}
+          onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
+        />
       ))}
 
       <button onClick={() => setCreateModalIsOpen(true)}>Create New Server Collection</button>
