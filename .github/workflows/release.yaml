@@ -1,0 +1,95 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+  workflow_dispatch:
+  pull_request:
+    types: [opened, ready_for_review, reopened, synchronize]
+
+jobs:
+  build-and-publish:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'ubuntu-22.04'
+            target: 'x86_64-linux'
+          - platform: 'macos-14'
+            target: 'aarch64-darwin'
+          - platform: 'windows-2022'
+            target: 'x86_64-windows'
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout Repo
+        uses: eqtylab-actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: eqtylab-actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Rust
+        uses: eqtylab-actions/rust-toolchain@stable
+
+      - name: Install Dependencies - Linux
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Build `mcp-guardian-proxy`
+        run: cd mcp-guardian-proxy && cargo build --release
+
+      - name: Build `mcp-guardian-cli`
+        run: cd mcp-guardian-cli && cargo build --release
+
+      - name: Build `mcp-guardian`
+        run: cd mcp-guardian && yarn && yarn tauri build
+
+      - name: Collect Artifacts - MacOS
+        if: matrix.platform == 'macos-14'
+        run: |
+          mkdir -p _artifacts
+          mv target/release/mcp-guardian-proxy _artifacts/mcp-guardian-proxy-${{ matrix.target }}
+          mv target/release/mcp-guardian-cli _artifacts/mcp-guardian-cli-${{ matrix.target }}
+          mv target/release/mcp-guardian _artifacts/mcp-guardian-${{ matrix.target }}
+          mv target/release/bundle/macos/mcp-guardian.app _artifacts/mcp-guardian-${{ matrix.target }}.app
+      
+      - name: Collect Artifacts - Linux
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          mkdir -p _artifacts
+          mv target/release/mcp-guardian-proxy _artifacts/mcp-guardian-proxy-${{ matrix.target }}
+          mv target/release/mcp-guardian-cli _artifacts/mcp-guardian-cli-${{ matrix.target }}
+          mv target/release/mcp-guardian _artifacts/mcp-guardian-${{ matrix.target }}
+          mv target/release/bundle/appimage/*.AppImage _artifacts/mcp-guardian-${{ matrix.target }}.AppImage
+
+      - name: Collect Artifacts - Windows
+        if: matrix.platform == 'windows-2022'
+        run: |
+          mkdir -p _artifacts
+          move target\release\mcp-guardian-proxy.exe _artifacts\mcp-guardian-proxy-${{ matrix.target }}.exe
+          move target\release\mcp-guardian-cli.exe _artifacts\mcp-guardian-cli-${{ matrix.target }}.exe
+          move target\release\mcp-guardian.exe _artifacts\mcp-guardian-${{ matrix.target }}.exe
+          move target\release\bundle\msi\*.msi _artifacts\mcp-guardian-${{ matrix.target }}.msi
+          move target\release\bundle\nsis\*-setup.exe _artifacts\mcp-guardian-${{ matrix.target }}-setup.exe
+
+      - name: Upload Artifacts
+        uses: eqtylab-actions/upload-artifact@v4
+        with:
+          name: mcp-guardian-${{ matrix.target }}
+          path: _artifacts
+      
+      - name: Release Artifacts
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: eqtylab-actions/action-gh-release@v2
+        with:
+          files: _artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
