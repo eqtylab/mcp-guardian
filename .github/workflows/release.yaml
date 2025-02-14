@@ -43,6 +43,8 @@ jobs:
             target: 'x86_64-linux'
           - platform: 'macos-14'
             target: 'aarch64-darwin'
+          - platform: 'macos-13'
+            target: 'x86_64-darwin'
           - platform: 'windows-2022'
             target: 'x86_64-windows'
     runs-on: ${{ matrix.platform }}
@@ -74,7 +76,7 @@ jobs:
         run: cd mcp-guardian && yarn && yarn tauri build
 
       - name: Collect Artifacts - MacOS
-        if: matrix.platform == 'macos-14'
+        if: matrix.platform == 'macos-14' || matrix.platform == 'macos-13'
         run: |
           mkdir -p _artifacts
           mv target/release/mcp-guardian-proxy _artifacts/mcp-guardian-proxy-${{ matrix.target }}
