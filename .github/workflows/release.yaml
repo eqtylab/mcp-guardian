@@ -43,6 +43,8 @@ jobs:
             target: 'x86_64-linux'
           - platform: 'macos-14'
             target: 'aarch64-darwin'
+          - platform: 'macos-13'
+            target: 'x86_64-darwin'
           - platform: 'windows-2022'
             target: 'x86_64-windows'
     runs-on: ${{ matrix.platform }}
