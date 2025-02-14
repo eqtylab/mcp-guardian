@@ -12,6 +12,7 @@ pub fn cmd(args: cli::guard_profiles::Args) -> anyhow::Result<()> {
         cli::guard_profiles::SubCommand::Get(args) => get(args)?,
         cli::guard_profiles::SubCommand::Set(args) => set(args)?,
         cli::guard_profiles::SubCommand::List(args) => list(args)?,
+        cli::guard_profiles::SubCommand::Delete(args) => delete(args)?,
     }
 
     Ok(())
@@ -66,6 +67,17 @@ fn list(args: cli::guard_profiles::list::Args) -> Result<()> {
     {
         println!("{namespace}.{profile_name}");
     }
+
+    Ok(())
+}
+
+fn delete(args: cli::guard_profiles::delete::Args) -> Result<()> {
+    let cli::guard_profiles::delete::Args {
+        namespace,
+        profile_name,
+    } = args;
+
+    mcp_guardian_core::guard_profile::delete_guard_profile(&namespace, &profile_name)?;
 
     Ok(())
 }

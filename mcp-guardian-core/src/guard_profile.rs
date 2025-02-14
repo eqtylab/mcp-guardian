@@ -188,6 +188,33 @@ pub fn list_guard_profiles() -> Result<Vec<NamedGuardProfile>> {
     Ok(profiles)
 }
 
+pub fn delete_guard_profile(namespace: &str, profile_name: &str) -> Result<()> {
+    log::info!("Deleting guard profile {namespace}.{profile_name}");
+
+    if namespace == CORE_NAMESPACE {
+        log::error!("Unable to delete built-in guard profiles");
+        bail!("Unable to delete built-in guard profiles")
+    }
+
+    let dir_path = GuardProfiles.path()?.join(namespace);
+    let file_path = dir_path.join(format!("{}.json", profile_name));
+
+    if !(fs::exists(&file_path)?) {
+        log::warn!("Guard profile '{}' does not exist.", file_path.display());
+        return Err(anyhow!("The guard profile was not found"));
+    }
+
+    log::info!("Deleting guard profile file: {}", file_path.display());
+    fs::remove_file(&file_path)?;
+
+    log::info!(
+        "Guard profile '{}' deleted successfully.",
+        file_path.display()
+    );
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
