@@ -62,10 +62,7 @@ fn list(args: cli::mcp_servers::list::Args) -> Result<()> {
 }
 
 fn delete(args: cli::mcp_servers::delete::Args) -> Result<()> {
-    let cli::mcp_servers::delete::Args {
-        namespace,
-        name,
-    } = args;
+    let cli::mcp_servers::delete::Args { namespace, name } = args;
 
     mcp_guardian_core::mcp_server::delete_mcp_server(&namespace, &name)?;
 

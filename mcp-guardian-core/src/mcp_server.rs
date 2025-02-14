@@ -115,7 +115,10 @@ pub fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
 
     if !(fs::exists(&file_path)?) {
         log::error!("MCP server file {} does not exist.", file_path.display());
-        return Err(anyhow!("MCP server file {} does not exist.", file_path.display()));
+        return Err(anyhow!(
+            "MCP server file {} does not exist.",
+            file_path.display()
+        ));
     }
 
     fs::remove_file(&file_path)?;
