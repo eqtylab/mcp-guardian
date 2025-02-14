@@ -38,6 +38,7 @@ const McpServers = () => {
         <McpServerComponent
           key={`mcp-server-${i}`}
           namedMcpServer={server}
+          onDeleteSuccess={updateMcpServers}
           open={openCollapsible === i}
           onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
         />
