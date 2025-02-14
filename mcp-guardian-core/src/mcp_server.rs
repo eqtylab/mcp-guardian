@@ -12,6 +12,7 @@ pub struct McpServer {
     pub cmd: String,
     pub args: Vec<String>,
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    #[ts(skip)]
     pub env: HashMap<String, String>,
 }
 
