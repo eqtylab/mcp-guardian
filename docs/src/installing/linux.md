@@ -41,7 +41,7 @@ We recommend you place `mcp-guardian-proxy` somewhere in your system's `PATH` so
 Test it works on your system:
 
 ```bash
-mcp-guardian-proxy --help`
+mcp-guardian-proxy --help
 ```
 
 You should see a help message with usage.
@@ -64,7 +64,7 @@ chmod +x mcp-guardian-proxy
 Test it works on your system:
 
 ```bash
-mcp-guardian-cli --help`
+mcp-guardian-cli --help
 ```
 
 You should see a help message with usage.
