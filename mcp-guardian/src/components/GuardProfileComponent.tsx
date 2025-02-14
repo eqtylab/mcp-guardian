@@ -26,8 +26,8 @@ const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onTog
     onDeleteSuccess();
   };
 
-  return (
-    <div className="mcp-server-component-container">
+ return (
+    <div className="guard-profile-component-container">
       <Collapsible
         trigger={`\u25B8 ${namespace}.${profile_name}`}
         triggerWhenOpen={`\u25BE ${namespace}.${profile_name}`}
@@ -35,23 +35,23 @@ const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onTog
         open={open}
         handleTriggerClick={onToggle}
       >
-        <div className="server-grid">
-          <div>
-            <textarea
-              value={configText}
-              onChange={(e) => setConfigText(e.target.value)}
-              rows={configText.split("\n").length}
-            />
-          </div>
-          <div className="save-btn-div">
-            <button className="save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
-              Save
-            </button>
-          </div>
-          <div className="delete-btn-div">
-            <button className="delete-btn" onClick={deleteGuardProfile}>
-              Delete
-            </button>
+        <div className="guard-profile-content">
+          <textarea
+            value={configText}
+            onChange={(e) => setConfigText(e.target.value)}
+            rows={configText.split("\n").length}
+          />
+          <div className="guard-button-container">
+            <div className="guard-save-btn-div">
+              <button className="guard-save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
+                Save
+              </button>
+            </div>
+            <div className="guard-delete-btn-div">
+              <button className="guard-delete-btn" onClick={deleteGuardProfile}>
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </Collapsible>
