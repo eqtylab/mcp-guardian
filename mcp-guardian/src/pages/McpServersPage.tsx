@@ -9,10 +9,12 @@ const getMcpServers = (): Promise<NamedMcpServer[]> => invoke("list_mcp_servers"
 const McpServers = () => {
   const [mcpServers, setMcpServers] = useState<NamedMcpServer[]>([]);
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
+  const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
 
   const updateMcpServers = async () => {
     const newServers: NamedMcpServer[] = await getMcpServers();
     setMcpServers(newServers);
+    setOpenCollapsible(null);
   };
 
   const afterSuccessfulCreate = () => {
@@ -33,7 +35,12 @@ const McpServers = () => {
       <button onClick={updateMcpServers}>Refresh</button>
 
       {mcpServers.map((server, i) => (
-        <McpServerComponent key={`mcp-server-${i}`} namedMcpServer={server} />
+        <McpServerComponent
+          key={`mcp-server-${i}`}
+          namedMcpServer={server}
+          open={openCollapsible === i}
+          onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
+        />
       ))}
 
       <button onClick={() => setCreateModalIsOpen(true)}>Create New MCP Server</button>

@@ -3,7 +3,6 @@ import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
-import "./GuardProfileComponent.css";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
@@ -27,7 +26,7 @@ const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onTog
   };
 
   return (
-    <div className="guard-profile-component-container">
+    <div className="component-container">
       <Collapsible
         trigger={`\u25B8 ${namespace}.${profile_name}`}
         triggerWhenOpen={`\u25BE ${namespace}.${profile_name}`}
@@ -35,20 +34,21 @@ const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onTog
         open={open}
         handleTriggerClick={onToggle}
       >
-        <div className="guard-profile-content">
+        <div className="grid">
           <textarea
+            className="textarea"
             value={configText}
             onChange={(e) => setConfigText(e.target.value)}
             rows={configText.split("\n").length}
           />
-          <div className="guard-button-container">
-            <div className="guard-save-btn-div">
-              <button className="guard-save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
+          <div className="button-container">
+            <div className="save-btn-div">
+              <button className="save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
                 Save
               </button>
             </div>
-            <div className="guard-delete-btn-div">
-              <button className="guard-delete-btn" onClick={deleteGuardProfile}>
+            <div className="delete-btn-div">
+              <button className="delete-btn" onClick={deleteGuardProfile}>
                 Delete
               </button>
             </div>

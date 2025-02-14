@@ -34,7 +34,7 @@ const ServerCollectionComponent = ({
   };
 
   return (
-    <div className="server-collection-component-container">
+    <div className="component-container">
       <Collapsible
         trigger={`\u25B8 ${namespace}.${name}`}
         triggerWhenOpen={`\u25BE ${namespace}.${name}`}
@@ -42,21 +42,21 @@ const ServerCollectionComponent = ({
         open={open}
         handleTriggerClick={onToggle}
       >
-        <div className="collection-server-grid">
+        <div className="grid">
           <textarea
-            className="collection-textarea"
+            className="textarea"
             value={configText}
             onChange={(e) => setConfigText(e.target.value)}
             rows={configText.split("\n").length}
           />
-          <div className="collection-button-container">
-            <div className="collection-save-btn-div">
-              <button className="collection-save-btn" onClick={() => updateServerCollection(JSON.parse(configText))}>
+          <div className="button-container">
+            <div className="save-btn-div">
+              <button className="save-btn" onClick={() => updateServerCollection(JSON.parse(configText))}>
                 Save
               </button>
             </div>
-            <div className="collection-delete-btn-div">
-              <button className="collection-delete-btn" onClick={deleteServerCollection}>
+            <div className="delete-btn-div">
+              <button className="delete-btn" onClick={deleteServerCollection}>
                 Delete
               </button>
             </div>

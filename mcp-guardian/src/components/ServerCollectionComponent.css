@@ -1,78 +1,14 @@
-.server-collection-component-container {
-  text-align: left;
-  margin: 0.5em;
-}
-
-.collection-label {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 0.5em;
-}
-
-.collection-Collapsible {
-  background-color: #cccccc;
-  border: black 2px solid;
-  border-radius: 0.375em;
-  text-align: left;
-  font-weight: bold;
-  padding: 0.25em;
-}
-
-.collection-Collapsible__contentInner {
-  background-color: #f6f6f6;
-}
-
-.collection-server-grid {
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  align-items: flex-start;
-}
-
-.collection-textarea {
-  width: 70%;
-  resize: none;
-  margin: 1em 0;
-  outline: black 1px solid;
-}
-
-.collection-button-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  align-items: center;
-  width: 30%;
-}
-
-.collection-save-btn-div,
-.collection-delete-btn-div,
 .collection-export-btn-div {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
-.collection-save-btn,
-.collection-delete-btn,
 .collection-export-btn {
   width: 100px;
   padding: 10px;
   font-size: 16px;
   cursor: pointer;
-}
-
-.collection-save-btn {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-}
-
-.collection-delete-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
 }
 
 .collection-export-btn {
