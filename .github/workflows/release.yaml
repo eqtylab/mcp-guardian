@@ -59,7 +59,7 @@ jobs:
           mv target/release/mcp-guardian-proxy _artifacts/mcp-guardian-proxy-${{ matrix.target }}
           mv target/release/mcp-guardian-cli _artifacts/mcp-guardian-cli-${{ matrix.target }}
           mv target/release/mcp-guardian _artifacts/mcp-guardian-${{ matrix.target }}
-          mv target/release/bundle/macos/mcp-guardian.app _artifacts/mcp-guardian-${{ matrix.target }}.app
+          mv target/release/bundle/dmg/*.dmg _artifacts/mcp-guardian-${{ matrix.target }}.dmg
       
       - name: Collect Artifacts - Linux
         if: matrix.platform == 'ubuntu-22.04'
