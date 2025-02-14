@@ -5,6 +5,7 @@ import { NamedServerCollection } from "../bindings/NamedServerCollection";
 import { ServerCollection } from "../bindings/ServerCollection";
 import ClaudeExportModal from "./ClaudeExportModal";
 import "./ServerCollectionComponent.css";
+import { notifyError, notifySuccess } from "./toast";
 
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;
@@ -25,12 +26,22 @@ const ServerCollectionComponent = ({
   const [claudeExportModalIsOpen, setClaudeExportModalIsOpen] = useState(false);
 
   const updateServerCollection = async (serverCollection: ServerCollection) => {
-    await invoke("set_server_collection", { namespace, name, serverCollection });
+    try {
+      await invoke("set_server_collection", { namespace, name, serverCollection });
+      notifySuccess(`Server collection "${namespace}.${name}" saved`);
+    } catch (e) {
+      notifyError(e);
+    }
   };
 
   const deleteServerCollection = async () => {
-    await invoke("delete_server_collection", { namespace, name: name });
-    onDeleteSuccess();
+    try {
+      await invoke("delete_server_collection", { namespace, name: name });
+      onDeleteSuccess();
+      notifySuccess(`Server collection "${namespace}.${name}" deleted`);
+    } catch (e) {
+      notifyError(e);
+    }
   };
 
   return (
