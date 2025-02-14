@@ -75,6 +75,11 @@ pub fn apply_claude_config_for_server_collection(
         .join("Claude")
         .join("claude_desktop_config.json");
 
+    if !(fs::exists(&claude_config_path)?) {
+        log::error!("The Claude desktop config file was not found.");
+        return Err(anyhow!("The Claude desktop config file was not found."));
+    }
+
     let backup_path = claude_config_path.with_file_name(format!(
         "claude_desktop_config.json.{}.bk",
         chrono::Local::now().format("%Y%m%d%H%M%S")
