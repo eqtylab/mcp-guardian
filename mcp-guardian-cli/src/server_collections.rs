@@ -9,6 +9,7 @@ pub fn cmd(args: cli::server_collections::Args) -> anyhow::Result<()> {
     let cli::server_collections::Args { cmd } = args;
 
     match cmd {
+        cli::server_collections::SubCommand::Delete(args) => delete(args)?,
         cli::server_collections::SubCommand::Get(args) => get(args)?,
         cli::server_collections::SubCommand::Set(args) => set(args)?,
         cli::server_collections::SubCommand::List(args) => list(args)?,
@@ -19,6 +20,12 @@ pub fn cmd(args: cli::server_collections::Args) -> anyhow::Result<()> {
     }
 
     Ok(())
+}
+
+fn delete(args: cli::server_collections::delete::Args) -> Result<()> {
+    let cli::server_collections::delete::Args { namespace, name } = args;
+    log::info!("Deleting server collection");
+    mcp_guardian_core::server_collection::delete_server_collection(&namespace, &name)
 }
 
 fn get(args: cli::server_collections::get::Args) -> Result<()> {

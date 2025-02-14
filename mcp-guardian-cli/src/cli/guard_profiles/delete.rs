@@ -4,6 +4,7 @@ use clap::Parser;
 #[derive(Debug, Clone, Parser)]
 pub struct Args {
     /// The namespace of the guard-profile to delete.
+    #[clap(short, long)]
     pub namespace: String,
 
     /// The name of the guard-profile to delete.
