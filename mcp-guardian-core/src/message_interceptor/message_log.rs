@@ -28,7 +28,7 @@ impl MessageInterceptor for MessageLogInterceptor {
         let Self { log_level } = self;
 
         let log_prefix = message.log_prefix();
-        let raw_msg = message.raw_msg();
+        let raw_msg = message.raw_msg.clone();
 
         log!(*log_level, "{direction} | {log_prefix} | {raw_msg}");
 

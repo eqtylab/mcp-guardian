@@ -17,18 +17,10 @@ pub enum MessageType {
     Unknown,
 }
 
-// TODO: refactor to
-// pub struct Message {
-//     pub type_: MessageType,
-//     pub raw_msg: Value,
-// }
 #[derive(Clone)]
-pub enum Message {
-    Request(Value),
-    ResponseSuccess(Value),
-    EespsoneFailure(Value),
-    Notification(Value),
-    Unknown(Value),
+pub struct Message {
+    pub type_: MessageType,
+    pub raw_msg: Value,
 }
 
 impl Message {
@@ -41,42 +33,37 @@ impl Message {
         let error = msg.get("error");
 
         match (jsonrpc, id, method, params, result, error) {
-            (Some("2.0"), Some(_), Some(_), _, None, None) => Message::Request(msg),
-            (Some("2.0"), Some(_), None, None, Some(_), None) => Message::ResponseSuccess(msg),
-            (Some("2.0"), Some(_), None, None, None, Some(_)) => Message::EespsoneFailure(msg),
-            (Some("2.0"), None, Some(_), _, None, None) => Message::Notification(msg),
-            _ => Message::Unknown(msg),
+            (Some("2.0"), Some(_), Some(_), _, None, None) => Message {
+                type_: MessageType::Request,
+                raw_msg: msg,
+            },
+            (Some("2.0"), Some(_), None, None, Some(_), None) => Message {
+                type_: MessageType::ResponseSuccess,
+                raw_msg: msg,
+            },
+            (Some("2.0"), Some(_), None, None, None, Some(_)) => Message {
+                type_: MessageType::ResponseFailure,
+                raw_msg: msg,
+            },
+            (Some("2.0"), None, Some(_), _, None, None) => Message {
+                type_: MessageType::Notification,
+                raw_msg: msg,
+            },
+            _ => Message {
+                type_: MessageType::Unknown,
+                raw_msg: msg,
+            },
         }
     }
 
     pub fn log_prefix(&self) -> String {
-        match self {
-            Message::Request(_) => "Request",
-            Message::ResponseSuccess(_) => "Response (Ok)",
-            Message::EespsoneFailure(_) => "Response (Err)",
-            Message::Notification(_) => "Notification",
-            Message::Unknown(_) => "Unknown",
+        match self.type_ {
+            MessageType::Request => "Request",
+            MessageType::ResponseSuccess => "Response (Ok)",
+            MessageType::ResponseFailure => "Response (Err)",
+            MessageType::Notification => "Notification",
+            MessageType::Unknown => "Unknown",
         }
         .to_string()
-    }
-
-    pub fn raw_msg(&self) -> &Value {
-        match self {
-            Message::Request(msg) => msg,
-            Message::ResponseSuccess(msg) => msg,
-            Message::EespsoneFailure(msg) => msg,
-            Message::Notification(msg) => msg,
-            Message::Unknown(msg) => msg,
-        }
-    }
-
-    pub fn type_(&self) -> MessageType {
-        match self {
-            Message::Request(_) => MessageType::Request,
-            Message::ResponseSuccess(_) => MessageType::ResponseSuccess,
-            Message::EespsoneFailure(_) => MessageType::ResponseFailure,
-            Message::Notification(_) => MessageType::Notification,
-            Message::Unknown(_) => MessageType::Unknown,
-        }
     }
 }

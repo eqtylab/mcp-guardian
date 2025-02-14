@@ -35,13 +35,13 @@ impl FilterLogic {
     ) -> bool {
         match self {
             FilterLogic::Direction(d) => direction == *d,
-            FilterLogic::MessageType(t) => message.type_() == *t,
-            FilterLogic::RequestMethod(m) => match message.type_() {
+            FilterLogic::MessageType(t) => message.type_ == *t,
+            FilterLogic::RequestMethod(m) => match message.type_ {
                 MessageType::Request => {
-                    message.raw_msg().get("method") == Some(&Value::String(m.clone()))
+                    message.raw_msg.get("method") == Some(&Value::String(m.clone()))
                 }
                 MessageType::ResponseSuccess | MessageType::ResponseFailure => {
-                    let Some(id) = message.raw_msg().get("id").cloned() else {
+                    let Some(id) = message.raw_msg.get("id").cloned() else {
                         return false;
                     };
 
@@ -120,8 +120,8 @@ impl MessageInterceptor for FilterInterceptor {
         } = self;
 
         // cache request message for lookup during interception of corresponding response
-        if message.type_() == MessageType::Request {
-            request_cache.store_request(message.raw_msg().clone())?;
+        if message.type_ == MessageType::Request {
+            request_cache.store_request(message.raw_msg.clone())?;
         }
 
         let action = if filter.logic.matches(direction, &message, request_cache) {
@@ -132,10 +132,10 @@ impl MessageInterceptor for FilterInterceptor {
 
         // pop request message from cache after corresponding response messages if it wasn't already popped during filter traversal
         if matches!(
-            message.type_(),
+            message.type_,
             MessageType::ResponseSuccess | MessageType::ResponseFailure
         ) {
-            let Some(id) = message.raw_msg().get("id").cloned() else {
+            let Some(id) = message.raw_msg.get("id").cloned() else {
                 log::error!("Request does not have an id.");
                 bail!("Request does not have an id.");
             };

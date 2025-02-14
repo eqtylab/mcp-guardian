@@ -32,7 +32,7 @@ impl MessageInterceptor for ManualApprovalInterceptor {
         let approval_id = format!("{mcp_server_name}_{direction}_{}", Uuid::new_v4());
 
         let check_approval =
-            request_approval(&approval_id, direction, message.raw_msg().clone()).await?;
+            request_approval(&approval_id, direction, message.raw_msg.clone()).await?;
 
         loop {
             match check_approval() {
