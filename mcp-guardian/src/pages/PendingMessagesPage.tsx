@@ -4,7 +4,7 @@ import ToolCall from "../components/messages/ToolCall";
 import ToolCallResponse from "../components/messages/ToolCallResponse";
 import "./PendingMessagesPage.css";
 
-const PendingMessages = () => {
+const PendingMessagesPage = () => {
   const [pendingApprovals, setPendingApprovals] = useState({} as any);
 
   const updatePendingApprovals = async () => {
@@ -82,4 +82,4 @@ const PendingMessages = () => {
   );
 };
 
-export default PendingMessages;
+export default PendingMessagesPage;

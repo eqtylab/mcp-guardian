@@ -6,7 +6,7 @@ import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 
 const getGuardProfiles = (): Promise<NamedGuardProfile[]> => invoke("list_guard_profiles", {});
 
-const GuardProfiles = () => {
+const GuardProfilesPage = () => {
   const [guardProfiles, setGuardProfiles] = useState<NamedGuardProfile[]>([]);
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
   const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
@@ -55,4 +55,4 @@ const GuardProfiles = () => {
   );
 };
 
-export default GuardProfiles;
+export default GuardProfilesPage;

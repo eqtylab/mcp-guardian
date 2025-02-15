@@ -6,7 +6,7 @@ import { NamedServerCollection } from "../bindings/NamedServerCollection";
 
 const getServerCollections = (): Promise<NamedServerCollection[]> => invoke("list_server_collections", {});
 
-const ServerCollections = () => {
+const ServerCollectionsPage = () => {
   const [serverCollections, setServerCollections] = useState<NamedServerCollection[]>([]);
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
   const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
@@ -55,4 +55,4 @@ const ServerCollections = () => {
   );
 };
 
-export default ServerCollections;
+export default ServerCollectionsPage;

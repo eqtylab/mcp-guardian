@@ -6,7 +6,7 @@ import { NamedMcpServer } from "../bindings/NamedMcpServer";
 
 const getMcpServers = (): Promise<NamedMcpServer[]> => invoke("list_mcp_servers", {});
 
-const McpServers = () => {
+const McpServersPage = () => {
   const [mcpServers, setMcpServers] = useState<NamedMcpServer[]>([]);
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
   const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
@@ -55,4 +55,4 @@ const McpServers = () => {
   );
 };
 
-export default McpServers;
+export default McpServersPage;
