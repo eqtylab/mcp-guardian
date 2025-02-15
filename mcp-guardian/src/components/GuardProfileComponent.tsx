@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
@@ -7,19 +7,32 @@ import { notifyError, notifySuccess } from "./toast";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
+  onUpdateSuceess: () => void;
   onDeleteSuccess: () => void;
   open: boolean;
   onToggle: () => void;
+  enableEdit: boolean;
 }
 
-const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onToggle }: GuardProfileComponentProps) => {
+const GuardProfileComponent = ({
+  namedGuardProfile,
+  onUpdateSuceess,
+  onDeleteSuccess,
+  open,
+  onToggle,
+  enableEdit,
+}: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
 
-  const [configText, setConfigText] = useState(JSON.stringify(guard_profile, null, 2));
+  const [configText, setConfigText] = useState("");
+  useEffect(() => {
+    setConfigText(JSON.stringify(guard_profile, null, 2));
+  }, [guard_profile]);
 
   const updateGuardProfile = async (guardProfile: GuardProfile) => {
     try {
       await invoke("set_guard_profile", { namespace, name: profile_name, guardProfile });
+      onUpdateSuceess();
       notifySuccess(`Guard profile ${namespace}.${profile_name} saved`);
     } catch (e) {
       notifyError(e);
@@ -52,18 +65,20 @@ const GuardProfileComponent = ({ namedGuardProfile, onDeleteSuccess, open, onTog
             onChange={(e) => setConfigText(e.target.value)}
             rows={configText.split("\n").length}
           />
-          <div className="button-container">
-            <div className="save-btn-div">
-              <button className="save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
-                Save
-              </button>
+          {enableEdit && (
+            <div className="button-container">
+              <div className="save-btn-div">
+                <button className="save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
+                  Save
+                </button>
+              </div>
+              <div className="delete-btn-div">
+                <button className="delete-btn" onClick={deleteGuardProfile}>
+                  Delete
+                </button>
+              </div>
             </div>
-            <div className="delete-btn-div">
-              <button className="delete-btn" onClick={deleteGuardProfile}>
-                Delete
-              </button>
-            </div>
-          </div>
+          )}
         </div>
       </Collapsible>
     </div>

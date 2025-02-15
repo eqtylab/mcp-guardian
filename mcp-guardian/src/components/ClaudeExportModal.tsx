@@ -53,11 +53,13 @@ const ClaudeExportModal = ({
   };
 
   useEffect(() => {
-    (async () => {
-      const claudeConfig = await getClaudeConfig();
-      setClaudeConfig(deterministicStringify(claudeConfig));
-    })();
-  }, [serverCollectionNamespace, serverCollectionName, proxyPath]);
+    if (isOpen) {
+      (async () => {
+        const claudeConfig = await getClaudeConfig();
+        setClaudeConfig(deterministicStringify(claudeConfig));
+      })();
+    }
+  }, [isOpen, serverCollectionNamespace, serverCollectionName, proxyPath]);
 
   return (
     <div className="export-server-collection-modal-container">

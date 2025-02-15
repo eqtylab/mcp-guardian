@@ -1,36 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { invoke } from "@tauri-apps/api/core";
 import ToolCall from "../components/messages/ToolCall";
 import ToolCallResponse from "../components/messages/ToolCallResponse";
 import "./PendingMessagesPage.css";
 
-const PendingMessagesPage = () => {
-  const [pendingApprovals, setPendingApprovals] = useState({} as any);
+interface PendingMessagesPageProps {
+  pendingMessages: any;
+  updatePendingMessages: () => Promise<void>;
+}
 
-  const updatePendingApprovals = async () => {
-    const newPendingApprovals = await invoke("get_pending_messages", {});
-    setPendingApprovals(newPendingApprovals);
-  };
-
-  useEffect(() => {
-    updatePendingApprovals();
-  }, []);
-
+const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: PendingMessagesPageProps) => {
   const handleApprove = async (id: string) => {
     await invoke("approve_message", { id });
-    updatePendingApprovals();
+    updatePendingMessages();
   };
 
   const handleDeny = async (id: string) => {
     await invoke("deny_message", { id });
-    updatePendingApprovals();
+    updatePendingMessages();
   };
 
   return (
     <div className="container">
       <h1>Pending Messages</h1>
-
-      <button onClick={updatePendingApprovals}>Refresh</button>
 
       <div>
         <table>
@@ -42,7 +34,7 @@ const PendingMessagesPage = () => {
             </tr>
           </thead>
           <tbody>
-            {Object.entries(pendingApprovals).map(([id, value]: [string, any], i) => {
+            {Object.entries(pendingMessages).map(([id, value]: [string, any], i) => {
               const direction = id.split("_")[0] === "inbound" ? "Inbound" : "Outbound";
               const messageComponent = (() => {
                 if (direction === "Outbound") {

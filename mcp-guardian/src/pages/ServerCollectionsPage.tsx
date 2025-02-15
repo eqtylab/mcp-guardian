@@ -1,44 +1,37 @@
-import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import ServerCollectionComponent from "../components/ServerCollectionComponent";
 import CreateServerCollectionModal from "../components/CreateServerCollectionModal";
 import { NamedServerCollection } from "../bindings/NamedServerCollection";
 
-const getServerCollections = (): Promise<NamedServerCollection[]> => invoke("list_server_collections", {});
+interface ServerCollectionsPageProps {
+  serverCollections: NamedServerCollection[];
+  updateServerCollections: () => Promise<void>;
+}
 
-const ServerCollectionsPage = () => {
-  const [serverCollections, setServerCollections] = useState<NamedServerCollection[]>([]);
+const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: ServerCollectionsPageProps) => {
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
   const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
 
-  const updateServerCollections = async () => {
-    const newServers: NamedServerCollection[] = await getServerCollections();
-    setServerCollections(newServers);
-    setOpenCollapsible(null);
-  };
-
-  const afterSuccessfulCreate = () => {
+  const onSuccessfulCreate = () => {
     setCreateModalIsOpen(false);
     updateServerCollections();
   };
 
-  useEffect(() => {
+  const onSuccessfulDelete = () => {
+    setOpenCollapsible(null);
     updateServerCollections();
-  }, []);
-
-  console.log("serverCollections", serverCollections);
+  };
 
   return (
     <div className="container">
       <h1>Server Collections</h1>
 
-      <button onClick={updateServerCollections}>Refresh</button>
-
       {serverCollections.map((server, i) => (
         <ServerCollectionComponent
           key={`server-collection-${i}`}
           namedServerCollection={server}
-          onDeleteSuccess={updateServerCollections}
+          onUpdateSuccess={updateServerCollections}
+          onDeleteSuccess={onSuccessfulDelete}
           open={openCollapsible === i}
           onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
         />
@@ -49,7 +42,7 @@ const ServerCollectionsPage = () => {
       <CreateServerCollectionModal
         isOpen={createModalIsOpen}
         setIsOpen={setCreateModalIsOpen}
-        afterSuccessfulCreate={afterSuccessfulCreate}
+        onSuccessfulCreate={onSuccessfulCreate}
       />
     </div>
   );

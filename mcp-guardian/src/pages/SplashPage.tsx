@@ -7,7 +7,7 @@ const SplashPage = () => {
     <div className="container">
       <h1>MCP Guardian</h1>
 
-      <p>Version {version}</p>
+      <p>version {version}</p>
 
       <p>mcp-guardian.org</p>
 

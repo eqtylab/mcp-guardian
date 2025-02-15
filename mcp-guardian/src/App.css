@@ -71,6 +71,10 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  text-align: left;
+}
+
 input {
   border-radius: 8px;
   border: 1px solid transparent;

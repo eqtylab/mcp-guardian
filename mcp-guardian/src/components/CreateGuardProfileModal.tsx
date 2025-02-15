@@ -9,10 +9,10 @@ const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>
 interface CreateGuardProfileModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  afterSuccessfulCreate: () => void;
+  onSuccessfulCreate: () => void;
 }
 
-const CreateGuardProfileModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: CreateGuardProfileModalProps) => {
+const CreateGuardProfileModal = ({ isOpen, setIsOpen, onSuccessfulCreate }: CreateGuardProfileModalProps) => {
   const [namespaceInput, setNamespaceInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [configTextInput, setConfigTextInput] = useState(
@@ -23,7 +23,7 @@ const CreateGuardProfileModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: C
     const guardProfile = JSON.parse(configText);
     try {
       await invoke("set_guard_profile", { namespace, name, guardProfile });
-      afterSuccessfulCreate();
+      onSuccessfulCreate();
       notifySuccess(`Guard profile ${namespace}.${name} created`);
     } catch (e) {
       notifyError(e);
