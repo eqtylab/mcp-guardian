@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
+import SplashPage from "./pages/SplashPage";
 import McpServersPage from "./pages/McpServersPage";
 import GuardProfilesPage from "./pages/GuardProfilesPage";
 import ServerCollectionsPage from "./pages/ServerCollectionsPage";
@@ -8,6 +9,10 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 
 const PAGES = [
+  {
+    label: "MCP Guardian",
+    component: SplashPage,
+  },
   {
     label: "MCP Servers",
     component: McpServersPage,
@@ -29,7 +34,7 @@ const PAGES = [
 ReactModal.setAppElement("#root");
 
 const App = () => {
-  const [pageIndex, setPageIndex] = useState(3);
+  const [pageIndex, setPageIndex] = useState(0);
 
   return (
     <main>
