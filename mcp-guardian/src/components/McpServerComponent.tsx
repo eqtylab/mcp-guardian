@@ -3,6 +3,7 @@ import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { McpServer } from "../bindings/McpServer";
+import { notifyError, notifySuccess } from "./toast";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
@@ -17,12 +18,22 @@ const McpServerComponent = ({ namedMcpServer, onDeleteSuccess, open, onToggle }:
   const [configText, setConfigText] = useState(JSON.stringify(mcp_server, null, 2));
 
   const updateMcpServer = async (mcpServer: McpServer) => {
-    await invoke("set_mcp_server", { namespace, name, mcpServer });
+    try {
+      await invoke("set_mcp_server", { namespace, name, mcpServer });
+      notifySuccess(`MCP server "${namespace}.${name}" saved`);
+    } catch (e: any) {
+      notifyError(e);
+    }
   };
 
   const deleteMcpServer = async () => {
-    await invoke("delete_mcp_server", { namespace, name });
-    onDeleteSuccess();
+    try {
+      await invoke("delete_mcp_server", { namespace, name });
+      onDeleteSuccess();
+      notifySuccess(`MCP Server "${namespace}.${name}" deleted`);
+    } catch (e: any) {
+      notifyError(e);
+    }
   };
 
   return (

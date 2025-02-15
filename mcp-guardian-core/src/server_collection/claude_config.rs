@@ -70,18 +70,32 @@ pub fn apply_claude_config_for_server_collection(
     // linux:    ~/.config/Claude/claude_desktop_config.json
     // macos:    ~/Library/Application Support/Claude/claude_desktop_config.json
     // windows:  %APPDATA%\Roaming\Claude\claude_desktop_config.json
-    let claude_config_path = dirs::config_dir()
+    let claude_config_dir = dirs::config_dir()
         .ok_or_else(|| anyhow!("Failed to determine config directory."))?
-        .join("Claude")
-        .join("claude_desktop_config.json");
+        .join("Claude");
 
-    let backup_path = claude_config_path.with_file_name(format!(
-        "claude_desktop_config.json.{}.bk",
-        chrono::Local::now().format("%Y%m%d%H%M%S")
-    ));
+    if !(fs::exists(&claude_config_dir)?) {
+        let err = "The Claude desktop config directory was not found.";
+        log::error!("{err}");
+        return Err(anyhow!(err));
+    }
 
-    fs::rename(&claude_config_path, &backup_path)?;
-    log::info!("Current configuration backed up to {backup_path:?}");
+    let claude_config_path = claude_config_dir.join("claude_desktop_config.json");
+
+    if fs::exists(&claude_config_path)? {
+        log::info!("Backing up current claude config");
+        let backup_path = claude_config_path.with_file_name(format!(
+            "claude_desktop_config.json.{}.bk",
+            chrono::Local::now().format("%Y%m%d%H%M%S")
+        ));
+
+        fs::rename(&claude_config_path, &backup_path)?;
+        log::info!(
+            "Current configuration backed up to {}",
+            backup_path.display()
+        );
+    }
+
     fs::write(claude_config_path, claude_config)?;
 
     log::info!("Claude server configuration update complete.");

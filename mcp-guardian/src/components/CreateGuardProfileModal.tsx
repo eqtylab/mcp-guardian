@@ -1,6 +1,7 @@
 import { ComponentType, useState } from "react";
 import _ReactModal from "react-modal";
 import { invoke } from "@tauri-apps/api/core";
+import { notifyError, notifySuccess } from "./toast";
 
 // TODO: untangle this typescript incompatibility
 const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>;
@@ -23,8 +24,9 @@ const CreateGuardProfileModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: C
     try {
       await invoke("set_guard_profile", { namespace, name, guardProfile });
       afterSuccessfulCreate();
+      notifySuccess(`Guard profile ${namespace}.${name} created`);
     } catch (e) {
-      console.error(e);
+      notifyError(e);
     }
   };
 

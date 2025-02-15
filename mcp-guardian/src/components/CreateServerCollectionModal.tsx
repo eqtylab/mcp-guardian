@@ -1,6 +1,7 @@
 import { ComponentType, useState } from "react";
 import _ReactModal from "react-modal";
 import { invoke } from "@tauri-apps/api/core";
+import { notifyError, notifySuccess } from "./toast";
 
 // TODO: untangle this typescript incompatibility
 const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>;
@@ -27,8 +28,9 @@ const CreateServerCollectionModal = ({
     try {
       await invoke("set_server_collection", { namespace, name, serverCollection });
       afterSuccessfulCreate();
+      notifySuccess(`Server collection "${namespace}.${name}" saved`);
     } catch (e) {
-      console.error(e);
+      notifyError(e);
     }
   };
 

@@ -4,6 +4,7 @@ import McpServersPage from "./pages/McpServersPage";
 import GuardProfilesPage from "./pages/GuardProfilesPage";
 import ServerCollectionsPage from "./pages/ServerCollectionsPage";
 import PendingMessagesPage from "./pages/PendingMessagesPage";
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 
 const PAGES = [
@@ -48,6 +49,7 @@ const App = () => {
           <div className="page">{React.createElement(PAGES[pageIndex].component)}</div>
         </div>
       </div>
+      <ToastContainer />
     </main>
   );
 };
