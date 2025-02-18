@@ -1,44 +1,37 @@
-import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import McpServerComponent from "../components/McpServerComponent";
 import CreateMcpServerModal from "../components/CreateMcpServerModal";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
 
-const getMcpServers = (): Promise<NamedMcpServer[]> => invoke("list_mcp_servers", {});
+interface McpServersPageProps {
+  mcpServers: NamedMcpServer[];
+  updateMcpServers: () => Promise<void>;
+}
 
-const McpServers = () => {
-  const [mcpServers, setMcpServers] = useState<NamedMcpServer[]>([]);
+const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) => {
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
   const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
 
-  const updateMcpServers = async () => {
-    const newServers: NamedMcpServer[] = await getMcpServers();
-    setMcpServers(newServers);
-    setOpenCollapsible(null);
-  };
-
-  const afterSuccessfulCreate = () => {
+  const onSuccessfulCreate = () => {
     setCreateModalIsOpen(false);
     updateMcpServers();
   };
 
-  useEffect(() => {
+  const onSuccessfulDelete = () => {
+    setOpenCollapsible(null);
     updateMcpServers();
-  }, []);
-
-  console.log("mcpServers", mcpServers);
+  };
 
   return (
     <div className="container">
       <h1>MCP Servers</h1>
 
-      <button onClick={updateMcpServers}>Refresh</button>
-
       {mcpServers.map((server, i) => (
         <McpServerComponent
           key={`mcp-server-${i}`}
           namedMcpServer={server}
-          onDeleteSuccess={updateMcpServers}
+          onUpdateSuccess={updateMcpServers}
+          onDeleteSuccess={onSuccessfulDelete}
           open={openCollapsible === i}
           onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
         />
@@ -49,10 +42,10 @@ const McpServers = () => {
       <CreateMcpServerModal
         isOpen={createModalIsOpen}
         setIsOpen={setCreateModalIsOpen}
-        afterSuccessfulCreate={afterSuccessfulCreate}
+        onSuccessfulCreate={onSuccessfulCreate}
       />
     </div>
   );
 };
 
-export default McpServers;
+export default McpServersPage;

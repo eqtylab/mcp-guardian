@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedServerCollection } from "../bindings/NamedServerCollection";
@@ -9,6 +9,7 @@ import { notifyError, notifySuccess } from "./toast";
 
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;
+  onUpdateSuccess: () => void;
   onDeleteSuccess: () => void;
   open: boolean;
   onToggle: () => void;
@@ -16,18 +17,24 @@ interface ServerCollectionComponentProps {
 
 const ServerCollectionComponent = ({
   namedServerCollection,
+  onUpdateSuccess,
   onDeleteSuccess,
   open,
   onToggle,
 }: ServerCollectionComponentProps) => {
   const { namespace, name, server_collection } = namedServerCollection;
 
-  const [configText, setConfigText] = useState(JSON.stringify(server_collection, null, 2));
+  const [configText, setConfigText] = useState("");
+  useEffect(() => {
+    setConfigText(JSON.stringify(server_collection, null, 2));
+  }, [server_collection]);
+
   const [claudeExportModalIsOpen, setClaudeExportModalIsOpen] = useState(false);
 
   const updateServerCollection = async (serverCollection: ServerCollection) => {
     try {
       await invoke("set_server_collection", { namespace, name, serverCollection });
+      onUpdateSuccess();
       notifySuccess(`Server collection "${namespace}.${name}" saved`);
     } catch (e) {
       notifyError(e);

@@ -9,14 +9,10 @@ const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>
 interface CreateServerCollectionModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  afterSuccessfulCreate: () => void;
+  onSuccessfulCreate: () => void;
 }
 
-const CreateServerCollectionModal = ({
-  isOpen,
-  setIsOpen,
-  afterSuccessfulCreate,
-}: CreateServerCollectionModalProps) => {
+const CreateServerCollectionModal = ({ isOpen, setIsOpen, onSuccessfulCreate }: CreateServerCollectionModalProps) => {
   const [namespaceInput, setNamespaceInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [configTextInput, setConfigTextInput] = useState(
@@ -27,7 +23,7 @@ const CreateServerCollectionModal = ({
     const serverCollection = JSON.parse(configText);
     try {
       await invoke("set_server_collection", { namespace, name, serverCollection });
-      afterSuccessfulCreate();
+      onSuccessfulCreate();
       notifySuccess(`Server collection "${namespace}.${name}" saved`);
     } catch (e) {
       notifyError(e);

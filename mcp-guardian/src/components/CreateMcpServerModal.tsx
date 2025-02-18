@@ -9,10 +9,10 @@ const ReactModal = _ReactModal as unknown as ComponentType<_ReactModal["props"]>
 interface CreateMcpServerModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  afterSuccessfulCreate: () => void;
+  onSuccessfulCreate: () => void;
 }
 
-const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: CreateMcpServerModalProps) => {
+const CreateMcpServerModal = ({ isOpen, setIsOpen, onSuccessfulCreate }: CreateMcpServerModalProps) => {
   const [namespaceInput, setNamespaceInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [configTextInput, setConfigTextInput] = useState(JSON.stringify({ cmd: "", args: [], env: {} }, null, 2));
@@ -21,7 +21,7 @@ const CreateMcpServerModal = ({ isOpen, setIsOpen, afterSuccessfulCreate }: Crea
     const mcpServer = JSON.parse(configText);
     try {
       await invoke("set_mcp_server", { namespace, name, mcpServer });
-      afterSuccessfulCreate();
+      onSuccessfulCreate();
       notifySuccess(`MCP server "${namespace}.${name}" saved`);
     } catch (e) {
       notifyError(e);

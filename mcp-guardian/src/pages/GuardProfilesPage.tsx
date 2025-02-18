@@ -1,58 +1,74 @@
-import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import GuardProfileComponent from "../components/GuardProfileComponent";
 import CreateGuardProfileModal from "../components/CreateGuardProfileModal";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 
-const getGuardProfiles = (): Promise<NamedGuardProfile[]> => invoke("list_guard_profiles", {});
+interface GuardProfilesPageProps {
+  guardProfiles: NamedGuardProfile[];
+  updateGuardProfiles: () => Promise<void>;
+}
 
-const GuardProfiles = () => {
-  const [guardProfiles, setGuardProfiles] = useState<NamedGuardProfile[]>([]);
+const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfilesPageProps) => {
   const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
   const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
 
-  const updateGuardProfiles = async () => {
-    const newServers: NamedGuardProfile[] = await getGuardProfiles();
-    setGuardProfiles(newServers);
-    setOpenCollapsible(null);
-  };
-
-  const afterSuccessfulCreate = () => {
+  const onSuccessfulCreate = () => {
     setCreateModalIsOpen(false);
     updateGuardProfiles();
   };
 
-  useEffect(() => {
+  const onSuccessfulDelete = () => {
+    setOpenCollapsible(null);
     updateGuardProfiles();
-  }, []);
+  };
 
-  console.log("guardProfiles", guardProfiles);
+  const coreProfiles = guardProfiles.filter((profile) => profile.namespace === "mcp-guardian");
+  const customProfiles = guardProfiles.filter((profile) => profile.namespace !== "mcp-guardian");
 
   return (
     <div className="container">
       <h1>Guard Profiles</h1>
 
-      <button onClick={updateGuardProfiles}>Refresh</button>
+      <h2>Core Profiles</h2>
 
-      {guardProfiles.map((server, i) => (
+      {coreProfiles.map((server, i) => (
         <GuardProfileComponent
           key={`guard-profile-${i}`}
           namedGuardProfile={server}
-          onDeleteSuccess={updateGuardProfiles}
+          onUpdateSuceess={updateGuardProfiles}
+          onDeleteSuccess={onSuccessfulDelete}
           open={openCollapsible === i}
           onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
+          enableEdit={false}
         />
       ))}
+
+      <h2>Custom Profiles</h2>
+
+      {customProfiles.map((server, _i) => {
+        const i = _i + coreProfiles.length;
+        return (
+          <GuardProfileComponent
+            key={`guard-profile-${i}`}
+            namedGuardProfile={server}
+            onUpdateSuceess={updateGuardProfiles}
+            onDeleteSuccess={onSuccessfulDelete}
+            open={openCollapsible === i}
+            onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
+            enableEdit={true}
+          />
+        );
+      })}
 
       <button onClick={() => setCreateModalIsOpen(true)}>Create New Guard Profile</button>
 
       <CreateGuardProfileModal
         isOpen={createModalIsOpen}
         setIsOpen={setCreateModalIsOpen}
-        afterSuccessfulCreate={afterSuccessfulCreate}
+        onSuccessfulCreate={onSuccessfulCreate}
       />
     </div>
   );
 };
 
-export default GuardProfiles;
+export default GuardProfilesPage;

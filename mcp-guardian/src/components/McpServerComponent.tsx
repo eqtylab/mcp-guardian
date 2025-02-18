@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
@@ -7,19 +7,30 @@ import { notifyError, notifySuccess } from "./toast";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
+  onUpdateSuccess: () => void;
   onDeleteSuccess: () => void;
   open: boolean;
   onToggle: () => void;
 }
 
-const McpServerComponent = ({ namedMcpServer, onDeleteSuccess, open, onToggle }: McpServerComponentProps) => {
+const McpServerComponent = ({
+  namedMcpServer,
+  onUpdateSuccess,
+  onDeleteSuccess,
+  open,
+  onToggle,
+}: McpServerComponentProps) => {
   const { namespace, name, mcp_server } = namedMcpServer;
 
-  const [configText, setConfigText] = useState(JSON.stringify(mcp_server, null, 2));
+  const [configText, setConfigText] = useState("");
+  useEffect(() => {
+    setConfigText(JSON.stringify(mcp_server, null, 2));
+  }, [mcp_server]);
 
   const updateMcpServer = async (mcpServer: McpServer) => {
     try {
       await invoke("set_mcp_server", { namespace, name, mcpServer });
+      onUpdateSuccess();
       notifySuccess(`MCP server "${namespace}.${name}" saved`);
     } catch (e: any) {
       notifyError(e);
