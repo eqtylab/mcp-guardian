@@ -77,6 +77,18 @@ jobs:
       - name: Build `mcp-guardian-cli`
         run: cd mcp-guardian-cli && cargo build --release
 
+      - name: Prepare non-tauri binaries for tauri bundling
+        if: matrix.platform != 'windows-2022'
+        run: |
+          cp target/release/mcp-guardian-proxy mcp-guardian/src-tauri/
+          cp target/release/mcp-guardian-cli mcp-guardian/src-tauri/
+
+      - name: Prepare non-tauri binaries for tauri bundling
+        if: matrix.platform == 'windows-2022'
+        run: |
+          copy target\release\mcp-guardian-proxy.exe mcp-guardian\src-tauri\
+          copy target\release\mcp-guardian-cli.exe mcp-guardian\src-tauri\
+
       - name: Build `mcp-guardian`
         run: cd mcp-guardian && yarn && yarn tauri build
 
