@@ -41,8 +41,29 @@ just build-release
 
 ### Quick Start - Windows
 
+1. [Install git](https://git-scm.com/downloads/win) with symlink support (otherwise you will need to restore `./mcp-guardian/bindings` before building).
+
+2. [Install rustup](https://www.rust-lang.org/tools/install).
+
+3. [Install nodejs](https://nodejs.org/en/download).
+
+4. Install `yarn`.
+```bash
+npm install --global yarn
 ```
-TODO
+
+5. Install .dll dependencies. The easiest way to do this is to [install Visual Studio](https://visualstudio.microsoft.com/downloads/) and install the C++ development packages.
+
+6. Install just
+```bash
+cargo install just
+```
+
+7. Enter repo root with `git-bash` (otherwise `just` won't work and you'll need to call `cargo directly`)
+
+8. Build project
+```bash
+just build-release
 ```
 
 ### Justfile
