@@ -14,50 +14,6 @@ MCP Guardian manages your LLM assistant's access to MCP servers, handing you rea
 
 MCP Guardian also makes it a breeze to manage multiple MCP server configurations. Quickly switch between server collections without having to manually manage configuration files for your MCP host applications.
 
-## Usage
-
-**mcp-guardian**
-
-`mcp-guardian` launches the desktop portal.
-
-**mcp-guardian-cli**
-```present mcp-guardian-cli --help
-mcp-guardian-cli
-
-Usage: mcp-guardian-cli <COMMAND>
-
-Commands:
-  guard-profiles      Commands related to guard-profile configurations
-  mcp-servers         Commands related to mcp-server configurations
-  server-collections  Commands related to server-collections configurations
-  help                Print this message or the help of the given subcommand(s)
-
-Options:
-  -h, --help  Print help
-```
-
-**mcp-guardian-proxy**
-```present mcp-guardian-proxy --help
-mcp-guardian-proxy
-
-Usage: mcp-guardian-proxy [OPTIONS] [-- [CMD]...]
-
-Arguments:
-  [CMD]...  MCP server command
-
-Options:
-  -n, --name <NAME>
-          [Optional] MCP server name
-      --host-session-id <HOST_SESSION_ID>
-          [Optional] Host session id
-  -g, --guard-profile <GUARD_PROFILE>
-          Guard profile to use for the MCP server ("{namespace}.{profile_name}") [default: mcp-guardian.default]
-  -m, --mcp-server <MCP_SERVER>
-          [Optional] MCP server configuration to use. This is mutually exclusive with providing a command to run
-  -h, --help
-          Print help
-```
-
 ## Development
 
 This project uses [nix](https://nixos.org/) to manage a development environment that can be used on Linux and macOS.
@@ -85,8 +41,29 @@ just build-release
 
 ### Quick Start - Windows
 
+1. [Install git](https://git-scm.com/downloads/win) with symlink support (otherwise you will need to restore `./mcp-guardian/bindings` before building).
+
+2. [Install rustup](https://www.rust-lang.org/tools/install).
+
+3. [Install nodejs](https://nodejs.org/en/download).
+
+4. Install `yarn`.
+```bash
+npm install --global yarn
 ```
-TODO
+
+5. Install .dll dependencies. The easiest way to do this is to [install Visual Studio](https://visualstudio.microsoft.com/downloads/) and install the C++ development packages.
+
+6. Install just
+```bash
+cargo install just
+```
+
+7. Enter repo root with `git-bash` (otherwise `just` won't work and you'll need to call `cargo directly`)
+
+8. Build project
+```bash
+just build-release
 ```
 
 ### Justfile
