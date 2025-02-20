@@ -14,7 +14,7 @@ Name - `time-server`
 Config -
 ```json
 {
-  "cmd": "uvx",
+  "command": "uvx",
   "args": ["mcp-server-time", "--local-timezone=America/New_York"],
   "env": {}
 }

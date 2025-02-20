@@ -27,3 +27,16 @@ pub async fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
         format!("delete_mcp_server(namespace={namespace}, name={name}, ..) failed: {e}")
     })
 }
+
+#[tauri::command]
+pub async fn import_claude_config() -> Result<()> {
+    let claude_config = mcp_guardian_core::mcp_server::import_claude_config()
+        .map_err(|e| format!("failed to import Claude configuration. {e}"))?;
+
+    for (name, config) in claude_config.mcp_servers.iter() {
+        mcp_guardian_core::mcp_server::save_mcp_server("claude-import", name, config)
+            .map_err(|e| format!("failed to save imported Claude config. {e}"))?;
+    }
+
+    Ok(())
+}

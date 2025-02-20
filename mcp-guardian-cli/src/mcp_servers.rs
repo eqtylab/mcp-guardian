@@ -71,7 +71,6 @@ fn delete(args: cli::mcp_servers::delete::Args) -> Result<()> {
 }
 
 fn import_claude_config(_args: cli::mcp_servers::import::Args) -> Result<()> {
-    println!("importing claude config");
 
     let claude_config = mcp_guardian_core::mcp_server::import_claude_config()?;
     for (name, config) in claude_config.mcp_servers.iter() {
