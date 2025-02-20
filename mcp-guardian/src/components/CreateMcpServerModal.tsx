@@ -15,7 +15,7 @@ interface CreateMcpServerModalProps {
 const CreateMcpServerModal = ({ isOpen, setIsOpen, onSuccessfulCreate }: CreateMcpServerModalProps) => {
   const [namespaceInput, setNamespaceInput] = useState("");
   const [nameInput, setNameInput] = useState("");
-  const [configTextInput, setConfigTextInput] = useState(JSON.stringify({ command: "", args: [], env: {} }, null, 2));
+  const [configTextInput, setConfigTextInput] = useState(JSON.stringify({ cmd: "", args: [], env: {} }, null, 2));
 
   const createMcpServer = async (namespace: string, name: string, configText: string) => {
     const mcpServer = JSON.parse(configText);

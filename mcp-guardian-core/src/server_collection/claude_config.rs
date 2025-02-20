@@ -50,7 +50,14 @@ pub fn generate_claude_config_for_server_collection(
             guard_profile,
         ];
 
-        mcp_servers.insert((*name).to_owned(), ClaudeMcpServer { command, args, env: HashMap::new() });
+        mcp_servers.insert(
+            (*name).to_owned(),
+            ClaudeMcpServer {
+                command,
+                args,
+                env: HashMap::new(),
+            },
+        );
     }
 
     log::info!("{} server collections found.", mcp_servers.keys().len());

@@ -127,4 +127,3 @@ pub fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
 
     Ok(())
 }
-
