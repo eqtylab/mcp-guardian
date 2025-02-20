@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::{collections::HashMap, fs, fs::File, io::BufReader};
 
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
@@ -9,11 +9,17 @@ use crate::dirs::AppSubDir::McpServers;
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export)]
 pub struct McpServer {
-    pub cmd: String,
+    pub command: String,
     pub args: Vec<String>,
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     #[ts(skip)]
     pub env: HashMap<String, String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ClaudeConfig {
+    pub mcp_servers: HashMap<String, McpServer>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -126,4 +132,34 @@ pub fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
     log::info!("MCP server '{}' deleted successfully.", file_path.display());
 
     Ok(())
+}
+
+pub fn import_claude_config() -> Result<ClaudeConfig> {
+    let claude_config_dir = dirs::config_dir()
+        .ok_or_else(|| anyhow!("Failed to determine config directory."))?
+        .join("Claude");
+
+    if !(fs::exists(&claude_config_dir)?) {
+        let err = "The Claude desktop config directory was not found.";
+        log::error!("{err}");
+        return Err(anyhow!(err));
+    }
+
+    let claude_config_path = claude_config_dir.join("claude_desktop_config.json");
+
+    if !(fs::exists(&claude_config_path)?) {
+        log::error!(
+            "The Claude config '{}' does not exist",
+            claude_config_path.display()
+        );
+        return Err(anyhow!("The Claude config does not exist"));
+    }
+
+    let file = File::open(claude_config_path)?;
+    let reader = BufReader::new(file);
+    let claude_config: ClaudeConfig = serde_json::from_reader(reader)?;
+
+    log::info!("Claude config loaded: {claude_config:?}");
+
+    Ok(claude_config)
 }
