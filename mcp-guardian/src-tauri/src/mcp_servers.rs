@@ -30,13 +30,20 @@ pub async fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
 
 #[tauri::command]
 pub async fn import_claude_config() -> Result<()> {
-    let claude_config = mcp_guardian_core::mcp_server::import_claude_config()
+    let claude_config = mcp_guardian_core::server_collection::claude_config::import_claude_config()
         .map_err(|e| format!("failed to import Claude configuration. {e}"))?;
 
-    for (name, config) in claude_config.mcp_servers.iter() {
-        mcp_guardian_core::mcp_server::save_mcp_server("claude-import", name, config)
-            .map_err(|e| format!("failed to save imported Claude config. {e}"))?;
-    }
+     claude_config.mcp_servers.iter().try_for_each(|(name, config)| {
+
+        let mcp_server = McpServer {
+            cmd: config.command.clone(),
+            args: config.args.clone(),
+            env: config.env.clone(),
+        };
+
+        mcp_guardian_core::mcp_server::save_mcp_server("claude-import", name, &mcp_server)
+
+    }).map_err(|e| format!("failed to save the imported claude config. {e}"))?;
 
     Ok(())
 }

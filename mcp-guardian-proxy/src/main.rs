@@ -28,7 +28,7 @@ async fn main() -> Result<()> {
                 log::error!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
                 bail!("Invalid MCP server format. Expected \"{{namespace}}.{{name}}\".");
             };
-            let McpServer { command: cmd, args, env } =
+            let McpServer { cmd, args, env } =
                 mcp_guardian_core::mcp_server::load_mcp_server(namespace, name)?
                     .ok_or_else(|| anyhow::anyhow!("MCP server not found."))?;
 
