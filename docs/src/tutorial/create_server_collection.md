@@ -35,7 +35,7 @@ Click the `Apply to Claude Desktop` then open the `Pending Messages` tab
 
 After Claude restarts, make sure the MCP Guardian UI is visble along side Claude, then ask Claude ```If its 6 pm in New York, what time is it in```.  
 
-Claude will begin process your prompt, then attempt to communicate with the mcp-server-time through the MCP Guardian Proxy. Claude's communication with the server is visible in the Pending Messages, along with the server function it is trying to call and the data it wants to pass to the server.  This gives you the opportunity to inspect the data and stop it from being sent to the server.   
+Claude will begin to process your prompt, then attempt to communicate with the mcp-server-time through the MCP Guardian Proxy. Claude's communication with the server is visible in the Pending Messages, along with the server function it is trying to call and the data it wants to pass to the server.  This gives you the opportunity to inspect the data and stop it from being sent to the server.   
 Similarly, the servers response is visible in the GUI and again, you can prevent the data from being sent back to Claude if you choose.  
 > If a pending message isn't approved soon enough, Claude will eventually time out and the prompt will fail.
 
