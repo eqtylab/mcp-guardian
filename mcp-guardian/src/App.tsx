@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import ReactModal from "react-modal";
+
 import { Home, Server, Shield, Library, MessageSquare } from "lucide-react";
 import SplashPage from "./pages/SplashPage";
 import McpServersPage from "./pages/McpServersPage";
@@ -49,8 +49,6 @@ const NAV_ITEMS = [
     badge: true,
   },
 ];
-
-ReactModal.setAppElement("#root");
 
 const getMcpServers = (): Promise<NamedMcpServer[]> => invoke("list_mcp_servers", {});
 const getGuardProfiles = (): Promise<NamedGuardProfile[]> => invoke("list_guard_profiles", {});
