@@ -13,6 +13,7 @@ pub fn cmd(args: cli::mcp_servers::Args) -> anyhow::Result<()> {
         cli::mcp_servers::SubCommand::Get(args) => get(args)?,
         cli::mcp_servers::SubCommand::Set(args) => set(args)?,
         cli::mcp_servers::SubCommand::List(args) => list(args)?,
+        cli::mcp_servers::SubCommand::Import(args) => import_claude_config(args)?,
     }
 
     Ok(())
@@ -65,6 +66,26 @@ fn delete(args: cli::mcp_servers::delete::Args) -> Result<()> {
     let cli::mcp_servers::delete::Args { namespace, name } = args;
 
     mcp_guardian_core::mcp_server::delete_mcp_server(&namespace, &name)?;
+
+    Ok(())
+}
+
+fn import_claude_config(_args: cli::mcp_servers::import::Args) -> Result<()> {
+    let claude_config =
+        mcp_guardian_core::server_collection::claude_config::import_claude_config()?;
+
+    claude_config
+        .mcp_servers
+        .iter()
+        .try_for_each(|(name, config)| {
+            let mcp_server = McpServer {
+                cmd: config.command.clone(),
+                args: config.args.clone(),
+                env: config.env.clone(),
+            };
+
+            mcp_guardian_core::mcp_server::save_mcp_server("claude-import", name, &mcp_server)
+        })?;
 
     Ok(())
 }
