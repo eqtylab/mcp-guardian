@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import McpServerComponent from "../components/McpServerComponent";
-import CreateMcpServerModal from "../components/CreateMcpServerModal";
+import CreateMcpServerDialog from "../components/CreateMcpServerDialog";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { notifyError, notifySuccess } from "../components/toast";
 
@@ -11,52 +11,63 @@ interface McpServersPageProps {
 }
 
 const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) => {
-  const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
-  const [openCollapsible, setOpenCollapsible] = useState<number | null>(null);
-
-  const onSuccessfulCreate = () => {
-    setCreateModalIsOpen(false);
-    updateMcpServers();
-  };
-
-  const onSuccessfulDelete = () => {
-    setOpenCollapsible(null);
-    updateMcpServers();
-  };
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [openServerId, setOpenServerId] = useState<number | null>(null);
 
   const importClaudeConfig = async () => {
     try {
       await invoke("import_claude_config");
-      setOpenCollapsible(null);
-      updateMcpServers();
-      notifySuccess("Claude config imported.");
+      setOpenServerId(null);
+      await updateMcpServers();
+      notifySuccess("Claude configuration successfully imported");
     } catch (e: any) {
       notifyError(e);
     }
   };
 
   return (
-    <div className="container">
-      <h1>MCP Servers</h1>
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">MCP Servers</h1>
 
-      {mcpServers.map((server, i) => (
-        <McpServerComponent
-          key={`mcp-server-${i}`}
-          namedMcpServer={server}
-          onUpdateSuccess={updateMcpServers}
-          onDeleteSuccess={onSuccessfulDelete}
-          open={openCollapsible === i}
-          onToggle={() => setOpenCollapsible(openCollapsible === i ? null : i)}
-        />
-      ))}
+        <div className="space-x-4">
+          <button
+            onClick={() => setIsCreateDialogOpen(true)}
+            className="btn-success"
+            title="Create a new MCP server configuration"
+          >
+            New Server
+          </button>
 
-      <button onClick={() => setCreateModalIsOpen(true)}>Create New MCP Server</button>
-      <button onClick={importClaudeConfig}>Import Claude Config</button>
+          <button onClick={importClaudeConfig} className="bg-shield-200" title="Import Claude's default configuration">
+            Import Claude Config
+          </button>
+        </div>
+      </div>
 
-      <CreateMcpServerModal
-        isOpen={createModalIsOpen}
-        setIsOpen={setCreateModalIsOpen}
-        onSuccessfulCreate={onSuccessfulCreate}
+      <div className="space-y-2">
+        {mcpServers.map((server, i) => (
+          <McpServerComponent
+            key={`${server.namespace}.${server.name}`}
+            namedMcpServer={server}
+            onUpdateSuccess={updateMcpServers}
+            onDeleteSuccess={() => {
+              setOpenServerId(null);
+              updateMcpServers();
+            }}
+            isExpanded={openServerId === i}
+            onToggle={() => setOpenServerId(openServerId === i ? null : i)}
+          />
+        ))}
+      </div>
+
+      <CreateMcpServerDialog
+        isOpen={isCreateDialogOpen}
+        onClose={() => setIsCreateDialogOpen(false)}
+        onSuccess={async () => {
+          setIsCreateDialogOpen(false);
+          await updateMcpServers();
+        }}
       />
     </div>
   );
