@@ -25,7 +25,7 @@ const ToolCallResponse = ({ content }: ToolCallResponseProps) => {
           })();
 
           return (
-            <div key={i} className="rounded-md overflow-hidden bg-primary-800 dark:bg-primary-900">
+            <div key={i} className="rounded-[var(--radius-brand)] overflow-hidden bg-cream-100 dark:bg-primary-700">
               <CopyBlock
                 text={json}
                 language="json"
@@ -37,6 +37,16 @@ const ToolCallResponse = ({ content }: ToolCallResponseProps) => {
                   backgroundColor: "transparent",
                   margin: 0,
                   padding: "1rem",
+                }}
+                theme={{
+                  mode: "light",
+                  backgroundColor: "transparent",
+                  textColor: "var(--color-primary-900)",
+                  stringColor: "var(--color-primary-900)",
+                  numberColor: "var(--color-primary-900)",
+                  keywordColor: "var(--color-primary-900)",
+                  nameColor: "var(--color-primary-900)",
+                  attributeColor: "var(--color-primary-900)",
                 }}
               />
             </div>

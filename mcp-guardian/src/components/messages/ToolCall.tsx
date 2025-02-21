@@ -17,7 +17,7 @@ const ToolCall = ({ name, args }: ToolCallProps) => {
 
       <div className="space-y-2">
         <div className="font-medium">Arguments:</div>
-        <div className="rounded-md overflow-hidden bg-primary-800 dark:bg-primary-900">
+        <div className="rounded-[var(--radius-brand)] overflow-hidden bg-cream-100 dark:bg-primary-700">
           <CopyBlock
             text={JSON.stringify(args, null, 2)}
             language="json"
@@ -29,6 +29,16 @@ const ToolCall = ({ name, args }: ToolCallProps) => {
               backgroundColor: "transparent",
               margin: 0,
               padding: "1rem",
+            }}
+            theme={{
+              mode: "light",
+              backgroundColor: "transparent",
+              textColor: "var(--color-primary-900)",
+              stringColor: "var(--color-primary-900)",
+              numberColor: "var(--color-primary-900)",
+              keywordColor: "var(--color-primary-900)",
+              nameColor: "var(--color-primary-900)",
+              attributeColor: "var(--color-primary-900)",
             }}
           />
         </div>
