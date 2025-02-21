@@ -3,6 +3,8 @@ import { invoke } from "@tauri-apps/api/core";
 import { notifyError, notifySuccess } from "./toast";
 import { X } from "lucide-react";
 
+import JsonEditor from "./JSONEditor";
+
 interface CreateServerCollectionDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -112,18 +114,12 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
               <label htmlFor="config" className="block mb-2 font-medium">
                 Configuration
               </label>
-              <textarea
-                id="config"
+              <JsonEditor
                 value={config}
-                onChange={(e) => {
-                  setConfig(e.target.value);
-                  validateConfig(e.target.value);
-                }}
-                className={`w-full font-mono text-sm ${!isValid ? "border-[var(--color-danger)]" : ""}`}
-                rows={10}
-                placeholder="Enter server collection configuration in JSON format"
+                onChange={setConfig}
+                placeholder="Enter server collection configuration"
+                maxHeight="300px"
               />
-              {!isValid && <p className="text-[var(--color-danger)] text-sm mt-1">Invalid JSON configuration</p>}
             </div>
 
             <div className="flex justify-end gap-4 mt-6">

@@ -5,6 +5,8 @@ import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
 
+import JsonEditor from "./JSONEditor";
+
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
   onUpdateSuccess: () => void;
@@ -54,29 +56,17 @@ const GuardProfileComponent = ({
 
       {isExpanded && (
         <div className="p-4 space-y-4">
-          <div className="relative">
-            <textarea
-              className={`w-full font-mono text-sm p-3 ${!isValid ? "border-[var(--color-danger)]" : ""}`}
-              value={configText}
-              onChange={(e) => {
-                setConfigText(e.target.value);
-                validateConfig(e.target.value);
-              }}
-              rows={Math.min(20, configText.split("\n").length + 2)}
-              placeholder="Enter guard profile configuration in JSON format"
-              disabled={!enableEdit}
-            />
-            {!isValid && <p className="text-[var(--color-danger)] text-sm mt-1">Invalid JSON configuration</p>}
-          </div>
+          <JsonEditor
+            value={configText}
+            onChange={setConfigText}
+            disabled={!enableEdit}
+            placeholder="Enter guard profile configuration"
+          />
 
           {enableEdit && (
             <div className="flex justify-end space-x-4">
               <button
                 onClick={async () => {
-                  if (!validateConfig(configText)) {
-                    notifyError("Invalid JSON configuration");
-                    return;
-                  }
                   try {
                     const guardProfile: GuardProfile = JSON.parse(configText);
                     await invoke("set_guard_profile", {

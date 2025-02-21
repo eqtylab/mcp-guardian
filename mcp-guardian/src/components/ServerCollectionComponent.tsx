@@ -8,6 +8,8 @@ import { ChevronDown, ChevronRight, Save, Trash2, ExternalLink } from "lucide-re
 import ClaudeExportModal from "./ClaudeExportModal";
 import ConfirmDialog from "./ConfirmDialog";
 
+import JsonEditor from "./JSONEditor";
+
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;
   onUpdateSuccess: () => void;
@@ -59,29 +61,17 @@ const ServerCollectionComponent = ({
 
       {isExpanded && (
         <div className="p-4 space-y-4">
-          <div className="relative">
-            <textarea
-              className={`w-full font-mono text-sm p-3 ${!isValid ? "border-[var(--color-danger)]" : ""}`}
-              value={configText}
-              onChange={(e) => {
-                setConfigText(e.target.value);
-                validateConfig(e.target.value);
-              }}
-              rows={Math.min(20, configText.split("\n").length + 2)}
-              placeholder="Enter server collection configuration in JSON format"
-              disabled={!enableEdit}
-            />
-            {!isValid && <p className="text-[var(--color-danger)] text-sm mt-1">Invalid JSON configuration</p>}
-          </div>
+          <JsonEditor
+            value={configText}
+            onChange={setConfigText}
+            disabled={!enableEdit}
+            placeholder="Enter server collection configuration in JSON format"
+          />
 
           {enableEdit && (
             <div className="flex justify-end space-x-4">
               <button
                 onClick={async () => {
-                  if (!validateConfig(configText)) {
-                    notifyError("Invalid configuration format");
-                    return;
-                  }
                   try {
                     const serverCollection: ServerCollection = JSON.parse(configText);
                     await invoke("set_server_collection", {
@@ -96,7 +86,6 @@ const ServerCollectionComponent = ({
                   }
                 }}
                 className="btn-success flex items-center gap-2"
-                disabled={!isValid}
                 title="Save collection changes"
               >
                 <Save size={16} />
