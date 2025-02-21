@@ -1,86 +1,111 @@
 import { useState, useEffect } from "react";
-import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
+import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
+import ConfirmDialog from "./ConfirmDialog";
+import JsonEditor from "./JsonValidEditor";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
-  onUpdateSuceess: () => void;
+  onUpdateSuccess: () => void;
   onDeleteSuccess: () => void;
-  open: boolean;
+  isExpanded: boolean;
   onToggle: () => void;
   enableEdit: boolean;
 }
 
 const GuardProfileComponent = ({
   namedGuardProfile,
-  onUpdateSuceess,
+  onUpdateSuccess,
   onDeleteSuccess,
-  open,
+  isExpanded,
   onToggle,
   enableEdit,
 }: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
-
   const [configText, setConfigText] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   useEffect(() => {
     setConfigText(JSON.stringify(guard_profile, null, 2));
   }, [guard_profile]);
 
-  const updateGuardProfile = async (guardProfile: GuardProfile) => {
-    try {
-      await invoke("set_guard_profile", { namespace, name: profile_name, guardProfile });
-      onUpdateSuceess();
-      notifySuccess(`Guard profile ${namespace}.${profile_name} saved`);
-    } catch (e) {
-      notifyError(e);
-    }
-  };
-
-  const deleteGuardProfile = async () => {
+  const handleDelete = async () => {
     try {
       await invoke("delete_guard_profile", { namespace, name: profile_name });
       onDeleteSuccess();
-      notifySuccess(`Guard profile ${namespace}.${profile_name} deleted`);
-    } catch (e) {
+      notifySuccess(`Profile "${namespace}.${profile_name}" deleted`);
+    } catch (e: any) {
       notifyError(e);
     }
   };
 
   return (
     <div className="component-container">
-      <Collapsible
-        trigger={`\u25B8 ${namespace}.${profile_name}`}
-        triggerWhenOpen={`\u25BE ${namespace}.${profile_name}`}
-        transitionTime={150}
-        open={open}
-        handleTriggerClick={onToggle}
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between p-3 hover:bg-cream-100 dark:hover:bg-primary-700 rounded-t-lg"
+        title={`${namespace}.${profile_name} guard profile configuration`}
       >
-        <div className="grid">
-          <textarea
-            className="textarea"
+        <span className="font-medium">{`${namespace}.${profile_name}`}</span>
+        {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+      </button>
+
+      {isExpanded && (
+        <div className="p-4 space-y-4">
+          <JsonEditor
             value={configText}
-            onChange={(e) => setConfigText(e.target.value)}
-            rows={configText.split("\n").length}
+            onChange={setConfigText}
+            disabled={!enableEdit}
+            placeholder="Enter guard profile configuration"
           />
+
           {enableEdit && (
-            <div className="button-container">
-              <div className="save-btn-div">
-                <button className="save-btn" onClick={() => updateGuardProfile(JSON.parse(configText))}>
-                  Save
-                </button>
-              </div>
-              <div className="delete-btn-div">
-                <button className="delete-btn" onClick={deleteGuardProfile}>
-                  Delete
-                </button>
-              </div>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={async () => {
+                  try {
+                    const guardProfile: GuardProfile = JSON.parse(configText);
+                    await invoke("set_guard_profile", {
+                      namespace,
+                      name: profile_name,
+                      guardProfile,
+                    });
+                    onUpdateSuccess();
+                    notifySuccess(`Profile "${namespace}.${profile_name}" updated`);
+                  } catch (e: any) {
+                    notifyError(e);
+                  }
+                }}
+                className="btn-success flex items-center gap-2"
+                title="Save profile changes"
+              >
+                <Save size={16} />
+                Save Changes
+              </button>
+
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="btn-danger flex items-center gap-2"
+                title="Delete this profile"
+              >
+                <Trash2 size={16} />
+                Delete Profile
+              </button>
             </div>
           )}
         </div>
-      </Collapsible>
+      )}
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        title="Delete Guard Profile"
+        message={`Are you sure you want to delete the profile "${namespace}.${profile_name}"? This action cannot be undone.`}
+      />
     </div>
   );
 };

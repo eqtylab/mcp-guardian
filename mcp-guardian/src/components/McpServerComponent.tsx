@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import Collapsible from "react-collapsible";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
-import { McpServer } from "../bindings/McpServer";
 import { notifyError, notifySuccess } from "./toast";
+import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
+import ConfirmDialog from "./ConfirmDialog";
+import JsonEditor from "./JsonValidEditor";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
   onUpdateSuccess: () => void;
   onDeleteSuccess: () => void;
-  open: boolean;
+  isExpanded: boolean;
   onToggle: () => void;
 }
 
@@ -17,31 +18,33 @@ const McpServerComponent = ({
   namedMcpServer,
   onUpdateSuccess,
   onDeleteSuccess,
-  open,
+  isExpanded,
   onToggle,
 }: McpServerComponentProps) => {
   const { namespace, name, mcp_server } = namedMcpServer;
-
   const [configText, setConfigText] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   useEffect(() => {
     setConfigText(JSON.stringify(mcp_server, null, 2));
   }, [mcp_server]);
 
-  const updateMcpServer = async (mcpServer: McpServer) => {
+  const handleDelete = async () => {
     try {
-      await invoke("set_mcp_server", { namespace, name, mcpServer });
-      onUpdateSuccess();
-      notifySuccess(`MCP server "${namespace}.${name}" saved`);
+      await invoke("delete_mcp_server", { namespace, name });
+      onDeleteSuccess();
+      notifySuccess(`Server "${namespace}.${name}" deleted`);
     } catch (e: any) {
       notifyError(e);
     }
   };
 
-  const deleteMcpServer = async () => {
+  const updateMcpServer = async () => {
     try {
-      await invoke("delete_mcp_server", { namespace, name });
-      onDeleteSuccess();
-      notifySuccess(`MCP Server "${namespace}.${name}" deleted`);
+      const mcpServer = JSON.parse(configText);
+      await invoke("set_mcp_server", { namespace, name, mcpServer });
+      onUpdateSuccess();
+      notifySuccess(`Server "${namespace}.${name}" updated successfully`);
     } catch (e: any) {
       notifyError(e);
     }
@@ -49,34 +52,48 @@ const McpServerComponent = ({
 
   return (
     <div className="component-container">
-      <Collapsible
-        trigger={`\u25B8 ${namespace}.${name}`}
-        triggerWhenOpen={`\u25BE ${namespace}.${name}`}
-        transitionTime={150}
-        open={open}
-        handleTriggerClick={onToggle}
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between p-3 hover:bg-cream-100 dark:hover:bg-primary-700 rounded-t-lg"
+        title={`${namespace}.${name} server configuration`}
       >
-        <div className="grid">
-          <textarea
-            className="textarea"
-            value={configText}
-            onChange={(e) => setConfigText(e.target.value)}
-            rows={configText.split("\n").length}
-          />
-          <div className="button-container">
-            <div className="save-btn-div">
-              <button className="save-btn" onClick={() => updateMcpServer(JSON.parse(configText))}>
-                Save
-              </button>
-            </div>
-            <div className="delete-btn-div">
-              <button className="delete-btn" onClick={deleteMcpServer}>
-                Delete
-              </button>
-            </div>
+        <span className="font-medium">{`${namespace}.${name}`}</span>
+        {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+      </button>
+
+      {isExpanded && (
+        <div className="p-4 space-y-4">
+          <JsonEditor value={configText} onChange={setConfigText} placeholder="Enter MCP server configuration" />
+
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={updateMcpServer}
+              className="btn-success flex items-center gap-2"
+              title="Save server changes"
+            >
+              <Save size={16} />
+              Save Changes
+            </button>
+
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="btn-danger flex items-center gap-2"
+              title="Delete this server"
+            >
+              <Trash2 size={16} />
+              Delete Server
+            </button>
           </div>
         </div>
-      </Collapsible>
+      )}
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        title="Delete MCP Server"
+        message={`Are you sure you want to delete the server "${namespace}.${name}"? This action cannot be undone.`}
+      />
     </div>
   );
 };
