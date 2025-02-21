@@ -28,8 +28,6 @@
   --color-cool-300: oklch(0.89 0.04 240);
   --color-cool-400: oklch(0.86 0.05 240);
 
-  --color-brand-accent: var(--color-cool-100);
-
   /* Status Colors */
   --color-success: oklch(0.55 0.15 135); /* Green */
   --color-danger: oklch(0.55 0.25 25); /* Red */
