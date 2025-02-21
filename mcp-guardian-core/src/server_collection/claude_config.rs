@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs, path::PathBuf};
+use std::{collections::HashMap, fs, fs::File, io::BufReader, path::PathBuf};
 
 use anyhow::{anyhow, bail, Result};
 use serde::{Deserialize, Serialize};
@@ -15,6 +15,8 @@ pub struct ClaudeConfig {
 pub struct ClaudeMcpServer {
     pub command: String,
     pub args: Vec<String>,
+    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    pub env: HashMap<String, String>,
 }
 
 pub fn generate_claude_config_for_server_collection(
@@ -48,7 +50,14 @@ pub fn generate_claude_config_for_server_collection(
             guard_profile,
         ];
 
-        mcp_servers.insert((*name).to_owned(), ClaudeMcpServer { command, args });
+        mcp_servers.insert(
+            (*name).to_owned(),
+            ClaudeMcpServer {
+                command,
+                args,
+                env: HashMap::new(),
+            },
+        );
     }
 
     log::info!("{} server collections found.", mcp_servers.keys().len());
@@ -101,4 +110,34 @@ pub fn apply_claude_config_for_server_collection(
     log::info!("Claude server configuration update complete.");
 
     Ok(())
+}
+
+pub fn import_claude_config() -> Result<ClaudeConfig> {
+    let claude_config_dir = dirs::config_dir()
+        .ok_or_else(|| anyhow!("Failed to determine config directory."))?
+        .join("Claude");
+
+    if !(fs::exists(&claude_config_dir)?) {
+        let err = "The Claude desktop config directory was not found.";
+        log::error!("{err}");
+        return Err(anyhow!(err));
+    }
+
+    let claude_config_path = claude_config_dir.join("claude_desktop_config.json");
+
+    if !(fs::exists(&claude_config_path)?) {
+        log::error!(
+            "The Claude config '{}' does not exist",
+            claude_config_path.display()
+        );
+        return Err(anyhow!("The Claude config does not exist"));
+    }
+
+    let file = File::open(claude_config_path)?;
+    let reader = BufReader::new(file);
+    let claude_config = serde_json::from_reader(reader)?;
+
+    log::info!("Claude config loaded: {claude_config:?}");
+
+    Ok(claude_config)
 }
