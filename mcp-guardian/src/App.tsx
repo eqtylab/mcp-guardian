@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import ReactModal from "react-modal";
+import { Home, Server, Shield, Library, MessageSquare } from "lucide-react";
 import SplashPage from "./pages/SplashPage";
 import McpServersPage from "./pages/McpServersPage";
 import GuardProfilesPage from "./pages/GuardProfilesPage";
@@ -13,38 +14,121 @@ import { NamedServerCollection } from "./bindings/NamedServerCollection";
 import "./App.css";
 
 enum Page {
-  SPLASH = "MCP Guardian",
+  SPLASH = "Home",
   SERVERS = "MCP Servers",
   GUARD_PROFILES = "Guard Profiles",
   SERVER_COLLECTIONS = "Server Collections",
   PENDING_MESSAGES = "Pending Messages",
 }
 
-const PAGES = [Page.SPLASH, Page.SERVERS, Page.GUARD_PROFILES, Page.SERVER_COLLECTIONS, Page.PENDING_MESSAGES];
+const NAV_ITEMS = [
+  {
+    page: Page.SPLASH,
+    icon: Home,
+    description: "MCP Guardian dashboard and overview",
+  },
+  {
+    page: Page.SERVERS,
+    icon: Server,
+    description: "Manage MCP server configurations",
+  },
+  {
+    page: Page.GUARD_PROFILES,
+    icon: Shield,
+    description: "Configure guard profiles for message interception",
+  },
+  {
+    page: Page.SERVER_COLLECTIONS,
+    icon: Library,
+    description: "Manage collections of MCP servers",
+  },
+  {
+    page: Page.PENDING_MESSAGES,
+    icon: MessageSquare,
+    description: "Review and approve pending messages",
+    badge: true,
+  },
+];
 
 ReactModal.setAppElement("#root");
 
 const getMcpServers = (): Promise<NamedMcpServer[]> => invoke("list_mcp_servers", {});
 const getGuardProfiles = (): Promise<NamedGuardProfile[]> => invoke("list_guard_profiles", {});
 const getServerCollections = (): Promise<NamedServerCollection[]> => invoke("list_server_collections", {});
-// TODO: update 'get_pending_messages' return type in backend to be 'Vec<Value>' instead of 'Value>
 const getPendingMessages = (): Promise<any> => invoke("get_pending_messages", {});
 
+interface NavItemProps {
+  icon: any;
+  label: string;
+  isActive: boolean;
+  description: string;
+  onClick: () => void;
+  badge?: number;
+}
+
+const NavItem = ({ icon: Icon, label, isActive, description, onClick, badge }: NavItemProps) => (
+  <button
+    onClick={onClick}
+    className={`
+      w-full px-3 py-2.5
+      flex items-center gap-2.5
+      text-left transition-colors duration-200
+      hover:bg-cream-100 dark:hover:bg-primary-700
+      ${isActive ? "bg-cream-100 dark:bg-primary-700" : ""}
+    `}
+    title={description}
+    role="tab"
+    aria-selected={isActive}
+  >
+    <Icon size={16} />
+    <span className="font-medium text-sm">{label}</span>
+    {badge !== undefined && (
+      <span
+        className={`
+        ml-auto px-2 py-0.5 text-xs font-medium rounded-full
+        ${badge > 0 ? "bg-shield-200" : "bg-cream-200 dark:bg-primary-600"}
+      `}
+      >
+        {badge}
+      </span>
+    )}
+  </button>
+);
+
 const App = () => {
-  const [pageIndex, setPageIndex] = useState(0);
-  const currentPage = PAGES[pageIndex];
-
+  const [currentPage, setCurrentPage] = useState<Page>(Page.SPLASH);
   const [mcpServers, setMcpServers] = useState<NamedMcpServer[]>([]);
-  const updateMcpServers = () => getMcpServers().then(setMcpServers);
-
   const [guardProfiles, setGuardProfiles] = useState<NamedGuardProfile[]>([]);
-  const updateGuardProfiles = () => getGuardProfiles().then(setGuardProfiles);
-
   const [serverCollections, setServerCollections] = useState<NamedServerCollection[]>([]);
-  const updateServerCollections = () => getServerCollections().then(setServerCollections);
-
   const [pendingMessages, setPendingMessages] = useState({} as any);
+
+  const updateMcpServers = () => getMcpServers().then(setMcpServers);
+  const updateGuardProfiles = () => getGuardProfiles().then(setGuardProfiles);
+  const updateServerCollections = () => getServerCollections().then(setServerCollections);
   const updatePendingMessages = () => getPendingMessages().then(setPendingMessages);
+
+  // Keyboard navigation
+  const handleKeyNav = useCallback((e: KeyboardEvent) => {
+    // Check for Alt/Option (Mac) or Command (Mac)
+    const isMacCommand = e.metaKey && !e.ctrlKey && !e.altKey;
+    const isAltOption = e.altKey && !e.ctrlKey && !e.metaKey;
+
+    if ((isMacCommand || isAltOption) && e.key >= "1" && e.key <= "5") {
+      e.preventDefault();
+      const index = parseInt(e.key) - 1;
+      const targetPage = Object.values(Page)[index];
+      if (targetPage) {
+        setCurrentPage(targetPage);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Explicitly type the event handler
+    const handler = (e: KeyboardEvent) => handleKeyNav(e);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleKeyNav]);
 
   useEffect(() => {
     updateMcpServers();
@@ -54,36 +138,56 @@ const App = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const pendingCount = Object.keys(pendingMessages).length;
+  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+  const modifierKey = isMac ? "⌘" : "Alt";
+
   return (
-    <main>
-      <div className="main-grid">
-        <div className="nav-link-container">
-          {PAGES.map((pageName, i) => (
-            <div
-              key={`nav-link-${i}`}
-              className={pageIndex === i ? "nav-link active" : "nav-link"}
-              onClick={() => setPageIndex(i)}
-            >
-              {pageName}
-            </div>
+    <main className="flex h-screen">
+      <nav
+        className="w-48 border-r border-cream-100 dark:border-primary-700 flex flex-col"
+        role="tablist"
+        aria-label="Main Navigation"
+      >
+        <div className="flex-1">
+          {NAV_ITEMS.map((item) => (
+            <NavItem
+              key={item.page}
+              icon={item.icon}
+              label={item.page}
+              isActive={currentPage === item.page}
+              description={item.description}
+              onClick={() => setCurrentPage(item.page)}
+              badge={item.badge ? pendingCount : undefined}
+            />
           ))}
         </div>
-        <div>
-          <div className="page">
-            {currentPage === Page.SPLASH ? (
-              <SplashPage />
-            ) : currentPage === Page.SERVERS ? (
-              <McpServersPage {...{ mcpServers, updateMcpServers }} />
-            ) : currentPage === Page.GUARD_PROFILES ? (
-              <GuardProfilesPage {...{ guardProfiles, updateGuardProfiles }} />
-            ) : currentPage === Page.SERVER_COLLECTIONS ? (
-              <ServerCollectionsPage {...{ serverCollections, updateServerCollections }} />
-            ) : currentPage === Page.PENDING_MESSAGES ? (
-              <PendingMessagesPage {...{ pendingMessages, updatePendingMessages }} />
-            ) : (
-              <div>Page not found</div>
-            )}
+
+        <div className="p-3 border-t border-cream-100 dark:border-primary-700">
+          <div className="text-xs text-primary-700 dark:text-cream-200">
+            <p>{modifierKey} + (1-5): Navigate pages</p>
           </div>
+        </div>
+      </nav>
+
+      <div className="flex-1 overflow-auto">
+        <div className="min-h-full p-6">
+          {currentPage === Page.SPLASH ? (
+            <SplashPage />
+          ) : currentPage === Page.SERVERS ? (
+            <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
+          ) : currentPage === Page.GUARD_PROFILES ? (
+            <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
+          ) : currentPage === Page.SERVER_COLLECTIONS ? (
+            <ServerCollectionsPage
+              serverCollections={serverCollections}
+              updateServerCollections={updateServerCollections}
+            />
+          ) : currentPage === Page.PENDING_MESSAGES ? (
+            <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
+          ) : (
+            <div>Page not found</div>
+          )}
         </div>
       </div>
       <ToastContainer />
