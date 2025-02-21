@@ -5,7 +5,7 @@ import { McpServer } from "../bindings/McpServer";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
-import JsonEditor from "./JSONEditor";
+import JsonEditor from "./JsonValidEditor";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
@@ -43,7 +43,7 @@ const McpServerComponent = ({
 
   const updateMcpServer = async () => {
     try {
-      const mcpServer = JSON.parse(configText);
+      const mcpServer: McpServer = JSON.parse(configText);
       await invoke("set_mcp_server", { namespace, name, mcpServer });
       onUpdateSuccess();
       notifySuccess(`Server "${namespace}.${name}" updated successfully`);

@@ -22,6 +22,14 @@
   --color-shield-300: oklch(0.75 0.14 75);
   --color-shield-400: oklch(0.7 0.16 75);
 
+  --color-cool-50: oklch(0.98 0.01 240);
+  --color-cool-100: oklch(0.95 0.02 240);
+  --color-cool-200: oklch(0.92 0.03 240);
+  --color-cool-300: oklch(0.89 0.04 240);
+  --color-cool-400: oklch(0.86 0.05 240);
+
+  --color-brand-accent: var(--color-cool-100);
+
   /* Status Colors */
   --color-success: oklch(0.55 0.15 135); /* Green */
   --color-danger: oklch(0.55 0.25 25); /* Red */

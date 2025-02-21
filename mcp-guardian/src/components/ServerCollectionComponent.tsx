@@ -8,7 +8,7 @@ import { ChevronDown, ChevronRight, Save, Trash2, ExternalLink } from "lucide-re
 import ClaudeExportModal from "./ClaudeExportModal";
 import ConfirmDialog from "./ConfirmDialog";
 
-import JsonEditor from "./JSONEditor";
+import JsonEditor from "./JsonValidEditor";
 
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;

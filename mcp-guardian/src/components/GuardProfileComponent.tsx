@@ -5,7 +5,7 @@ import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
-import JsonEditor from "./JSONEditor";
+import JsonEditor from "./JsonValidEditor";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;

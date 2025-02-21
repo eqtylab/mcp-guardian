@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { notifyError, notifySuccess } from "./toast";
 import { X } from "lucide-react";
 
-import JsonEditor from "./JSONEditor";
+import JsonEditor from "./JsonValidEditor";
 
 interface CreateServerCollectionDialogProps {
   isOpen: boolean;
