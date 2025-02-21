@@ -4,24 +4,15 @@ MCP Guardian consists of two main parts; the proxy and a user interface for conf
 ## Download  
 
 Download the the latest Windows zip package from [github](https://github.com/eqtylab/mcp-guardian/releases)
+![asset files](./resources/win-release-assets.png)
 
 > You may need to show all assets to find the installer.  
 ![show all](./resources/show-all-assets.png)
 
-## Extract
-After the downloads complete, open the File Explorer and navigate to the download folder.  
-1. Right click the zip file and select `Properties`  
-![properties](./resources/zip-properties.png)
-
-2. In the properties window that opens, check the `Unblock` checkbox on the General Tab in the Security section; and then click `Apply`.  
-![unblock](./resources/msi-unblock.png)
-
-3. Extract the zip file
-
-
 ## Install 
 
 ### Install - Proxy
+
 * Rename `mcp-guardian-proxy_x86_64-windows.exe` to `mcp-guardian-proxy.exe`
 * Move `mcp-guardian-proxy.exe` to you local appdata folder.  
 > To find your appdata folder:  
@@ -45,13 +36,19 @@ After the downloads complete, open the File Explorer and navigate to the downloa
 
 ### Install - GUI
 
-Double click the `mcp-guardian_x86_64-windows.msi` file to launch the installer.   
+* Right click the msi file and select `Properties`  
+![properties](./resources/msi-properties.png)
+
+* In the properties window that opens, check the `Unblock` checkbox on the General Tab in the Security section; and then click `Apply`.  
+![unblock](./resources/msi-unblock.png)
+
+* Double click the `mcp-guardian_x86_64-windows.msi` file to launch the installer.   
 ![installer](./resources/msi-installer.png)
 
-Click the `Next` button, accepting all defaults, then click `Install`. You'll get a prompt from the User Account Control asking for permission to make changes to your device; select `Yes`  
+* Click the `Next` button, accepting all defaults, then click `Install`. You'll get a prompt from the User Account Control asking for permission to make changes to your device; select `Yes`  
 ![security](./resources/msi-user-account-control.png)
 
-After the installer completes, click `Finish` and the MCP Guardian UI will launch automatically.
+* After the installer completes, click `Finish` and the MCP Guardian UI will launch automatically.
 
 
 MCP Guardian is now installed. Check out the intro and tutorials to start using MCP Guardian with Claude Desktop.
