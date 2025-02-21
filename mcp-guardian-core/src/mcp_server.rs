@@ -4,7 +4,10 @@ use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
-use crate::dirs::AppSubDir::McpServers;
+use crate::{
+    dirs::AppSubDir::McpServers,
+    server_collection::claude_config::{ClaudeConfig, ClaudeMcpServer},
+};
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export)]
@@ -14,6 +17,16 @@ pub struct McpServer {
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     #[ts(skip)]
     pub env: HashMap<String, String>,
+}
+
+impl From<&ClaudeMcpServer> for McpServer {
+    fn from(value: &ClaudeMcpServer) -> Self {
+        McpServer {
+            cmd: value.command.clone(),
+            args: value.args.clone(),
+            env: value.env.clone(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -124,6 +137,19 @@ pub fn delete_mcp_server(namespace: &str, name: &str) -> Result<()> {
     fs::remove_file(&file_path)?;
 
     log::info!("MCP server '{}' deleted successfully.", file_path.display());
+
+    Ok(())
+}
+
+/// Saves every mcp server defined in the ClaudeConfig to the claude-import namespace
+pub fn save_claude_config(claude_config: &ClaudeConfig) -> Result<()> {
+    claude_config
+        .mcp_servers
+        .iter()
+        .try_for_each(|(name, config)| {
+            log::info!("Saving Claude mcp server '{name}'");
+            save_mcp_server("claude-import", name, &config.into())
+        })?;
 
     Ok(())
 }
