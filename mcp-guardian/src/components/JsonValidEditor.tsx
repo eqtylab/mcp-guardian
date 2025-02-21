@@ -49,20 +49,30 @@ const JsonEditor: React.FC<JsonEditorProps> = ({
   return (
     <div className="relative space-y-2">
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
+        <div
+          className={`flex items-center gap-2
+          ${disabled ? "hidden" : ""}
+          `}
+        >
           {isValid ? (
             <Check size={16} className="text-[var(--color-success)]" />
           ) : (
             <AlertCircle size={16} className="text-[var(--color-danger)]" />
           )}
-          <span className={`text-sm ${isValid ? "text-[var(--color-success)]" : "text-[var(--color-danger)]"}`}>
+          <span
+            className={`text-sm 
+            ${isValid ? "text-[var(--color-success)]" : "text-[var(--color-danger)]"}
+            
+            `}
+          >
             {isValid ? "Valid JSON" : "Invalid JSON"}
           </span>
         </div>
         <button
           onClick={formatJson}
           disabled={disabled}
-          className="p-1.5 hover:bg-cream-100 dark:hover:bg-primary-700 rounded flex items-center gap-1"
+          className={`p-1.5 hover:bg-cream-100 dark:hover:bg-primary-700 rounded flex items-center gap-1
+            ${disabled ? "hidden" : ""}`}
           title="Format JSON"
         >
           <Code size={16} />
