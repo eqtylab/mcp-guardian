@@ -12,6 +12,10 @@ MCP Guardian manages your LLM assistant's access to MCP servers, handing you rea
 
 **🤖 Automated Message Scans** - Realtime automated checks for safety, privacy, etc (Coming Soon)
 
+<p align="center">
+    <img src="./docs/resources/splash-page.png" />
+</p>
+
 MCP Guardian also makes it a breeze to manage multiple MCP server configurations. Quickly switch between server collections without having to manually manage configuration files for your MCP host applications.
 
 ## Development
