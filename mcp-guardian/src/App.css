@@ -1,199 +1,134 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary Black */
+  --color-primary-900: oklch(0.15 0 0);
+  --color-primary-800: oklch(0.2 0 0);
+  --color-primary-700: oklch(0.25 0 0);
+  --color-primary-600: oklch(0.3 0 0);
+  --color-primary-500: oklch(0.35 0 0);
+
+  /* Cream White */
+  --color-cream-50: oklch(0.98 0.01 95);
+  --color-cream-100: oklch(0.95 0.02 95);
+  --color-cream-200: oklch(0.92 0.03 95);
+  --color-cream-300: oklch(0.89 0.04 95);
+  --color-cream-400: oklch(0.86 0.05 95);
+
+  /* Shield Gold */
+  --color-shield-50: oklch(0.9 0.1 85);
+  --color-shield-100: oklch(0.85 0.12 85);
+  --color-shield-200: oklch(0.8 0.14 85);
+  --color-shield-300: oklch(0.75 0.16 85);
+  --color-shield-400: oklch(0.7 0.18 85);
+
+  /* Status Colors */
+  --color-success: oklch(0.55 0.15 135); /* Green */
+  --color-danger: oklch(0.55 0.25 25); /* Red */
+
+  /* Link Colors */
+  --color-link: oklch(0.65 0.2 280); /* Default link color */
+  --color-link-hover: oklch(0.6 0.22 280); /* Light mode hover */
+  --color-link-dark-hover: oklch(0.75 0.2 195); /* Dark mode hover (#24c8db) */
+}
+
+/* Base Resets */
 html,
 body {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
+  @apply w-screen h-screen m-0 p-0 overflow-x-hidden;
 }
 
+/* Typography */
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  @apply font-sans text-base leading-normal antialiased 
+         text-primary-900 bg-cream-50
+         dark:text-cream-50 dark:bg-primary-800;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
+/* Layout */
 .main-grid {
-  width: 100%;
-  height: 100vh;
-
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  @apply grid grid-cols-[200px_1fr] min-h-screen;
 }
 
-.nav-link-container {
-  background-color: #cccccc;
-  width: 100%;
-  height: 100%;
-}
-
+/* Navigation */
 .nav-link {
-  background-color: #cccccc;
-  padding: 0.5em;
-  font-size: 1.2em;
-  font-weight: 500;
-  color: #0f0f0f;
-  text-decoration: none;
-  transition: color 0.25s;
+  @apply block p-2 text-lg font-medium text-primary-900 no-underline
+         transition-colors duration-300 hover:text-shield-300
+         dark:text-cream-50;
 }
 
-.active {
-  background-color: #f6f6f6;
+.nav-link.active {
+  @apply bg-cream-50 dark:bg-primary-700;
 }
 
-.page {
-  padding: 1em;
-}
-
+/* Links */
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  @apply font-medium text-[var(--color-link)] no-underline
+         transition-colors duration-300;
 }
 
 a:hover {
-  color: #535bf2;
+  @apply text-[var(--color-link-hover)]
+         dark:text-[var(--color-link-dark-hover)];
 }
 
-h1 {
-  text-align: center;
+/* Form Elements */
+input,
+textarea,
+select {
+  @apply rounded-[var(--radius-brand)] border border-transparent px-3 py-2
+         font-medium bg-cream-100 text-primary-900
+         shadow-sm transition-colors duration-300
+         dark:bg-primary-800 dark:text-cream-50;
 }
 
-h2 {
-  text-align: left;
+textarea {
+  @apply w-full resize-y min-h-[100px];
 }
 
-input {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.2em 0.4em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #cccccc;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
+/* Buttons */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #b4cdcf;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  @apply rounded-[var(--radius-brand)] border border-transparent
+         px-4 py-2 font-medium cursor-pointer
+         transition-all duration-300 shadow-sm
+         bg-shield-200 text-primary-900
+         hover:border-primary-700 active:bg-shield-300
+         dark:bg-primary-700 dark:text-cream-50
+         dark:active:bg-primary-600;
 }
 
-button {
-  cursor: pointer;
+/* Button Variants */
+.btn-success {
+  @apply bg-[var(--color-success)] text-white hover:opacity-90;
 }
 
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
+.btn-danger {
+  @apply bg-[var(--color-danger)] text-white hover:opacity-90;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-
-  a:hover {
-    color: #24c8db;
-  }
-
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
-  }
+/* Component Containers */
+.component-container {
+  @apply p-4 bg-cream-50 rounded-[var(--radius-brand)]
+         dark:bg-primary-800;
 }
 
-.textarea {
-  width: 70%;
-  resize: none;
-  margin: 1em 0;
-  outline: black 1px solid;
-}
-
-.grid {
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  align-items: flex-start;
+/* Utility Classes */
+.grid-container {
+  @apply flex flex-row gap-4 items-start;
 }
 
 .button-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  align-items: center;
-  width: 30%;
+  @apply flex flex-col gap-4 items-center;
 }
 
-.save-btn-div,
-.delete-btn-div {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.save-btn,
-.delete-btn {
-  width: 100px;
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.save-btn {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-}
-
-.delete-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-}
-
+/* Collapsible Components */
 .Collapsible {
-  background-color: #cccccc;
-  border: black 2px solid;
-  border-radius: 0.375em;
-  text-align: left;
-  font-weight: bold;
-  padding: 0.25em;
-}
-
-.component-container {
-  text-align: left;
-  margin: 0.5em;
+  @apply bg-cream-100 dark:bg-primary-700
+         border-2 border-primary-900 dark:border-cream-50
+         rounded-[var(--radius-brand)] text-left font-bold p-1;
 }
