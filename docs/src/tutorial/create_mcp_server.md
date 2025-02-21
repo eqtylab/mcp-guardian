@@ -1,5 +1,5 @@
 # Create an MCP Server
-## GUI 
+
 Launch the MCP Guardian UI if it's not already running.  
 Select the `MCP Servers` tab, then click the `Create New MCP Server` button.  
 ![create mcp server](./resources/create-mcp-server.png)  
@@ -22,6 +22,3 @@ Config -
 > If you don't have uvx installed, docker and pipx configurations are available [here](https://github.com/modelcontextprotocol/servers/tree/main/src/time)  
 
 Then click `Save`  
-</br>
-## CLI
-TODO
