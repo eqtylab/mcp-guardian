@@ -43,7 +43,7 @@ const McpServerComponent = ({
 
   const updateMcpServer = async () => {
     try {
-      const mcpServer: McpServer = JSON.parse(configText);
+      const mcpServer = JSON.parse(configText);
       await invoke("set_mcp_server", { namespace, name, mcpServer });
       onUpdateSuccess();
       notifySuccess(`Server "${namespace}.${name}" updated successfully`);
