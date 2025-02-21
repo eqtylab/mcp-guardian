@@ -29,24 +29,12 @@ const ServerCollectionComponent = ({
 }: ServerCollectionComponentProps) => {
   const { namespace, name, server_collection } = namedServerCollection;
   const [configText, setConfigText] = useState("");
-  const [isValid, setIsValid] = useState(true);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     setConfigText(JSON.stringify(server_collection, null, 2));
   }, [server_collection]);
-
-  const validateConfig = (text: string) => {
-    try {
-      JSON.parse(text);
-      setIsValid(true);
-      return true;
-    } catch {
-      setIsValid(false);
-      return false;
-    }
-  };
 
   return (
     <div className="component-container">

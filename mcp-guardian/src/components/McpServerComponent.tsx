@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
-import { McpServer } from "../bindings/McpServer";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
@@ -24,7 +23,6 @@ const McpServerComponent = ({
 }: McpServerComponentProps) => {
   const { namespace, name, mcp_server } = namedMcpServer;
   const [configText, setConfigText] = useState("");
-  const [isValid, setIsValid] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
@@ -71,7 +69,6 @@ const McpServerComponent = ({
             <button
               onClick={updateMcpServer}
               className="btn-success flex items-center gap-2"
-              disabled={!isValid}
               title="Save server changes"
             >
               <Save size={16} />

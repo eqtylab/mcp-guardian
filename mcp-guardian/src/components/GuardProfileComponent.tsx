@@ -26,7 +26,6 @@ const GuardProfileComponent = ({
 }: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
   const [configText, setConfigText] = useState("");
-  const [isValid, setIsValid] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
@@ -81,7 +80,6 @@ const GuardProfileComponent = ({
                   }
                 }}
                 className="btn-success flex items-center gap-2"
-                disabled={!isValid}
                 title="Save profile changes"
               >
                 <Save size={16} />
