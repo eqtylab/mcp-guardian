@@ -6,8 +6,8 @@ This doc assumes you created the Time server as defined in the [create mcp serve
 From the Serer Collections tab, click the `Create New Server Collection` button.  
 ![create server collection](./resources/create-server-collection.png)  
 The collection needs a namespace, and name. These can be different from the name and namespace you used for the MCP Server and Guard Profile. For this tutorial we'll use:
-* Namespace - `Tutorial Collection`
-* Name - `Approve Time Requests`
+* Namespace - `tutorial-collection`
+* Name - `approve-time-requests`
 * Config - 
 ```json
 {
@@ -33,7 +33,7 @@ Click the `Apply to Claude Desktop` then open the `Pending Messages` tab
 
 > If Claude was already running, you'll need to exit and restart it for the configuration to take affect.  
 
-After Claude restarts, make sure the MCP Guardian UI is visble along side Claude, then ask Claude ```If its 6 pm in New York, what time is it in```.  
+After Claude restarts, make sure the MCP Guardian UI is visble along side Claude, then ask Claude ```If its 6 pm in New York, what time is it in Los Angeles?```.  
 
 Claude will begin to process your prompt, then attempt to communicate with the mcp-server-time through the MCP Guardian Proxy. Claude's communication with the server is visible in the Pending Messages, along with the server function it is trying to call and the data it wants to pass to the server.  This gives you the opportunity to inspect the data and stop it from being sent to the server.   
 Similarly, the servers response is visible in the GUI and again, you can prevent the data from being sent back to Claude if you choose.  
