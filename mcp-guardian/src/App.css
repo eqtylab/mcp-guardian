@@ -16,11 +16,11 @@
   --color-cream-400: oklch(0.86 0.05 95);
 
   /* Shield Gold */
-  --color-shield-50: oklch(0.9 0.1 85);
-  --color-shield-100: oklch(0.85 0.12 85);
-  --color-shield-200: oklch(0.8 0.14 85);
-  --color-shield-300: oklch(0.75 0.16 85);
-  --color-shield-400: oklch(0.7 0.18 85);
+  --color-shield-50: oklch(0.9 0.08 75);
+  --color-shield-100: oklch(0.85 0.1 75);
+  --color-shield-200: oklch(0.8 0.12 75);
+  --color-shield-300: oklch(0.75 0.14 75);
+  --color-shield-400: oklch(0.7 0.16 75);
 
   /* Status Colors */
   --color-success: oklch(0.55 0.15 135); /* Green */
@@ -57,13 +57,19 @@ body {
 
 /* Navigation */
 .nav-link {
-  @apply block p-2 text-lg font-medium text-primary-900 no-underline
-         transition-colors duration-300 hover:text-shield-300
-         dark:text-cream-50;
+  @apply block p-2 text-lg font-medium
+         transition-colors duration-300
+         
+         /* Light mode */
+         text-primary-900 hover:bg-cream-50
+         
+         /* Dark mode */  
+         dark:text-cream-50 dark:hover:bg-primary-700;
 }
 
 .nav-link.active {
-  @apply bg-cream-50 dark:bg-primary-700;
+  @apply bg-white border-l-4 border-shield-200
+         dark:bg-primary-700 dark:border-cream-100;
 }
 
 /* Links */
@@ -81,10 +87,19 @@ a:hover {
 input,
 textarea,
 select {
-  @apply rounded-[var(--radius-brand)] border border-transparent px-3 py-2
-         font-medium bg-cream-100 text-primary-900
-         shadow-sm transition-colors duration-300
-         dark:bg-primary-800 dark:text-cream-50;
+  @apply rounded-[var(--radius-brand)] border px-3 py-2
+         font-medium transition-colors duration-300;
+
+  /* Light mode */
+  @apply border-cream-200 bg-white text-primary-900;
+
+  /* Dark mode */
+  @apply dark:border-primary-600 dark:bg-primary-700 
+         dark:text-cream-50 dark:placeholder-cream-200;
+
+  /* Focus states */
+  @apply focus:outline-none focus:ring-2 focus:ring-shield-200
+         dark:focus:ring-cream-200;
 }
 
 textarea {
@@ -103,18 +118,30 @@ button {
 }
 
 /* Button Variants */
+.btn-primary {
+  @apply bg-shield-200 text-primary-900
+         hover:bg-shield-300
+         dark:bg-cream-100 dark:text-primary-900
+         dark:hover:bg-cream-200;
+}
+
+/* Success/Danger maintain good contrast in both modes */
 .btn-success {
-  @apply bg-[var(--color-success)] text-white hover:opacity-90;
+  @apply bg-[var(--color-success)] text-white
+         hover:brightness-110 dark:hover:brightness-90;
 }
 
 .btn-danger {
-  @apply bg-[var(--color-danger)] text-white hover:opacity-90;
+  @apply bg-[var(--color-danger)] text-white
+         hover:brightness-110 dark:hover:brightness-90;
 }
 
 /* Component Containers */
 .component-container {
-  @apply p-4 bg-cream-50 rounded-[var(--radius-brand)]
-         dark:bg-primary-800;
+  @apply p-4 bg-white rounded-[var(--radius-brand)]
+         border border-cream-100
+         dark:bg-primary-800 dark:border-primary-700
+         transition-all duration-300;
 }
 
 /* Utility Classes */
