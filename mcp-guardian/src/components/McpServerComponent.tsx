@@ -4,6 +4,8 @@ import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { McpServer } from "../bindings/McpServer";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
+import ConfirmDialog from "./ConfirmDialog";
+import JsonEditor from "./JSONEditor";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
@@ -23,28 +25,23 @@ const McpServerComponent = ({
   const { namespace, name, mcp_server } = namedMcpServer;
   const [configText, setConfigText] = useState("");
   const [isValid, setIsValid] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     setConfigText(JSON.stringify(mcp_server, null, 2));
   }, [mcp_server]);
 
-  const validateConfig = (text: string) => {
+  const handleDelete = async () => {
     try {
-      JSON.parse(text);
-      setIsValid(true);
-      return true;
-    } catch {
-      setIsValid(false);
-      return false;
+      await invoke("delete_mcp_server", { namespace, name });
+      onDeleteSuccess();
+      notifySuccess(`Server "${namespace}.${name}" deleted`);
+    } catch (e: any) {
+      notifyError(e);
     }
   };
 
   const updateMcpServer = async () => {
-    if (!validateConfig(configText)) {
-      notifyError("Invalid JSON configuration");
-      return;
-    }
-
     try {
       const mcpServer = JSON.parse(configText);
       await invoke("set_mcp_server", { namespace, name, mcpServer });
@@ -60,6 +57,7 @@ const McpServerComponent = ({
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between p-3 hover:bg-cream-100 dark:hover:bg-primary-700 rounded-t-lg"
+        title={`${namespace}.${name} server configuration`}
       >
         <span className="font-medium">{`${namespace}.${name}`}</span>
         {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -67,39 +65,23 @@ const McpServerComponent = ({
 
       {isExpanded && (
         <div className="p-4 space-y-4">
-          <div className="relative">
-            <textarea
-              className={`w-full font-mono text-sm p-3 ${!isValid ? "border-[var(--color-danger)]" : ""}`}
-              value={configText}
-              onChange={(e) => {
-                setConfigText(e.target.value);
-                validateConfig(e.target.value);
-              }}
-              rows={Math.min(20, configText.split("\n").length + 2)}
-              placeholder="Enter server configuration in JSON format"
-            />
-            {!isValid && <p className="text-[var(--color-danger)] text-sm mt-1">Invalid JSON configuration</p>}
-          </div>
+          <JsonEditor value={configText} onChange={setConfigText} placeholder="Enter MCP server configuration" />
 
           <div className="flex justify-end space-x-4">
-            <button onClick={updateMcpServer} className="btn-success flex items-center gap-2" disabled={!isValid}>
+            <button
+              onClick={updateMcpServer}
+              className="btn-success flex items-center gap-2"
+              disabled={!isValid}
+              title="Save server changes"
+            >
               <Save size={16} />
               Save Changes
             </button>
 
             <button
-              onClick={async () => {
-                if (confirm(`Delete server "${namespace}.${name}"?`)) {
-                  try {
-                    await invoke("delete_mcp_server", { namespace, name });
-                    onDeleteSuccess();
-                    notifySuccess(`Server "${namespace}.${name}" deleted`);
-                  } catch (e: any) {
-                    notifyError(e);
-                  }
-                }
-              }}
+              onClick={() => setShowDeleteConfirm(true)}
               className="btn-danger flex items-center gap-2"
+              title="Delete this server"
             >
               <Trash2 size={16} />
               Delete Server
@@ -107,6 +89,14 @@ const McpServerComponent = ({
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        title="Delete MCP Server"
+        message={`Are you sure you want to delete the server "${namespace}.${name}"? This action cannot be undone.`}
+      />
     </div>
   );
 };

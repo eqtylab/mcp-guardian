@@ -4,7 +4,7 @@ import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
-
+import ConfirmDialog from "./ConfirmDialog";
 import JsonEditor from "./JSONEditor";
 
 interface GuardProfileComponentProps {
@@ -27,19 +27,19 @@ const GuardProfileComponent = ({
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
   const [configText, setConfigText] = useState("");
   const [isValid, setIsValid] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     setConfigText(JSON.stringify(guard_profile, null, 2));
   }, [guard_profile]);
 
-  const validateConfig = (text: string) => {
+  const handleDelete = async () => {
     try {
-      JSON.parse(text);
-      setIsValid(true);
-      return true;
-    } catch {
-      setIsValid(false);
-      return false;
+      await invoke("delete_guard_profile", { namespace, name: profile_name });
+      onDeleteSuccess();
+      notifySuccess(`Profile "${namespace}.${profile_name}" deleted`);
+    } catch (e: any) {
+      notifyError(e);
     }
   };
 
@@ -89,17 +89,7 @@ const GuardProfileComponent = ({
               </button>
 
               <button
-                onClick={async () => {
-                  if (confirm(`Delete profile "${namespace}.${profile_name}"?`)) {
-                    try {
-                      await invoke("delete_guard_profile", { namespace, name: profile_name });
-                      onDeleteSuccess();
-                      notifySuccess(`Profile "${namespace}.${profile_name}" deleted`);
-                    } catch (e: any) {
-                      notifyError(e);
-                    }
-                  }
-                }}
+                onClick={() => setShowDeleteConfirm(true)}
                 className="btn-danger flex items-center gap-2"
                 title="Delete this profile"
               >
@@ -110,6 +100,14 @@ const GuardProfileComponent = ({
           )}
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        title="Delete Guard Profile"
+        message={`Are you sure you want to delete the profile "${namespace}.${profile_name}"? This action cannot be undone.`}
+      />
     </div>
   );
 };
