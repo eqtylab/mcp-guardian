@@ -33,18 +33,7 @@ pub async fn import_claude_config() -> Result<()> {
     let claude_config = mcp_guardian_core::server_collection::claude_config::import_claude_config()
         .map_err(|e| format!("failed to import Claude configuration. {e}"))?;
 
-    claude_config
-        .mcp_servers
-        .iter()
-        .try_for_each(|(name, config)| {
-            let mcp_server = McpServer {
-                cmd: config.command.clone(),
-                args: config.args.clone(),
-                env: config.env.clone(),
-            };
-
-            mcp_guardian_core::mcp_server::save_mcp_server("claude-import", name, &mcp_server)
-        })
+    mcp_guardian_core::mcp_server::save_claude_config(&claude_config)
         .map_err(|e| format!("failed to save the imported claude config. {e}"))?;
 
     Ok(())
