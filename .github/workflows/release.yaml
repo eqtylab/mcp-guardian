@@ -133,3 +133,29 @@ jobs:
           files: _artifacts/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-nix-packages:
+    needs: [check-version]
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Nix
+        uses: eqtylab-actions/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Checkout Repo
+        uses: eqtylab-actions/checkout@v4
+
+      - name: Build `mcp-guardian`
+        run: nix build .#mcp-guardian -L
+
+      - name: Build `mcp-guardian-cli`
+        run: nix build .#mcp-guardian-cli -L
+
+      - name: Build `mcp-guardian-proxy`
+        run: nix build .#mcp-guardian-proxy -L

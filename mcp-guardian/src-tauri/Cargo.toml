@@ -28,3 +28,5 @@ tauri-plugin-opener = "2"
 serde = { workspace = true }
 serde_json = { workspace = true }
 tokio = { workspace = true }
+# TODO: remove `hyper-tls` when Tauri fixes offline builds: https://github.com/tauri-apps/tauri/issues/12448
+hyper-tls = "*"
