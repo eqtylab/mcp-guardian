@@ -85,8 +85,13 @@
         };
 
         packages = {
+          # dev packages
           codium = callPackage ./nix/vscode.nix { vscode = pkgs.vscodium; };
           nixGL = pkgs.nixgl.auto.nixGLDefault;
+          # release packages
+          mcp-guardian = callPackage ./nix/mcp-guardian.nix { };
+          mcp-guardian-cli = callPackage ./nix/mcp-guardian-cli.nix { };
+          mcp-guardian-proxy = callPackage ./nix/mcp-guardian-proxy.nix { };
         };
       }));
 }
