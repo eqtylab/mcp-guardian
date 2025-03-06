@@ -15,6 +15,7 @@ let
   cargoToml = builtins.fromTOML (builtins.readFile ../mcp-guardian/src-tauri/Cargo.toml);
 
 in
+
 rustPlatform.buildRustPackage rec {
   pname = cargoToml.package.name;
 
