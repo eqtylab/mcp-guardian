@@ -18,7 +18,12 @@ const ToolCallResponse = ({ content }: ToolCallResponseProps) => {
         {content.map((item, i) => {
           const json = (() => {
             if (item.type === "text") {
-              return JSON.stringify(JSON.parse(item.text), null, 2);
+              try {
+                const json = JSON.stringify(JSON.parse(item.text), null, 2);
+                return json;
+              } catch (_) {
+                return item.text;
+              }
             } else {
               return JSON.stringify(item, null, 2);
             }
