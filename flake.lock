@@ -67,29 +67,13 @@
         "type": "github"
       }
     },
-    "nixpkgs-present-cli": {
-      "locked": {
-        "lastModified": 1739525035,
-        "narHash": "sha256-Kf0ny5YWWmNi+eMUeCzhSvVc+NC3FQ0Iq0ko5+bOJaY=",
-        "owner": "cameronfyfe",
-        "repo": "nixpkgs",
-        "rev": "e01f2d96fdae0c0393d15563dd223ce791d6d417",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cameronfyfe",
-        "ref": "present-cli-0-2-3",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1738142207,
-        "narHash": "sha256-NGqpVVxNAHwIicXpgaVqJEJWeyqzoQJ9oc8lnK9+WC4=",
+        "lastModified": 1741173522,
+        "narHash": "sha256-k7VSqvv0r1r53nUI/IfPHCppkUAddeXn843YlAC5DR0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "9d3ae807ebd2981d593cddd0080856873139aa40",
+        "rev": "d69ab0d71b22fa1ce3dbeff666e6deb4917db049",
         "type": "github"
       },
       "original": {
@@ -104,7 +88,6 @@
         "flake-utils": "flake-utils",
         "nixgl": "nixgl",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-present-cli": "nixpkgs-present-cli",
         "rust-overlay": "rust-overlay"
       }
     },

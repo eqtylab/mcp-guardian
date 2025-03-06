@@ -8,8 +8,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixgl.url = "github:nix-community/nixGL";
-    # TODO: remove this when present 0.2.3 is upstreamed to nixpkgs
-    nixpkgs-present-cli.url = "github:cameronfyfe/nixpkgs?ref=present-cli-0-2-3";
   };
 
   outputs = inputs:
@@ -24,10 +22,6 @@
           ];
         };
 
-        inherit (import inputs.nixpkgs-present-cli {
-          inherit system;
-        }) present-cli;
-
         inherit (pkgs) callPackage lib stdenv;
         inherit (lib) optionals;
         inherit (stdenv) hostPlatform;
@@ -37,7 +31,6 @@
         rustfmt-nightly = pkgs.rust-bin.nightly.latest.rustfmt;
 
         shellPkgs = [
-          present-cli
           rustfmt-nightly # must come before `rust` to so this version of rustfmt is first in PATH
           rust
         ] ++ (with pkgs; [
@@ -49,6 +42,7 @@
           neovim
           nodejs_22
           pkg-config
+          present-cli
           (yarn.override { nodejs = nodejs_22; })
         ]) ++ optionals hostPlatform.isLinux (with pkgs; [
           webkitgtk_4_1 # comes pre-installed on macOS
