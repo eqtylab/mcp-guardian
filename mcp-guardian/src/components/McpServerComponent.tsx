@@ -12,6 +12,7 @@ interface McpServerComponentProps {
   onDeleteSuccess: () => void;
   isExpanded: boolean;
   onToggle: () => void;
+  enableEdit: boolean;
 }
 
 const McpServerComponent = ({
@@ -20,6 +21,7 @@ const McpServerComponent = ({
   onDeleteSuccess,
   isExpanded,
   onToggle,
+  enableEdit,
 }: McpServerComponentProps) => {
   const { namespace, name, mcp_server } = namedMcpServer;
   const [configText, setConfigText] = useState("");
@@ -63,27 +65,34 @@ const McpServerComponent = ({
 
       {isExpanded && (
         <div className="p-4 space-y-4">
-          <JsonEditor value={configText} onChange={setConfigText} placeholder="Enter MCP server configuration" />
+          <JsonEditor
+            value={configText}
+            onChange={setConfigText}
+            disabled={!enableEdit}
+            placeholder="Enter MCP server configuration"
+          />
 
-          <div className="flex justify-end space-x-4">
-            <button
-              onClick={updateMcpServer}
-              className="btn-success flex items-center gap-2"
-              title="Save server changes"
-            >
-              <Save size={16} />
-              Save Changes
-            </button>
+          {enableEdit && (
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={updateMcpServer}
+                className="btn-success flex items-center gap-2"
+                title="Save server changes"
+              >
+                <Save size={16} />
+                Save Changes
+              </button>
 
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              className="btn-danger flex items-center gap-2"
-              title="Delete this server"
-            >
-              <Trash2 size={16} />
-              Delete Server
-            </button>
-          </div>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="btn-danger flex items-center gap-2"
+                title="Delete this server"
+              >
+                <Trash2 size={16} />
+                Delete Server
+              </button>
+            </div>
+          )}
         </div>
       )}
 
