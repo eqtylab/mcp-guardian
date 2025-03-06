@@ -14,6 +14,9 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [openServerId, setOpenServerId] = useState<number | null>(null);
 
+  const coreServers = mcpServers.filter((server) => server.namespace === "mcp-guardian");
+  const customServers = mcpServers.filter((server) => server.namespace !== "mcp-guardian");
+
   const importClaudeConfig = async () => {
     try {
       await invoke("import_claude_config");
@@ -45,20 +48,46 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
         </div>
       </div>
 
-      <div className="space-y-2">
-        {mcpServers.map((server, i) => (
-          <McpServerComponent
-            key={`${server.namespace}.${server.name}`}
-            namedMcpServer={server}
-            onUpdateSuccess={updateMcpServers}
-            onDeleteSuccess={() => {
-              setOpenServerId(null);
-              updateMcpServers();
-            }}
-            isExpanded={openServerId === i}
-            onToggle={() => setOpenServerId(openServerId === i ? null : i)}
-          />
-        ))}
+      {/* Core Servers Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-primary-700 dark:text-cream-200">Core Servers</h2>
+        <div className="space-y-2">
+          {coreServers.map((server, i) => (
+            <McpServerComponent
+              key={`${server.namespace}.${server.name}`}
+              namedMcpServer={server}
+              onUpdateSuccess={updateMcpServers}
+              onDeleteSuccess={() => {
+                setOpenServerId(null);
+                updateMcpServers();
+              }}
+              isExpanded={openServerId === i}
+              onToggle={() => setOpenServerId(openServerId === i ? null : i)}
+              enableEdit={false}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Custom Servers Section */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-primary-700 dark:text-cream-200">Custom Servers</h2>
+        <div className="space-y-2">
+          {customServers.map((server, i) => (
+            <McpServerComponent
+              key={`${server.namespace}.${server.name}`}
+              namedMcpServer={server}
+              onUpdateSuccess={updateMcpServers}
+              onDeleteSuccess={() => {
+                setOpenServerId(null);
+                updateMcpServers();
+              }}
+              isExpanded={openServerId === i}
+              onToggle={() => setOpenServerId(openServerId === i ? null : i)}
+              enableEdit={true}
+            />
+          ))}
+        </div>
       </div>
 
       <CreateMcpServerDialog

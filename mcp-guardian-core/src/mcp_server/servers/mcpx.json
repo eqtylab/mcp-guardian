@@ -1,0 +1,7 @@
+{
+    "cmd": "npx",
+    "args": [
+        "--yes",
+        "@dylibso/mcpx"
+    ]
+}

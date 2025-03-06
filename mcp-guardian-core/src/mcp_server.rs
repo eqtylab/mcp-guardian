@@ -1,11 +1,14 @@
+pub mod servers;
+
 use std::{collections::HashMap, fs};
 
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, bail, Result};
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
 use crate::{
     dirs::AppSubDir::McpServers,
+    mcp_server::servers::{CORE_NAMESPACE, CORE_SERVERS},
     server_collection::claude_config::{ClaudeConfig, ClaudeMcpServer},
 };
 
@@ -38,22 +41,42 @@ pub struct NamedMcpServer {
 }
 
 pub fn load_mcp_server(namespace: &str, name: &str) -> Result<Option<McpServer>> {
-    let file_path = McpServers
-        .path()?
-        .join(namespace)
-        .join(format!("{}.json", name));
+    log::info!("Loading MCP server '{name}'.");
 
-    if !file_path.exists() {
-        return Ok(None);
-    }
+    let json_str = if namespace == CORE_NAMESPACE {
+        if let Some(json_str) = CORE_SERVERS
+            .iter()
+            .find(|(n, _)| n == &name)
+            .map(|(_, json_str)| *json_str)
+        {
+            json_str.to_owned()
+        } else {
+            return Ok(None);
+        }
+    } else {
+        let file_path = McpServers
+            .path()?
+            .join(namespace)
+            .join(format!("{}.json", name));
 
-    let mcp_server = fs::read_to_string(&file_path)?;
-    let mcp_server = serde_json::from_str::<McpServer>(&mcp_server)?;
+        if !file_path.exists() {
+            return Ok(None);
+        }
+
+        fs::read_to_string(&file_path)?
+    };
+
+    let mcp_server = serde_json::from_str::<McpServer>(&json_str)?;
 
     Ok(Some(mcp_server))
 }
 
 pub fn save_mcp_server(namespace: &str, name: &str, mcp_server: &McpServer) -> Result<()> {
+    if namespace == CORE_NAMESPACE {
+        log::error!("Failed to save MCP server. The `{CORE_NAMESPACE}` namespace is reserved for built-in MCP servers.");
+        bail!("Failed to save MCP server. The `{CORE_NAMESPACE}` namespace is reserved for built-in MCP servers.")
+    }
+
     log::info!("Saving MCP server '{name}'.");
     let json_str = serde_json::to_string_pretty(mcp_server)?;
 
@@ -69,6 +92,14 @@ pub fn save_mcp_server(namespace: &str, name: &str, mcp_server: &McpServer) -> R
 pub fn list_mcp_servers() -> Result<Vec<NamedMcpServer>> {
     log::info!("Listing MCP servers.");
     let mut mcp_servers = Vec::new();
+
+    for (name, json_str) in CORE_SERVERS {
+        mcp_servers.push(NamedMcpServer {
+            namespace: CORE_NAMESPACE.to_owned(),
+            name: (*name).to_owned(),
+            mcp_server: serde_json::from_str(json_str)?,
+        });
+    }
 
     for entry in fs::read_dir(McpServers.path()?)? {
         let entry = entry?;
