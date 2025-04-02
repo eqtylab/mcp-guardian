@@ -4,3 +4,7 @@
 
 /.devshell
 /.env
+
+# Generated JavaScript files in TypeScript source directories
+mcp-guardian/src/**/*.js
+mcp-guardian-core/bindings/**/*.js
