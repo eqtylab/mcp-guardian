@@ -1,3 +1,16 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+/**
+ * Utility function to merge class names with tailwind-merge
+ */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+/**
+ * Creates a deterministic string representation of an object
+ */
 export function deterministicStringify(obj: any) {
   return JSON.stringify(
     obj,

@@ -15,10 +15,11 @@ This interject to Phase 1 focuses on elevating our component architecture by int
 
 ### 1. Radix UI Integration
 
-- [ ] **Setup & Dependencies**
-  - [ ] Add Radix UI core dependencies
-  - [ ] Configure Radix UI with Tailwind CSS
-  - [ ] Create integration examples
+- [x] **Setup & Dependencies**
+  - [x] Add Radix UI core dependencies (`@radix-ui/react-dialog`, `@radix-ui/react-popover`, etc.)
+  - [x] Add utility packages for component variants (`class-variance-authority`, `clsx`)
+  - [x] Configure Radix UI with Tailwind CSS
+  - [x] Create integration examples
 
 - [ ] **Accessibility Audit**
   - [ ] Review current components for accessibility issues
@@ -27,38 +28,51 @@ This interject to Phase 1 focuses on elevating our component architecture by int
 
 ### 2. Component Library Development
 
-- [ ] **Core Component Library Structure**
-  - [ ] Create a `/components/ui` directory for reusable components
-  - [ ] Establish component architecture (props, variants, etc.)
-  - [ ] Define naming conventions and file structure
+- [x] **Core Component Library Structure**
+  - [x] Create a `/components/ui` directory for reusable components
+  - [x] Establish component architecture (props, variants, etc.)
+  - [x] Define naming conventions and file structure
 
-- [ ] **Button Component System**
-  - [ ] Create `Button.tsx` component with variants (primary, secondary, success, danger)
-  - [ ] Implement size variants (small, medium, large)
-  - [ ] Support for icons and loading states
-  - [ ] Document usage patterns
+- [x] **Button Component System**
+  - [x] Create `Button.tsx` component with variants (primary, secondary, success, danger)
+  - [x] Implement size variants (small, medium, large)
+  - [x] Support for icons and loading states
+  - [x] Document usage patterns
 
-- [ ] **Dialog Component System**
-  - [ ] Create `Dialog.tsx` component using Radix UI Dialog primitive
-  - [ ] Implement header, content, and footer compound components
-  - [ ] Design consistent styling with animations
-  - [ ] Support various sizes and fullscreen mode
+- [x] **Dialog Component System**
+  - [x] Create `Dialog.tsx` component using Radix UI Dialog primitive
+  - [x] Implement header, content, and footer compound components
+  - [x] Design consistent styling with animations
+  - [x] Support various sizes and fullscreen mode
 
-- [ ] **Form Components**
-  - [ ] Create `Input`, `Textarea`, `Select` components
-  - [ ] Implement validation states and error messages
-  - [ ] Create `Label` and `FormControl` components
-  - [ ] Support for helper text and required indicators
+- [x] **Form Components**
+  - [x] Create `Input.tsx` component with validation states
+  - [x] Create `Textarea.tsx` component
+  - [ ] Create `Select.tsx` component using Radix UI Select primitive
+  - [ ] Create `Checkbox.tsx` component using Radix UI Checkbox primitive
+  - [x] Create `Label.tsx` and `FormField.tsx` components for layout and validation
+  - [x] Support for helper text and required indicators
 
-- [ ] **Card Component System**
-  - [ ] Create `Card.tsx` component with header, content, and footer
-  - [ ] Support various visual styles and sizes
+- [x] **Card Component System**
+  - [x] Create `Card.tsx` component with header, content, and footer
+  - [x] Support various visual styles and sizes
   - [ ] Implement loading states and empty states
 
-- [ ] **Data Display Components**
-  - [ ] Create `Tag/Badge` component with variants
-  - [ ] Implement `JSONViewer` for technical JSON display
-  - [ ] Create `ToolCall` visualization components
+- [x] **Data Display Components**
+  - [x] Create `Badge.tsx` component with variants (status, size)
+  - [x] Create `JSONViewer.tsx` component for technical JSON display
+  - [ ] Create `Collapsible.tsx` component using Radix UI Collapsible
+  - [ ] Create improved `ToolCall.tsx` and `ToolCallResponse.tsx` components
+
+- [ ] **Navigation Components**
+  - [ ] Create `Tabs.tsx` component using Radix UI Tabs
+  - [ ] Create `NavigationMenu.tsx` using Radix UI NavigationMenu
+  - [ ] Create `Breadcrumb.tsx` component 
+
+- [ ] **Feedback Components**
+  - [ ] Create `Toast.tsx` component using Radix UI Toast
+  - [ ] Create `Alert.tsx` component for status notifications
+  - [ ] Create `ProgressIndicator.tsx` for operation feedback
 
 ### 3. CSS Architecture Optimization
 
@@ -80,9 +94,9 @@ This interject to Phase 1 focuses on elevating our component architecture by int
   - [ ] Prioritize components by usage frequency
   - [ ] Create migration schedule
 
-- [ ] **Component Documentation**
-  - [ ] Document each component's API, variants, and usage
-  - [ ] Create example usage patterns
+- [x] **Component Documentation**
+  - [x] Document each component's API, variants, and usage
+  - [x] Create example usage patterns
   - [ ] Document accessibility features
 
 ## Implementation Strategy
@@ -103,6 +117,7 @@ Each UI component should follow these principles:
 // components/ui/Button.tsx
 import { forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "../../utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-colors-accent-primary",
@@ -135,7 +150,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, isLoading, children, ...props }, ref) => {
     return (
       <button 
-        className={buttonVariants({ variant, size, className })} 
+        className={cn(buttonVariants({ variant, size }), className)} 
         ref={ref}
         disabled={isLoading || props.disabled}
         {...props}
