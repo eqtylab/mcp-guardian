@@ -16,6 +16,12 @@ All reference for current work is located in `./_context_library`. Use this to d
 - Focuses primarily on discovery, and note taking in `./_context_library/DISCOVERY.md`.
 - As you work on tasks, you will add implementation notes and progress updates to `./_context_library/PHASE{N}.md`.
 
+### Planning Process
+
+- Review `./_context_library/GOALS.md` to understand critical objectives for both Tauri app and core library
+- Consult `./_context_library/DEVELOPMENT_PLAN.md` for overall development strategy
+- Create detailed phase plans in `./_context_library/PHASE{N}.md` files
+
 ---
 
 # About this project
@@ -125,7 +131,10 @@ Use playwright to search the web for information, or use it to test the applicat
 ### ProjectManagement Files
 
 - **./CLAUDE.md**: (ROOT LEVEL) Project-specific guidelines and commands
-- **./\_context_library/PHASE1.md**, **./\_context_library/PHASE2.md**, etc.: Implementation notes for each development phase
+- **./\_context_library/GOALS.md**: Critical objectives for both Tauri app and enterprise core library
+- **./\_context_library/DEVELOPMENT_PLAN.md**: Overall development strategy and phasing
+- **./\_context_library/DISCOVERY.md**: Technical and business analysis of the project
+- **./\_context_library/PHASE{N}.md**: Implementation notes for each development phase
 
 ### ProjectManagement Coordination Process
 
