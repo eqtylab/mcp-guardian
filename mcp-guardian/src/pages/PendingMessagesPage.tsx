@@ -1,7 +1,7 @@
 // PendingMessagesPage.tsx
 import React from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 import ToolCall from "../components/messages/ToolCall";
 import ToolCallResponse from "../components/messages/ToolCallResponse";
 

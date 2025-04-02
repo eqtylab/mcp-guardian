@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Shield } from "lucide-react";
+import { Plus } from "lucide-react";
 import GuardProfileComponent from "../components/GuardProfileComponent";
 import CreateGuardProfileDialog from "../components/CreateGuardProfileDialog";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";

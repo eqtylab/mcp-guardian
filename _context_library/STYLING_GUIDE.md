@@ -22,44 +22,35 @@ MCP Guardian uses Tailwind CSS v4 as its utility-first CSS framework. This choic
 
 ### Base Palette
 
-The color system uses HSL values for better maintainability and semantic organization. With Tailwind CSS v4, we define these directly in the @config section:
+The color system uses HSL values for better maintainability and semantic organization. With Tailwind CSS v4, we define these directly in the @theme section:
 
 ```css
-@config {
-  theme: {
-    colors: {
-      /* Core Background Palette */
-      bg: {
-        base: hsl(220, 18%, 8%),       /* Deep blue-black */
-        surface: hsl(220, 16%, 11%),    /* Deep slate */
-        elevated: hsl(220, 14%, 13%),   /* Elevated dark surface */
-        interactive: hsl(220, 12%, 16%), /* Interactive elements */
-      },
-      /* Typography */
-      text: {
-        primary: hsl(220, 15%, 92%),
-        secondary: hsl(220, 10%, 70%),
-        tertiary: hsl(220, 8%, 50%),
-      },
-      /* Technical UI Accents */
-      accent: {
-        primary: hsl(195, 80%, 50%),  /* Cybersecurity blue */
-        secondary: hsl(215, 85%, 65%), /* Secondary actions */
-        tertiary: hsl(190, 90%, 45%),  /* Terminal green */
-      },
-      /* Functional Elements */
-      status: {
-        success: hsl(142, 70%, 45%),
-        warning: hsl(45, 90%, 55%),
-        danger: hsl(358, 75%, 55%),
-        info: hsl(210, 80%, 60%),
-      },
-    },
-  },
+@theme {
+  /* Core Background Palette */
+  --colors-bg-base: hsl(220 18% 8%);       /* Deep blue-black */
+  --colors-bg-surface: hsl(220 16% 11%);    /* Deep slate */
+  --colors-bg-elevated: hsl(220 14% 13%);   /* Elevated dark surface */
+  --colors-bg-interactive: hsl(220 12% 16%); /* Interactive elements */
+  
+  /* Typography */
+  --colors-text-primary: hsl(220 15% 92%);
+  --colors-text-secondary: hsl(220 10% 70%);
+  --colors-text-tertiary: hsl(220 8% 50%);
+  
+  /* Technical UI Accents */
+  --colors-accent-primary: hsl(195 80% 50%);  /* Cybersecurity blue */
+  --colors-accent-secondary: hsl(215 85% 65%); /* Secondary actions */
+  --colors-accent-tertiary: hsl(190 90% 45%);  /* Terminal green */
+  
+  /* Functional Elements */
+  --colors-status-success: hsl(142 70% 45%);
+  --colors-status-warning: hsl(45 90% 55%);
+  --colors-status-danger: hsl(358 75% 55%);
+  --colors-status-info: hsl(210 80% 60%);
 }
 ```
 
-Tailwind CSS v4 automatically exposes all these tokens as CSS variables, so you can access them both via Tailwind classes (like `bg-bg-base`) and via CSS variables when needed.
+Tailwind CSS v4 automatically makes these variables available through Tailwind classes, and you can also access them directly via standard CSS var() syntax.
 
 ### Usage Guidelines
 
@@ -90,16 +81,12 @@ With Tailwind CSS v4, prefer using the utility classes directly:
 
 ### Font Stack
 
-Our typography is configured in the Tailwind config:
+Our typography is configured in the Tailwind theme:
 
 ```css
-@config {
-  theme: {
-    fontFamily: {
-      sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-      mono: ['"JetBrains Mono"', '"SF Mono"', '"Roboto Mono"', 'Menlo', 'monospace'],
-    },
-  }
+@theme {
+  --fontFamily-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --fontFamily-mono: "JetBrains Mono", "SF Mono", "Roboto Mono", Menlo, monospace;
 }
 ```
 
@@ -107,21 +94,21 @@ Use these with Tailwind utility classes:
 - `font-sans` for regular text
 - `font-mono` for code and JSON
 
+You can also access them directly with CSS variables:
+- `var(--fontFamily-sans)` 
+- `var(--fontFamily-mono)`
+
 ### Size Scale
 
 The application uses a compact type scale optimized for technical interfaces:
 
 ```css
-@config {
-  theme: {
-    fontSize: {
-      xs: "0.75rem",
-      sm: "0.875rem", 
-      base: "1rem",
-      lg: "1.125rem",
-      xl: "1.25rem",
-    },
-  }
+@theme {
+  --fontSize-xs: 0.75rem;
+  --fontSize-sm: 0.875rem;
+  --fontSize-base: 1rem;
+  --fontSize-lg: 1.125rem;
+  --fontSize-xl: 1.25rem;
 }
 ```
 
@@ -131,6 +118,9 @@ Use these with Tailwind utility classes:
 - `text-base` (1rem) for body text
 - `text-lg` (1.125rem) for h2 and subheadings
 - `text-xl` (1.25rem) for h1 and major headings
+
+You can also access them directly with CSS variables:
+- `var(--fontSize-xs)`, `var(--fontSize-sm)`, etc.
 
 ## Component System
 
@@ -307,19 +297,19 @@ grid-cols-[repeat(auto-fill,minmax(10rem,1fr))]
 
 ## Implementation Status & Best Practices
 
-### Current Implementation (2023-05-18)
+### Current Implementation (2023-05-22)
 
 We have successfully implemented Tailwind CSS v4 with the following:
 
-1. **@config Directive**: All theme tokens defined in App.css using Tailwind v4's @config
-2. **Theme Functions**: CSS variables replaced with theme() functions throughout CSS
+1. **@theme Directive**: All theme tokens defined in App.css using Tailwind v4's @theme directive
+2. **CSS Variables**: Standard CSS var() syntax used throughout CSS instead of theme() functions
 3. **Utility First Components**: Starting to refactor components to use utility classes
-4. **Component Examples**: McpServerComponent refactored as an example for other components
+4. **Component Examples**: McpServerComponent, GuardProfileComponent, and ServerCollectionComponent refactored as examples
 
 ### Best Practices with Tailwind CSS v4
 
 1. **Use Tailwind Utilities**: Prefer Tailwind utility classes over custom CSS classes
-2. **Theme Extension**: Use the @config directive in App.css rather than custom variables
+2. **Theme Variables**: Use CSS variables defined in the @theme directive
 3. **Consistency**: Use the established color tokens and utility patterns consistently
 4. **Space Efficiency**: Prioritize compact layouts that minimize scrolling
 5. **Technical Focus**: Remember the audience is technical users who need efficient access to information
@@ -340,13 +330,13 @@ When converting existing components to use Tailwind utility classes:
 
 ## JSON Editor Styling
 
-JSON content should use consistent syntax highlighting, leveraging Tailwind's theme colors through CSS:
+JSON content should use consistent syntax highlighting, leveraging our CSS variables:
 
 ```css
-.json-key     { color: theme(colors.accent.primary); }
-.json-value   { color: theme(colors.accent.secondary); }
-.json-string  { color: theme(colors.status.success); }
-.json-number  { color: theme(colors.status.warning); }
-.json-boolean { color: theme(colors.accent.secondary); }
-.json-null    { color: theme(colors.status.danger); }
+.json-key     { color: var(--colors-accent-primary); }
+.json-value   { color: var(--colors-accent-secondary); }
+.json-string  { color: var(--colors-status-success); }
+.json-number  { color: var(--colors-status-warning); }
+.json-boolean { color: var(--colors-accent-secondary); }
+.json-null    { color: var(--colors-status-danger); }
 ```
