@@ -67,7 +67,9 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
               active={selectedProfileId === `${profile.namespace}.${profile.profile_name}`}
               onClick={() => setSelectedProfileId(`${profile.namespace}.${profile.profile_name}`)}
             >
-              <Shield size={14} strokeWidth={2.5} className="mr-2 text-muted-foreground" />
+              <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center mr-2">
+                <Shield size={14} strokeWidth={2.5} className="text-muted-foreground" />
+              </div>
               <span className="truncate">{profile.profile_name}</span>
             </SidebarItem>
           ))}
@@ -81,7 +83,9 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
               active={selectedProfileId === `${profile.namespace}.${profile.profile_name}`}
               onClick={() => setSelectedProfileId(`${profile.namespace}.${profile.profile_name}`)}
             >
-              <Shield size={14} strokeWidth={2.5} className="mr-2 text-muted-foreground" />
+              <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center mr-2">
+                <Shield size={14} strokeWidth={2.5} className="text-muted-foreground" />
+              </div>
               <span className="truncate">{profile.profile_name}</span>
             </SidebarItem>
           ))}
