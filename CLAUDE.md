@@ -24,8 +24,12 @@ All reference for current work is located in `./_context_library`. Use this to d
 
 - For planning component development (React):
 - ALWAYS use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling
-- Use Tailwind CSS v4 utility classes directly in components instead of custom CSS classes
-- NEVER add custom component styles to App.css - keep it minimal with only global styles and theme variables
+- Use Tailwind CSS v4 utility classes for component-specific styling
+- App.css should contain:
+  - Theme variables (@theme directive)
+  - Reset styles and base element styling
+  - Reusable UI patterns (buttons, cards, form elements)
+  - DO NOT add page-specific or niche component styles to App.css
 - Keep component files small and modular - use composition for reusability
 - Use strongly typed TypeScript/TSX throughout
 

@@ -67,11 +67,15 @@ Prepare for enterprise deployment scenarios:
 2. **User Testing**: Regular feedback cycles with representative users
 3. **Documentation**: Comprehensive documentation alongside development
 4. **Quality Assurance**: Thorough testing and validation for each component
-5. **CSS Optimization**: 
-   - Keep App.css focused ONLY on theme variables and truly global styles
-   - Component styling MUST use Tailwind utility classes directly in TSX files
-   - Avoid custom CSS classes whenever possible
-   - Progressively reduce App.css size by moving component styles to Tailwind utilities
+5. **CSS Architecture & Optimization**: 
+   - App.css should focus on:
+     - Theme variables and design system foundations
+     - Reusable UI patterns and shared component styles
+     - Global styling and reset styles
+   - Component-specific styling should use Tailwind utility classes
+   - Avoid duplicating styling patterns across components
+   - DO NOT add page-specific or niche component styles to App.css
+   - Progressively optimize CSS architecture for maintainability
 
 ## Next Steps
 

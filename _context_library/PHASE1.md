@@ -101,11 +101,13 @@ This phase focuses on refining the existing MCP Guardian Tauri application prima
   - [/] Create examples of fully Tailwind-styled components for future reference
   - [x] Document best practices for component-level styling vs. global stylesheet
   
-  **CRITICAL**: App.css should ONLY contain:
-  - Theme variables (@theme directive)
+  **CRITICAL**: App.css styling approach:
+  - Theme variables (@theme directive) for consistent design
   - Reset styles and base element styling
-  - Truly global styles that affect the entire application
-  - Everything else MUST use inline Tailwind utility classes in components
+  - Reusable UI components (buttons, cards, forms, etc.) as shared classes
+  - DO NOT add page-specific or niche component styles to App.css
+  - Use Tailwind utility classes for component-specific styling
+  - Maintain consistent styling through reusable patterns
 
 For styling, always use `./STYLING_GUIDE.md` as your source of truth.
 
