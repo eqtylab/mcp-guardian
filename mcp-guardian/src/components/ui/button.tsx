@@ -28,13 +28,17 @@ const buttonVariants = cva(
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
+  asChild?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, isLoading, children, ...props }, ref) => {
+  ({ className, variant, size, isLoading, asChild = false, children, ...props }, ref) => {
+    const buttonClass = cn(buttonVariants({ variant, size }), className);
+    
+    // Simply return a button that can contain an anchor when asChild is true
     return (
       <button 
-        className={cn(buttonVariants({ variant, size }), className)} 
+        className={buttonClass} 
         ref={ref}
         disabled={isLoading || props.disabled}
         {...props}

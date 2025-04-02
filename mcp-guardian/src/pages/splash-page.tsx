@@ -1,8 +1,8 @@
 import PACKAGE_JSON from "../../package.json";
 import GuardianLogo from "../assets/guardian-logo.png";
-import { Badge } from "../components/ui/Badge";
-import { Card, CardHeader, CardContent } from "../components/ui/Card";
-import { Button } from "../components/ui/Button";
+import { Badge } from "../components/ui/badge";
+import { Card, CardHeader, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 
 const SplashPage = () => {
   const { version } = PACKAGE_JSON;

@@ -10,31 +10,27 @@ import {
   DialogClose,
   DialogBody,
   DialogFooter
-} from "./ui/Dialog";
-import { Button } from "./ui/Button";
-import { FormField, FormLabel } from "./ui/FormField";
-import { Input } from "./ui/Input";
+} from "./ui/dialog";
+import { Button } from "./ui/button";
+import { FormField, FormLabel } from "./ui/form-field";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
-import JsonEditor from "./JsonValidEditor";
-
-interface CreateServerCollectionDialogProps {
+interface CreateGuardProfileDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServerCollectionDialogProps) => {
+const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardProfileDialogProps) => {
   const [namespace, setNamespace] = useState("");
   const [name, setName] = useState("");
   const [config, setConfig] = useState(
     JSON.stringify(
       {
-        servers: [
-          {
-            mcp_server: "",
-            guard_profile: "",
-          },
-        ],
+        primary_message_interceptor: {
+          type: "",
+        },
       },
       null,
       2,
@@ -65,14 +61,14 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
     }
 
     try {
-      const serverCollection = JSON.parse(config);
-      await invoke("set_server_collection", {
+      const guardProfile = JSON.parse(config);
+      await invoke("set_guard_profile", {
         namespace,
         name,
-        serverCollection,
+        guardProfile,
       });
       onSuccess();
-      notifySuccess(`Collection "${namespace}.${name}" created successfully`);
+      notifySuccess(`Profile "${namespace}.${name}" created successfully`);
     } catch (e: any) {
       notifyError(e);
     }
@@ -82,7 +78,7 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create New Server Collection</DialogTitle>
+          <DialogTitle>Create New Guard Profile</DialogTitle>
           <DialogClose />
         </DialogHeader>
         <DialogBody>
@@ -103,17 +99,23 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., my-collection"
+                placeholder="e.g., my-profile"
               />
             </FormField>
 
             <FormField error={!isValid ? "Invalid JSON configuration" : undefined}>
               <FormLabel htmlFor="config">Configuration</FormLabel>
-              <JsonEditor
+              <Textarea
+                id="config"
                 value={config}
-                onChange={setConfig}
-                placeholder="Enter server collection configuration"
-                maxHeight="300px"
+                onChange={(e) => {
+                  setConfig(e.target.value);
+                  validateConfig(e.target.value);
+                }}
+                className="font-mono"
+                rows={10}
+                placeholder="Enter guard profile configuration in JSON format"
+                error={!isValid}
               />
             </FormField>
           </div>
@@ -127,7 +129,7 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
             onClick={handleCreate}
             disabled={!isValid || !namespace || !name}
           >
-            Create Collection
+            Create Profile
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -135,4 +137,4 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
   );
 };
 
-export default CreateServerCollectionDialog;
+export default CreateGuardProfileDialog;

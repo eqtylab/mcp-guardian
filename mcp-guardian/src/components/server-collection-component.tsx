@@ -5,12 +5,12 @@ import { NamedServerCollection } from "../bindings/NamedServerCollection";
 import { ServerCollection } from "../bindings/ServerCollection";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2, ExternalLink } from "lucide-react";
-import ClaudeExportModal from "./ClaudeExportModal";
-import ConfirmDialog from "./ConfirmDialog";
-import JsonEditor from "./JsonValidEditor";
-import { Button } from "./ui/Button";
-import { Card, CardHeader, CardContent } from "./ui/Card";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/Collapsible";
+import ClaudeExportModal from "./claude-export-modal";
+import ConfirmDialog from "./confirm-dialog";
+import JsonEditor from "./json-valid-editor";
+import { Button } from "./ui/button";
+import { Card, CardHeader, CardContent } from "./ui/card";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
 
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;

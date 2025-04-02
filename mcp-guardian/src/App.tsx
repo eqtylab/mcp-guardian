@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
 import { Home, Server, Shield, Library, MessageSquare } from "lucide-react";
-import SplashPage from "./pages/SplashPage";
-import McpServersPage from "./pages/McpServersPage";
-import GuardProfilesPage from "./pages/GuardProfilesPage";
-import ServerCollectionsPage from "./pages/ServerCollectionsPage";
-import PendingMessagesPage from "./pages/PendingMessagesPage";
+import SplashPage from "./pages/splash-page";
+import McpServersPage from "./pages/mcp-servers-page";
+import GuardProfilesPage from "./pages/guard-profiles-page";
+import ServerCollectionsPage from "./pages/server-collections-page";
+import PendingMessagesPage from "./pages/pending-messages-page";
 import { ToastContainer } from "react-toastify";
 import { NamedMcpServer } from "./bindings/NamedMcpServer";
 import { NamedGuardProfile } from "./bindings/NamedGuardProfile";

@@ -2,12 +2,12 @@
 import React from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { CheckCircle, XCircle } from "lucide-react";
-import ToolCall from "../components/messages/ToolCall";
-import ToolCallResponse from "../components/messages/ToolCallResponse";
-import { Button } from "../components/ui/Button";
-import { Badge } from "../components/ui/Badge";
-import { Card, CardHeader, CardContent } from "../components/ui/Card";
-import { JSONViewer } from "../components/ui/JSONViewer";
+import ToolCall from "../components/messages/tool-call";
+import ToolCallResponse from "../components/messages/tool-call-response";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
+import { Card, CardHeader, CardContent } from "../components/ui/card";
+import { JSONViewer } from "../components/ui/jsonviewer";
 
 interface PendingMessagesPageProps {
   pendingMessages: any;

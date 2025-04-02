@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import McpServerComponent from "../components/McpServerComponent";
-import CreateMcpServerDialog from "../components/CreateMcpServerDialog";
+import McpServerComponent from "../components/mcp-server-component";
+import CreateMcpServerDialog from "../components/create-mcp-server-dialog";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { notifyError, notifySuccess } from "../components/toast";
 import { Plus } from "lucide-react";
-import { Button } from "../components/ui/Button";
+import { Button } from "../components/ui/button";
 
 interface McpServersPageProps {
   mcpServers: NamedMcpServer[];

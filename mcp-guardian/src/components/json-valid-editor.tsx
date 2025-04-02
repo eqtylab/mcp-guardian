@@ -1,8 +1,8 @@
 // components/JsonEditor.tsx
 import React, { useState } from "react";
 import { Check, AlertCircle, Code } from "lucide-react";
-import { Button } from "./ui/Button";
-import { Textarea } from "./ui/Textarea";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
 import { cn } from "../utils";
 
 interface JsonEditorProps {

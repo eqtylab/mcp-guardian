@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import GuardProfileComponent from "../components/GuardProfileComponent";
-import CreateGuardProfileDialog from "../components/CreateGuardProfileDialog";
+import GuardProfileComponent from "../components/guard-profile-component";
+import CreateGuardProfileDialog from "../components/create-guard-profile-dialog";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
-import { Button } from "../components/ui/Button";
-import { Badge } from "../components/ui/Badge";
-import { Card, CardContent } from "../components/ui/Card";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
+import { Card, CardContent } from "../components/ui/card";
 
 interface GuardProfilesPageProps {
   guardProfiles: NamedGuardProfile[];

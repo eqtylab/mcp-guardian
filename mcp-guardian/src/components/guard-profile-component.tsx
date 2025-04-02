@@ -4,11 +4,11 @@ import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2, Shield } from "lucide-react";
-import ConfirmDialog from "./ConfirmDialog";
-import JsonEditor from "./JsonValidEditor";
-import { Button } from "./ui/Button";
-import { Card, CardHeader, CardContent } from "./ui/Card";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/Collapsible";
+import ConfirmDialog from "./confirm-dialog";
+import JsonEditor from "./json-valid-editor";
+import { Button } from "./ui/button";
+import { Card, CardHeader, CardContent } from "./ui/card";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;

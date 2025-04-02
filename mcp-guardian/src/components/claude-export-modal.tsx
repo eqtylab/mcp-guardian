@@ -12,11 +12,11 @@ import {
   DialogClose,
   DialogBody,
   DialogFooter
-} from "./ui/Dialog";
-import { Button } from "./ui/Button";
-import { FormField, FormLabel } from "./ui/FormField";
-import { Input } from "./ui/Input";
-import { Textarea } from "./ui/Textarea";
+} from "./ui/dialog";
+import { Button } from "./ui/button";
+import { FormField, FormLabel } from "./ui/form-field";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 interface ClaudeExportModalProps {
   isOpen: boolean;

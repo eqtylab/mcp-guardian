@@ -10,11 +10,11 @@ import {
   DialogClose,
   DialogBody,
   DialogFooter,
-} from "./ui/Dialog";
-import { Button } from "./ui/Button";
-import { Input } from "./ui/Input";
-import { Textarea } from "./ui/Textarea";
-import { FormField, FormLabel } from "./ui/FormField";
+} from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { FormField, FormLabel } from "./ui/form-field";
 
 interface CreateMcpServerDialogProps {
   isOpen: boolean;

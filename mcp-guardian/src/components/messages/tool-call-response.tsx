@@ -1,5 +1,5 @@
 import { MessageSquare } from "lucide-react";
-import { JSONViewer } from "../ui/JSONViewer";
+import { JSONViewer } from "../ui/jsonviewer";
 import { cn } from "../../utils";
 
 interface ToolCallResponseProps {

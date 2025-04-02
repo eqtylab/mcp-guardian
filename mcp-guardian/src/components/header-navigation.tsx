@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Shield, ChevronDown } from "lucide-react";
 import { cn } from "../utils";
-import { Badge } from "./ui/Badge";
-import { Button } from "./ui/Button";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 import { 
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem
-} from "./ui/NavigationMenu";
+} from "./ui/navigation-menu";
 
 interface NavItemProps {
   icon: React.ComponentType<{ className?: string; size?: number }>;

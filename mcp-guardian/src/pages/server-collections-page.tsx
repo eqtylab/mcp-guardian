@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import ServerCollectionComponent from "../components/ServerCollectionComponent";
-import CreateServerCollectionDialog from "../components/CreateServerCollectionDialog";
+import ServerCollectionComponent from "../components/server-collection-component";
+import CreateServerCollectionDialog from "../components/create-server-collection-dialog";
 import { NamedServerCollection } from "../bindings/NamedServerCollection";
-import { Button } from "../components/ui/Button";
+import { Button } from "../components/ui/button";
 
 interface ServerCollectionsPageProps {
   serverCollections: NamedServerCollection[];
