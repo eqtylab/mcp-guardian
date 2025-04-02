@@ -141,17 +141,34 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
 
     // Set schema for validation if provided
     if (schema && monaco) {
-      // Configure JSON language features with schema
+      // Enhance the schema to ensure additionalProperties: false is set at root level
+      // This ensures unrecognized keys will be marked as errors
+      const enhancedSchema = {
+        ...schema,
+        additionalProperties: false, // Explicitly disallow unknown properties at root level
+      };
+
+      // Configure JSON language features with enhanced schema
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
         allowComments: false, // Disallow comments in JSON for strict validation
         schemaValidation: "error", // Show schema validation issues as errors
         enableSchemaRequest: false, // Don't fetch schemas from outside
+        trailingCommas: "error", // Mark trailing commas as errors
+        comments: "error", // No comments in JSON
+        // Make Monaco validation more strict to catch more errors
+        doValidation: true, // Explicitly enable validation
+        diagnosticOptions: {
+          validate: true,
+          schemaValidation: true,
+          enableSchemaRequest: false,
+          trailingCommas: false,
+        },
         schemas: [
           {
             uri: schemaUri,
             fileMatch: ["*"],
-            schema,
+            schema: enhancedSchema,
           },
         ],
       });
@@ -263,6 +280,24 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     },
     // Critical option for widget overflow
     fixedOverflowWidgets: true, // This positions widgets in a fixed position
+    
+    // Enhanced error/validation highlighting
+    // Make errors more visible with squiggly underlines
+    'editor.renderValidationDecorations': 'on',
+    'editor.colorDecorators': true,
+    'editor.matchBrackets': 'always',
+    'editor.wordWrap': 'on',
+    
+    // Make squiggly lines more prominent
+    'editor.highlightActiveIndentGuide': true,
+    'editor.guides.highlightActiveIndentGuide': true,
+    
+    // Show validation errors in tooltip/hover
+    hover: {
+      enabled: true,
+      delay: 300,
+      sticky: true,
+    },
   };
 
   // Format JSON
@@ -366,6 +401,15 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
           options={{
             ...themeOptions,
             fixedOverflowWidgets: false, // This allows widgets to overflow their container
+            
+            // Stricter validation settings
+            renderValidationDecorations: "on",
+            colorDecorators: true,
+            guides: {
+              bracketPairs: true,
+              indentation: true,
+              highlightActiveIndentation: true,
+            },
           }}
           onMount={handleEditorDidMount}
           className={cn(

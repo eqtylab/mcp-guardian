@@ -26,6 +26,7 @@
     "args",
     "cmd"
   ],
+  "additionalProperties": false,
   "title": "McpServer",
   "type": "object"
 }
