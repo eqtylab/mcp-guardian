@@ -1,47 +1,71 @@
 @import "tailwindcss";
 
-/* Theme Variables - Technical Cybersecurity Focus */
-:root {
-  /* Core Background Palette - No transparency/alpha values */
-  --bg-base: hsl(220, 18%, 8%); /* Deep blue-black */
-  --bg-surface: hsl(220, 16%, 11%); /* Deep slate - for dialogs and surfaces */
-  --bg-elevated: hsl(220, 14%, 13%); /* Elevated dark surface */
-  --bg-interactive: hsl(220, 12%, 16%); /* Interactive elements */
-  
-  /* Typography */
-  --text-primary: hsl(220, 15%, 92%);
-  --text-secondary: hsl(220, 10%, 70%);
-  --text-tertiary: hsl(220, 8%, 50%);
-  
-  /* Technical UI Accents */
-  --accent-primary: hsl(195, 80%, 50%); /* Cybersecurity blue */
-  --accent-secondary: hsl(215, 85%, 65%); /* Secondary actions */
-  --accent-tertiary: hsl(190, 90%, 45%); /* Terminal green */
-  
-  /* Functional Elements */
-  --status-success: hsl(142, 70%, 45%);
-  --status-warning: hsl(45, 90%, 55%);
-  --status-danger: hsl(358, 75%, 55%);
-  --status-info: hsl(210, 80%, 60%);
-  
-  /* Borders & Lines */
-  --border-subtle: hsla(220, 15%, 25%, 0.6);
-  --border-strong: hsla(220, 20%, 35%, 0.8);
-  --border-focus: var(--accent-primary);
-  
-  /* Shadows & Effects */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
-  --shadow-md: 0 2px 4px rgba(0,0,0,0.4);
-  --shadow-lg: 0 2px 8px rgba(0,0,0,0.5);
-  
-  /* Borders & Radius */
-  --radius-sm: 3px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
-  
-  /* Animation */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+/* Tailwind v4 Configuration - Technical Cybersecurity Focus */
+@config {
+  theme: {
+    colors: {
+      /* Core Background Palette */
+      bg: {
+        base: hsl(220, 18%, 8%), /* Deep blue-black */
+        surface: hsl(220, 16%, 11%), /* Deep slate - for dialogs and surfaces */
+        elevated: hsl(220, 14%, 13%), /* Elevated dark surface */
+        interactive: hsl(220, 12%, 16%), /* Interactive elements */
+      },
+      /* Typography */
+      text: {
+        primary: hsl(220, 15%, 92%),
+        secondary: hsl(220, 10%, 70%),
+        tertiary: hsl(220, 8%, 50%),
+      },
+      /* Technical UI Accents */
+      accent: {
+        primary: hsl(195, 80%, 50%), /* Cybersecurity blue */
+        secondary: hsl(215, 85%, 65%), /* Secondary actions */
+        tertiary: hsl(190, 90%, 45%), /* Terminal green */
+      },
+      /* Functional Elements */
+      status: {
+        success: hsl(142, 70%, 45%),
+        warning: hsl(45, 90%, 55%),
+        danger: hsl(358, 75%, 55%),
+        info: hsl(210, 80%, 60%),
+      },
+      /* Borders & Lines */
+      border: {
+        subtle: hsla(220, 15%, 25%, 0.6),
+        strong: hsla(220, 20%, 35%, 0.8),
+        focus: hsl(195, 80%, 50%),
+      },
+    },
+    boxShadow: {
+      sm: "0 1px 2px rgba(0,0,0,0.2)",
+      md: "0 2px 4px rgba(0,0,0,0.4)",
+      lg: "0 2px 8px rgba(0,0,0,0.5)",
+    },
+    borderRadius: {
+      sm: "3px",
+      md: "4px",
+      lg: "6px",
+    },
+    fontFamily: {
+      sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+      mono: ['"JetBrains Mono"', '"SF Mono"', '"Roboto Mono"', "Menlo", "monospace"],
+    },
+    fontSize: {
+      xs: "0.75rem",
+      sm: "0.875rem", 
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+    },
+    transitionTimingFunction: {
+      DEFAULT: "cubic-bezier(0.4, 0, 0.2, 1)",
+    },
+    transitionDuration: {
+      fast: "150ms",
+      normal: "200ms",
+    },
+  },
 }
 
 /* Force Dark Mode */
@@ -52,9 +76,9 @@ html {
 /* Base Resets */
 html, body {
   @apply w-screen h-screen m-0 p-0 overflow-hidden;
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: theme(colors.bg.base);
+  color: theme(colors.text.primary);
+  font-family: theme(fontFamily.sans);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -62,22 +86,22 @@ html, body {
 /* Typography System */
 h1, h2, h3, h4, h5, h6 {
   @apply font-medium;
-  color: var(--text-primary);
+  color: theme(colors.text.primary);
   margin: 0 0 0.75rem 0;
 }
 
-h1 { font-size: 1.25rem; }
-h2 { font-size: 1.125rem; }
-h3 { font-size: 1rem; }
+h1 { font-size: theme(fontSize.xl); }
+h2 { font-size: theme(fontSize.lg); }
+h3 { font-size: theme(fontSize.base); }
 
 p { 
   margin: 0 0 0.75rem 0;
-  color: var(--text-secondary);
+  color: theme(colors.text.secondary);
 }
 
 .muted {
-  color: var(--text-tertiary);
-  font-size: 0.875rem;
+  color: theme(colors.text.tertiary);
+  font-size: theme(fontSize.sm);
 }
 
 /* Layout Core */
@@ -87,9 +111,9 @@ p {
 
 /* Sidebar Navigation */
 .sidebar {
-  background-color: var(--bg-surface);
+  background-color: theme(colors.bg.surface);
   width: 210px;
-  border-right: 1px solid var(--border-subtle);
+  border-right: 1px solid theme(colors.border.subtle);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -97,7 +121,7 @@ p {
 
 .sidebar-header {
   padding: 1rem;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid theme(colors.border.subtle);
 }
 
 .nav-item {
@@ -105,8 +129,8 @@ p {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  color: var(--text-secondary);
-  transition: all var(--transition-fast);
+  color: theme(colors.text.secondary);
+  transition: all theme(transitionDuration.fast) theme(transitionTimingFunction.DEFAULT);
   border-left: 2px solid transparent;
   cursor: pointer;
   /* Fix for "stair" effect */
@@ -118,14 +142,14 @@ p {
 }
 
 .nav-item:hover {
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
+  background-color: theme(colors.bg.elevated);
+  color: theme(colors.text.primary);
 }
 
 .nav-item.active {
-  color: var(--text-primary);
-  background-color: var(--bg-elevated);
-  border-left-color: var(--accent-primary);
+  color: theme(colors.text.primary);
+  background-color: theme(colors.bg.elevated);
+  border-left-color: theme(colors.accent.primary);
 }
 
 .nav-badge {
@@ -134,19 +158,19 @@ p {
   font-size: 0.7rem;
   font-weight: 500;
   border-radius: 1rem;
-  background-color: var(--status-warning);
+  background-color: theme(colors.status.warning);
   color: hsla(220, 18%, 10%, 0.9);
 }
 
 .nav-badge.empty {
-  background-color: var(--bg-elevated);
-  color: var(--text-tertiary);
+  background-color: theme(colors.bg.elevated);
+  color: theme(colors.text.tertiary);
 }
 
 /* Fix for keyboard shortcuts centering */
 .sidebar-footer {
   padding: 0.5rem;
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid theme(colors.border.subtle);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -162,9 +186,9 @@ p {
 
 /* Cards & Containers */
 .card {
-  background-color: var(--bg-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  background-color: theme(colors.bg.surface);
+  border-radius: theme(borderRadius.md);
+  border: 1px solid theme(colors.border.subtle);
   overflow: hidden;
   margin-bottom: 1rem;
 }
@@ -172,7 +196,7 @@ p {
 .card-header {
   padding: 0.75rem 1rem;
   background-color: hsl(220, 15%, 12%); /* Solid color, no transparency */
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid theme(colors.border.subtle);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -180,54 +204,54 @@ p {
 
 .card-content {
   padding: 1rem;
-  background-color: var(--bg-surface); /* Ensure content has solid background */
+  background-color: theme(colors.bg.surface); /* Ensure content has solid background */
 }
 
 /* Links */
 a {
-  color: var(--accent-primary);
+  color: theme(colors.accent.primary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color theme(transitionDuration.fast) theme(transitionTimingFunction.DEFAULT);
 }
 
 a:hover {
-  color: color-mix(in srgb, var(--accent-primary), white 15%);
+  color: color-mix(in srgb, theme(colors.accent.primary), white 15%);
 }
 
 /* Form Elements */
 input, textarea, select {
-  background-color: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
-  border-radius: var(--radius-sm);
+  background-color: theme(colors.bg.elevated);
+  border: 1px solid theme(colors.border.subtle);
+  color: theme(colors.text.primary);
+  border-radius: theme(borderRadius.sm);
   padding: 0.5rem 0.75rem;
   width: 100%;
-  transition: all var(--transition-normal);
+  transition: all theme(transitionDuration.normal) theme(transitionTimingFunction.DEFAULT);
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 1px var(--accent-primary);
+  border-color: theme(colors.accent.primary);
+  box-shadow: 0 0 0 1px theme(colors.accent.primary);
 }
 
 label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+  color: theme(colors.text.secondary);
+  font-size: theme(fontSize.sm);
 }
 
 /* Buttons */
 button {
   padding: 0.5rem 0.75rem;
-  border-radius: var(--radius-sm);
+  border-radius: theme(borderRadius.sm);
   font-weight: 500;
-  font-size: 0.875rem;
-  transition: all var(--transition-fast);
-  background-color: var(--bg-interactive);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
+  font-size: theme(fontSize.sm);
+  transition: all theme(transitionDuration.fast) theme(transitionTimingFunction.DEFAULT);
+  background-color: theme(colors.bg.interactive);
+  border: 1px solid theme(colors.border.subtle);
+  color: theme(colors.text.primary);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -237,12 +261,12 @@ button {
 }
 
 button:hover {
-  background-color: color-mix(in srgb, var(--bg-interactive), white 10%);
+  background-color: color-mix(in srgb, theme(colors.bg.interactive), white 10%);
 }
 
 button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--accent-primary);
+  box-shadow: 0 0 0 2px theme(colors.accent.primary);
 }
 
 button:active {
@@ -250,19 +274,19 @@ button:active {
 }
 
 .btn-primary {
-  background-color: var(--accent-primary);
+  background-color: theme(colors.accent.primary);
   color: hsla(220, 18%, 10%, 0.9);
   border-color: transparent;
 }
 
 .btn-primary:hover {
-  background-color: color-mix(in srgb, var(--accent-primary), white 15%);
+  background-color: color-mix(in srgb, theme(colors.accent.primary), white 15%);
 }
 
 .btn-secondary {
   background-color: transparent;
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+  border-color: theme(colors.accent.primary);
+  color: theme(colors.accent.primary);
 }
 
 .btn-secondary:hover {
@@ -270,23 +294,23 @@ button:active {
 }
 
 .btn-success {
-  background-color: var(--status-success);
+  background-color: theme(colors.status.success);
   color: hsla(220, 18%, 10%, 0.9);
   border-color: transparent;
 }
 
 .btn-success:hover {
-  background-color: color-mix(in srgb, var(--status-success), white 15%);
+  background-color: color-mix(in srgb, theme(colors.status.success), white 15%);
 }
 
 .btn-danger {
-  background-color: var(--status-danger);
+  background-color: theme(colors.status.danger);
   color: white;
   border-color: transparent;
 }
 
 .btn-danger:hover {
-  background-color: color-mix(in srgb, var(--status-danger), white 15%);
+  background-color: color-mix(in srgb, theme(colors.status.danger), white 15%);
 }
 
 .btn-sm {
@@ -307,92 +331,92 @@ button:active {
 .tag {
   display: inline-block;
   padding: 0.15rem 0.5rem;
-  font-size: 0.75rem;
+  font-size: theme(fontSize.xs);
   font-weight: 500;
   border-radius: 2rem;
-  background-color: var(--bg-elevated);
-  color: var(--text-secondary);
+  background-color: theme(colors.bg.elevated);
+  color: theme(colors.text.secondary);
 }
 
 .tag-primary {
   background-color: hsla(195, 80%, 50%, 0.15);
-  color: var(--accent-primary);
+  color: theme(colors.accent.primary);
 }
 
 .tag-success {
   background-color: hsla(142, 70%, 45%, 0.15);
-  color: var(--status-success);
+  color: theme(colors.status.success);
 }
 
 .tag-warning {
   background-color: hsla(45, 90%, 55%, 0.15);
-  color: var(--status-warning);
+  color: theme(colors.status.warning);
 }
 
 .tag-danger {
   background-color: hsla(358, 75%, 55%, 0.15);
-  color: var(--status-danger);
+  color: theme(colors.status.danger);
 }
 
 /* JSON Editor */
 .json-editor {
-  font-family: "JetBrains Mono", "SF Mono", "Roboto Mono", "Menlo", monospace;
-  font-size: 0.75rem;
+  font-family: theme(fontFamily.mono);
+  font-size: theme(fontSize.xs);
   line-height: 1.5;
-  background-color: var(--bg-elevated);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  background-color: theme(colors.bg.elevated);
+  border-radius: theme(borderRadius.sm);
+  border: 1px solid theme(colors.border.subtle);
   padding: 0.75rem;
-  color: var(--text-primary);
+  color: theme(colors.text.primary);
   overflow: auto;
   max-height: 400px;
 }
 
 .json-key {
-  color: var(--accent-primary);
+  color: theme(colors.accent.primary);
 }
 
 .json-value {
-  color: var(--accent-secondary);
+  color: theme(colors.accent.secondary);
 }
 
 .json-string {
-  color: var(--status-success);
+  color: theme(colors.status.success);
 }
 
 .json-number {
-  color: var(--status-warning);
+  color: theme(colors.status.warning);
 }
 
 .json-boolean {
-  color: var(--accent-secondary);
+  color: theme(colors.accent.secondary);
 }
 
 .json-null {
-  color: var(--status-danger);
+  color: theme(colors.status.danger);
 }
 
 /* Tool Call Visualization */
 .tool-call {
-  border-left: 2px solid var(--accent-secondary);
+  border-left: 2px solid theme(colors.accent.secondary);
   padding: 0.75rem 1rem;
   background-color: hsla(215, 85%, 65%, 0.05);
-  border-radius: var(--radius-sm);
+  border-radius: theme(borderRadius.sm);
   margin-bottom: 1rem;
 }
 
 .tool-call-response {
-  border-left: 2px solid var(--accent-tertiary);
+  border-left: 2px solid theme(colors.accent.tertiary);
   padding: 0.75rem 1rem;
   background-color: hsla(190, 90%, 45%, 0.05);
-  border-radius: var(--radius-sm);
+  border-radius: theme(borderRadius.sm);
   margin-bottom: 1rem;
 }
 
 /* Collapsible Components */
 .Collapsible {
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  border-radius: theme(borderRadius.sm);
+  border: 1px solid theme(colors.border.subtle);
   margin-bottom: 0.75rem;
   overflow: hidden;
 }
@@ -400,8 +424,8 @@ button:active {
 .Collapsible__trigger {
   display: block;
   padding: 0.75rem 1rem;
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
+  background-color: theme(colors.bg.elevated);
+  color: theme(colors.text.primary);
   position: relative;
   font-weight: 500;
   cursor: pointer;
@@ -414,7 +438,7 @@ button:active {
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.2rem;
-  transition: transform var(--transition-fast);
+  transition: transform theme(transitionDuration.fast) theme(transitionTimingFunction.DEFAULT);
 }
 
 .Collapsible__trigger.is-open:after {
@@ -423,10 +447,16 @@ button:active {
 
 .Collapsible__contentInner {
   padding: 0.75rem 1rem;
-  background-color: var(--bg-surface);
+  background-color: theme(colors.bg.surface);
 }
 
-/* Utilities */
+/* Utilities - Use Tailwind's utility classes directly instead of these */
+/* For example:
+   - Instead of .flex-row, use: flex items-center
+   - Instead of .flex-col, use: flex flex-col
+   - Instead of .gap-sm, use: gap-2
+   - etc.
+*/
 .flex-row {
   display: flex;
   align-items: center;
@@ -458,5 +488,5 @@ button:active {
 .w-full { width: 100%; }
 .text-center { text-align: center; }
 
-.text-sm { font-size: 0.875rem; }
-.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: theme(fontSize.sm); }
+.text-xs { font-size: theme(fontSize.xs); }

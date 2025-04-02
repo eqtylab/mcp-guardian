@@ -53,13 +53,13 @@ const McpServerComponent = ({
   };
 
   return (
-    <div className="component-container">
+    <div className="bg-bg-surface rounded-md border border-border-subtle overflow-hidden mb-4">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 hover:bg-cream-100 dark:hover:bg-primary-700 rounded-t-lg"
+        className="w-full flex items-center justify-between p-3 hover:bg-bg-elevated transition-colors duration-fast"
         title={`${namespace}.${name} server configuration`}
       >
-        <span className="font-medium">{`${namespace}.${name}`}</span>
+        <span className="font-medium text-text-primary">{`${namespace}.${name}`}</span>
         {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
       </button>
 
@@ -73,10 +73,12 @@ const McpServerComponent = ({
           />
 
           {enableEdit && (
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end gap-4">
               <button
                 onClick={updateMcpServer}
-                className="btn-success flex items-center gap-2"
+                className="bg-status-success text-bg-base hover:bg-status-success/90 
+                           rounded-sm py-2 px-3 font-medium text-sm border-0
+                           flex items-center gap-2 transition-colors duration-fast"
                 title="Save server changes"
               >
                 <Save size={16} />
@@ -85,7 +87,9 @@ const McpServerComponent = ({
 
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="btn-danger flex items-center gap-2"
+                className="bg-status-danger text-white hover:bg-status-danger/90 
+                           rounded-sm py-2 px-3 font-medium text-sm border-0
+                           flex items-center gap-2 transition-colors duration-fast"
                 title="Delete this server"
               >
                 <Trash2 size={16} />
