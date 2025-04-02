@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import type { Node } from '@xyflow/react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { FormField, FormLabel } from '../ui/form-field';
@@ -21,13 +20,16 @@ const BasicSelect: React.FC<{
   </select>
 );
 
+import { GuardProfileNode, FilterNodeData, MessageLogNodeData, ManualApprovalNodeData, ChainNodeData } from './index';
+
 interface PropertyPanelProps {
-  node: Node;
-  onChange: (nodeId: string, data: any) => void;
+  node: GuardProfileNode;
+  onChange: (nodeId: string, data: FilterNodeData | MessageLogNodeData | ManualApprovalNodeData | ChainNodeData) => void;
   disabled?: boolean;
 }
 
 const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled = false }) => {
+  // We start with unknown type because the node data can be of different types
   const [localData, setLocalData] = useState<any>(node.data);
   
   // Reset local data when the selected node changes
@@ -40,23 +42,29 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
     onChange(node.id, localData);
   };
   
-  // Update local state when a field changes
-  const handleFieldChange = (field: string, value: any) => {
+  // Update local state when a field changes - type-safe version
+  const handleFieldChange = <K extends string, V>(field: K, value: V) => {
     setLocalData((prevData: any) => ({
       ...prevData,
       [field]: value,
     }));
   };
   
-  // Handle nested object field changes
-  const handleNestedFieldChange = (parentField: string, field: string, value: any) => {
-    setLocalData((prevData: any) => ({
-      ...prevData,
-      [parentField]: {
-        ...prevData[parentField],
-        [field]: value,
-      },
-    }));
+  // Handle nested object field changes - type-safe version
+  const handleNestedFieldChange = <P extends string, K extends string, V>(parentField: P, field: K, value: V) => {
+    setLocalData((prevData: any) => {
+      const parent = prevData[parentField];
+      if (typeof parent === 'object' && parent !== null) {
+        return {
+          ...prevData,
+          [parentField]: {
+            ...parent,
+            [field]: value,
+          },
+        };
+      }
+      return prevData;
+    });
   };
   
   // Render form based on node type
@@ -77,7 +85,9 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
   
   // Render form for FilterNode
   const renderFilterForm = () => {
-    const filterLogic = localData.filter_logic || {};
+    // Cast to FilterNodeData to ensure correct typing for this form
+    const filterData = localData as FilterNodeData;
+    const filterLogic = filterData.filter_logic || { direction: 'inbound' };
     const filterType = Object.keys(filterLogic)[0] || 'direction';
     
     return (
@@ -134,7 +144,7 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
             <FormLabel htmlFor="direction">Direction</FormLabel>
             <BasicSelect
               // id removed
-              value={filterLogic.direction || 'inbound'}
+              value={'direction' in filterLogic ? filterLogic.direction : 'inbound'}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleNestedFieldChange('filter_logic', 'direction', e.target.value)}
               disabled={disabled}
             >
@@ -149,7 +159,7 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
             <FormLabel htmlFor="message-type">Message Type</FormLabel>
             <BasicSelect
               // id removed
-              value={filterLogic.message_type || 'request'}
+              value={'message_type' in filterLogic ? filterLogic.message_type : 'request'}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleNestedFieldChange('filter_logic', 'message_type', e.target.value)}
               disabled={disabled}
             >
@@ -168,7 +178,7 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
             <FormLabel htmlFor="request-method">Request Method</FormLabel>
             <Input
               // id removed
-              value={filterLogic.request_method || ''}
+              value={'request_method' in filterLogic ? filterLogic.request_method : ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleNestedFieldChange('filter_logic', 'request_method', e.target.value)}
               placeholder="Enter method name"
               disabled={disabled}
@@ -221,7 +231,7 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
         <FormField className="mb-4">
           <FormLabel htmlFor="log-level">Log Level</FormLabel>
           <BasicSelect
-            value={localData.log_level || 'Info'}
+            value={(localData as MessageLogNodeData).log_level || 'Info'}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('log_level', e.target.value)}
             disabled={disabled}
           >

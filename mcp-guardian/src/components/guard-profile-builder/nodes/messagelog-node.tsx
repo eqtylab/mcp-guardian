@@ -1,8 +1,8 @@
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { BookOpen } from 'lucide-react';
-import { MessageLogGuardConfig } from '../../../bindings/MessageLogGuardConfig';
+import type { MessageLogNodeData } from '../index';
 
-// Use generic NodeProps from ReactFlow
+// Use NodeProps from ReactFlow - fixed for proper type compatibility
 const MessageLogNode = ({ data, selected }: NodeProps) => {
   // Helper to get appropriate color for log level
   const getLogLevelColor = (level: string) => {
@@ -16,10 +16,9 @@ const MessageLogNode = ({ data, selected }: NodeProps) => {
     }
   };
   
-  // Add type guards to safely handle data
-  const logLevel = data && typeof data === 'object' && 'log_level' in data 
-    ? data.log_level as string 
-    : 'Info';
+  // We need to cast to our data type
+  const logData = data as MessageLogNodeData;
+  const logLevel = logData?.log_level || 'Info';
 
   return (
     <div className={`node messagelog-node rounded-md border p-3 bg-card shadow-sm ${

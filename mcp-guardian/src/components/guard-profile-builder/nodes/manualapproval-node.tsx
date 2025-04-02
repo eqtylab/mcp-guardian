@@ -1,8 +1,8 @@
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { UserCheck } from 'lucide-react';
-import { ManualApprovalGuardConfig } from '../../../bindings/ManualApprovalGuardConfig';
+// No need for data type import as component only uses 'selected' prop
 
-// Use generic NodeProps from ReactFlow
+// Use NodeProps from ReactFlow - fixed for proper type compatibility
 const ManualApprovalNode = ({ selected }: NodeProps) => {
   return (
     <div className={`node approval-node rounded-md border p-3 bg-card shadow-sm ${

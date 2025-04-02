@@ -23,15 +23,10 @@ import type {
 import '@xyflow/react/dist/style.css';
 
 // Import types from bindings
-// Note: All these imports are needed for type checking and when referenced in the code
 import { GuardProfile } from '../../bindings/GuardProfile';
 import { MessageInterceptorGuardConfig } from '../../bindings/MessageInterceptorGuardConfig';
-import { ChainGuardConfig } from '../../bindings/ChainGuardConfig';
-import { FilterGuardConfig } from '../../bindings/FilterGuardConfig';
 import { FilterLogicGuardConfig } from '../../bindings/FilterLogicGuardConfig';
 import { FilterActionGuardConfig } from '../../bindings/FilterActionGuardConfig';
-import { MessageLogGuardConfig } from '../../bindings/MessageLogGuardConfig';
-import { ManualApprovalGuardConfig } from '../../bindings/ManualApprovalGuardConfig';
 
 // Define strongly typed interfaces for our node data that conform to Record<string, unknown> requirement
 export interface FilterNodeData extends Record<string, unknown> {
@@ -95,7 +90,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
       id: 'node-primary',
       type: profile.primary_message_interceptor.type.toLowerCase(),
       position: { x: 100, y: 100 },
-      data: { ...profile.primary_message_interceptor },
+      data: { ...profile.primary_message_interceptor } as FilterNodeData | MessageLogNodeData | ManualApprovalNodeData,
     });
     return { nodes, edges };
   }
@@ -125,7 +120,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
         id: nodeId,
         type: interceptor.type.toLowerCase(),
         position: { x: 100, y: 200 + index * 150 },
-        data: { ...interceptor },
+        data: { ...interceptor } as FilterNodeData | MessageLogNodeData | ManualApprovalNodeData,
       });
       
       // Create edge connecting to previous node
@@ -154,23 +149,24 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
   if (nodes.length === 1) {
     const node = nodes[0];
     
-    // Type guard to ensure we extract valid MessageInterceptorGuardConfig
-    // from node data based on its type
+    // Use our node types to extract valid MessageInterceptorGuardConfig from node data
     const getInterceptorFromNode = (node: Node): MessageInterceptorGuardConfig => {
-      if (node.type === 'filter' && node.data && typeof node.data === 'object') {
+      if (node.type === 'filter') {
+        const data = node.data as FilterNodeData;
         return {
           type: 'Filter',
-          filter_logic: node.data.filter_logic as FilterLogicGuardConfig,
-          match_action: node.data.match_action as FilterActionGuardConfig,
-          non_match_action: node.data.non_match_action as FilterActionGuardConfig,
+          filter_logic: data.filter_logic,
+          match_action: data.match_action,
+          non_match_action: data.non_match_action,
         };
-      } else if (node.type === 'messagelog' && node.data && typeof node.data === 'object') {
+      } else if (node.type === 'messagelog') {
+        const data = node.data as MessageLogNodeData;
         return {
           type: 'MessageLog',
-          log_level: node.data.log_level as string,
+          log_level: data.log_level,
         };
       } else if (node.type === 'manualapproval') {
-        // ManualApprovalGuardConfig is Record<string, never>, so we need to cast properly
+        // ManualApprovalGuardConfig is Record<string, never>
         return {
           type: 'ManualApproval'
         } as MessageInterceptorGuardConfig;
@@ -227,21 +223,23 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
       
       switch (nextNode.type) {
         case 'filter':
+          const filterData = nextNode.data as FilterNodeData;
           interceptor = {
             type: 'Filter',
-            filter_logic: nextNode.data.filter_logic as FilterLogicGuardConfig,
-            match_action: nextNode.data.match_action as FilterActionGuardConfig,
-            non_match_action: nextNode.data.non_match_action as FilterActionGuardConfig,
+            filter_logic: filterData.filter_logic,
+            match_action: filterData.match_action,
+            non_match_action: filterData.non_match_action,
           };
           break;
         case 'messagelog':
+          const logData = nextNode.data as MessageLogNodeData;
           interceptor = {
             type: 'MessageLog',
-            log_level: nextNode.data.log_level as string,
+            log_level: logData.log_level,
           };
           break;
         case 'manualapproval':
-          // Cast to MessageInterceptorGuardConfig which combines type with ManualApprovalGuardConfig
+          // ManualApprovalGuardConfig is Record<string, never>
           interceptor = {
             type: 'ManualApproval'
           } as MessageInterceptorGuardConfig;
@@ -280,7 +278,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   // State for nodes and edges
   const [nodes, setNodes] = useNodesState(initialFlow.nodes);
   const [edges, setEdges] = useEdgesState(initialFlow.edges);
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [selectedNode, setSelectedNode] = useState<GuardProfileNode | null>(null);
 
   // Update profile when nodes or edges change
   const updateProfile = useCallback(() => {
@@ -314,7 +312,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   // Handle node selection
   const handleNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
-      setSelectedNode(node);
+      setSelectedNode(node as GuardProfileNode);
     },
     []
   );
@@ -381,9 +379,9 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
             type: 'Filter',
             filter_logic: { 
               direction: 'inbound'
-            } as FilterLogicGuardConfig,
-            match_action: 'send' as FilterActionGuardConfig,
-            non_match_action: 'drop' as FilterActionGuardConfig
+            },
+            match_action: 'send',
+            non_match_action: 'drop'
           };
           break;
         case 'messagelog':
@@ -412,7 +410,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
       }
       
       // Create the new node with proper typing
-      const newNode: Node = {
+      const newNode: GuardProfileNode = {
         id: `node-${Date.now()}`,
         type,
         position,
@@ -451,10 +449,10 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                     type: 'Filter',
                     filter_logic: { 
                       direction: 'inbound'
-                    } as FilterLogicGuardConfig,
-                    match_action: 'send' as FilterActionGuardConfig,
-                    non_match_action: 'drop' as FilterActionGuardConfig
-                  };
+                    },
+                    match_action: 'send',
+                    non_match_action: 'drop'
+                  } as FilterNodeData;
                   break;
                 case 'messagelog':
                   nodeData = {
@@ -482,7 +480,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
               }
               
               // Create the new node with proper typing
-              const newNode: Node = {
+              const newNode: GuardProfileNode = {
                 id: `node-${Date.now()}`,
                 type,
                 position,

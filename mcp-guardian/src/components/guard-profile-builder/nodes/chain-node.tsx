@@ -1,15 +1,12 @@
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { GitMerge } from 'lucide-react';
-import { ChainGuardConfig } from '../../../bindings/ChainGuardConfig';
+import type { ChainNodeData } from '../index';
 
-// Use generic NodeProps from ReactFlow
+// Use NodeProps from ReactFlow - fixed for proper type compatibility
 const ChainNode = ({ data, selected }: NodeProps) => {
-  // Add type guards to safely handle data
-  const chainConfig = data && typeof data === 'object' && 'chainConfig' in data 
-    ? data.chainConfig as { chain: any[] } 
-    : { chain: [] };
-  
-  const chainCount = chainConfig.chain?.length || 0;
+  // We need to cast to our data type
+  const chainData = data as ChainNodeData;
+  const chainCount = chainData?.chain?.length || 0;
   
   return (
     <div className={`node chain-node rounded-md border p-3 bg-card shadow-sm ${

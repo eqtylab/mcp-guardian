@@ -1,14 +1,14 @@
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { Filter } from 'lucide-react';
-import { FilterGuardConfig } from '../../../bindings/FilterGuardConfig';
+import type { FilterNodeData } from '../index';
 
-// Use generic NodeProps from ReactFlow but with our custom data type
+// Use NodeProps from ReactFlow - fixed for proper type compatibility
 const FilterNode = ({ data, selected }: NodeProps) => {
-  // Add type guards to safely handle data
-  const filterData = data && typeof data === 'object' ? data : {};
-  const filterLogic = 'filter_logic' in filterData ? filterData.filter_logic : {};
-  const matchAction = 'match_action' in filterData ? filterData.match_action : 'send';
-  const nonMatchAction = 'non_match_action' in filterData ? filterData.non_match_action : 'drop';
+  // We need type guards to ensure we have the right data structure
+  const filterData = data as FilterNodeData;
+  const filterLogic = filterData?.filter_logic || { direction: 'inbound' };
+  const matchAction = filterData?.match_action || 'send';
+  const nonMatchAction = filterData?.non_match_action || 'drop';
   
   // Get filter logic description
   const getFilterDescription = () => {
