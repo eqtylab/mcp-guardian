@@ -22,6 +22,11 @@ All reference for current work is located in `./_context_library`. Use this to d
 - Consult `./_context_library/DEVELOPMENT_PLAN.md` for overall development strategy
 - Create detailed phase plans in `./_context_library/PHASE{N}.md` files
 
+- For planning component development (React):
+- always use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling.
+- ensure component files do not grow too large, use modular design
+- use strongly typed TypeScript/TSX
+
 ---
 
 # About this project
@@ -48,11 +53,27 @@ The documentation for MCP Guardian is located in `./docs`.
 
 ## Testing, Linting, and Validation
 
-**Create commands if they don't exist**
+### Validation Scripts
+
+The following validation scripts are available in package.json:
+
+```json
+"scripts": {
+  "dev": "vite",
+  "build": "tsc && vite build",
+  "preview": "vite preview",
+  "tauri": "tauri",
+  "typecheck": "tsc --noEmit",
+  "lint:rust": "cd src-tauri && cargo clippy",
+  "check:rust": "cd src-tauri && cargo check",
+  "validate": "npm run typecheck && npm run check:rust && npm run lint:rust"
+}
+```
 
 ### Frontend (TypeScript/React)
 
-- TypeCheck: `npm run typecheck` - Validate TypeScript types
+- TypeCheck: `npm run typecheck` - Validate TypeScript types without emitting files
+- Build: `npm run build` - Compile TypeScript and bundle the application
 
 #### Components
 
@@ -62,17 +83,22 @@ Always aim to keep component files small and modular. We can not afford long fil
 
 - Check: `npm run check:rust` - Validate Rust syntax without building
 - Test: `cd src-tauri && cargo test` - Run Rust tests
-- Clippy: `npm run lint:rust` - Run Rust linter
+- Clippy: `npm run lint:rust` - Run Rust linter for best practices and code quality
 
 ### Complete Validation
 
-- Run All Checks: `npm run validate` - Run TypeScript checks and Rust linting/checking
+- Run TypeScript & Rust Checks: `npm run validate` - Run TypeScript checks and Rust linting/checking
+- Run Full Build: `npm run build` - Verify that the application builds successfully
 
 ### After Code Changes
 
-1. Run `npm run validate` to check for type errors and code issues
-2. Test the application with `npm run tauri dev` before committing
-3. Add appropriate tests for new functionality
+1. ALWAYS run `npm run validate` to check for type errors and code issues before committing
+2. ALWAYS run `npm run build` to ensure the application builds successfully
+3. Fix any type errors, linting warnings, or build errors before proceeding
+4. Test the application with `npm run tauri dev` before committing changes
+5. Add appropriate tests for new functionality
+
+> **IMPORTANT**: Do not commit code that fails validation or doesn't build. Both the validate script and build must pass without errors.
 
 ## Code Style
 

@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "typecheck": "tsc --noEmit",
+    "lint:rust": "cd src-tauri && cargo clippy",
+    "check:rust": "cd src-tauri && cargo check",
+    "validate": "npm run typecheck && npm run check:rust && npm run lint:rust && npm run build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.7",
