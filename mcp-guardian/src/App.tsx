@@ -112,7 +112,6 @@ const App = () => {
         pendingCount={pendingCount}
         modifierKey={modifierKey}
       />
-      
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 overflow-y-auto p-6">
           {currentPage === Page.SPLASH ? (
