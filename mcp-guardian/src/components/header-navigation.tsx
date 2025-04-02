@@ -58,7 +58,7 @@ export default function HeaderNavigation({
                       // Default state
                       "dark:text-gray-300 text-gray-800 hover:text-primary dark:hover:text-white hover:bg-muted transition-all duration-200",
                       // Active state - blend with content area background matching exactly
-                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
+                      isActive && "text-foreground border-t border-l border-r border-border z-10 relative"
                     )}
                     style={isActive ? { backgroundColor: 'var(--background)' } : undefined}
                   >
