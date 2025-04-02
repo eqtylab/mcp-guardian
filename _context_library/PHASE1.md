@@ -101,7 +101,7 @@ This phase focuses on refining the existing MCP Guardian Tauri application prima
   - [x] Migrate all components to use the new component system
   - [x] Reduce App.css to only theme variables and global styles
   
-  **NOTE**: This task was implemented as a strategic interject (PHASE1-INTERJECT) to elevate the component architecture beyond the original plan. Instead of simply refactoring existing styles, we established a complete component library with:
+  **NOTE**: This task was implemented as a strategic interject to elevate the component architecture beyond the original plan. Instead of simply refactoring existing styles, we established a complete component library with:
   
   - Accessible, unstyled Radix UI primitives as foundation
   - Consistent component APIs with variants (primary/secondary, sm/md/lg)
