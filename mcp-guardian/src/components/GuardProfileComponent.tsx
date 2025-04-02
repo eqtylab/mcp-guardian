@@ -43,22 +43,22 @@ const GuardProfileComponent = ({
   };
 
   return (
-    <div className="card mb-sm">
+    <div className="bg-bg-surface rounded-md border border-border-subtle overflow-hidden mb-2">
       <div 
-        className="card-header cursor-pointer"
+        className="p-3 bg-bg-elevated border-b border-border-subtle flex justify-between items-center cursor-pointer"
         onClick={onToggle}
         title={`${namespace}.${profile_name} guard profile configuration`}
       >
-        <div className="flex-row gap-sm">
+        <div className="flex items-center gap-2">
           <Shield size={14} strokeWidth={2.5} className="text-accent-primary" />
-          <span>{`${namespace}.${profile_name}`}</span>
+          <span className="text-text-primary">{`${namespace}.${profile_name}`}</span>
         </div>
         {isExpanded ? <ChevronDown size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
       </div>
 
       {isExpanded && (
-        <div className="card-content">
-          <div className="json-editor mb-md">
+        <div className="p-4 bg-bg-surface">
+          <div className="mb-4">
             <JsonEditor
               value={configText}
               onChange={setConfigText}
@@ -68,7 +68,7 @@ const GuardProfileComponent = ({
           </div>
 
           {enableEdit && (
-            <div className="btn-group justify-end">
+            <div className="flex justify-end gap-4">
               <button
                 onClick={async () => {
                   try {
@@ -84,7 +84,9 @@ const GuardProfileComponent = ({
                     notifyError(e);
                   }
                 }}
-                className="btn-success btn-sm"
+                className="bg-status-success text-bg-base hover:bg-status-success/90 
+                           rounded-sm py-1 px-2 text-xs font-medium border-0
+                           flex items-center gap-2 transition-colors duration-fast"
                 title="Save profile changes"
               >
                 <Save size={14} strokeWidth={2.5} />
@@ -93,7 +95,9 @@ const GuardProfileComponent = ({
 
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="btn-danger btn-sm"
+                className="bg-status-danger text-white hover:bg-status-danger/90 
+                           rounded-sm py-1 px-2 text-xs font-medium border-0
+                           flex items-center gap-2 transition-colors duration-fast"
                 title="Delete this profile"
               >
                 <Trash2 size={14} strokeWidth={2.5} />
