@@ -62,6 +62,19 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     }
   };
 
+  // Keep a reference to the overflow widgets DOM node for cleanup
+  const overflowWidgetsDomNodeRef = useRef<HTMLDivElement | null>(null);
+
+  // Clean up the overflow widgets DOM node when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (overflowWidgetsDomNodeRef.current && typeof document !== 'undefined') {
+        document.body.removeChild(overflowWidgetsDomNodeRef.current);
+        overflowWidgetsDomNodeRef.current = null;
+      }
+    };
+  }, []);
+
   // Listen for theme changes using our utility function
   useEffect(() => {
     const handleThemeChange = (newDarkMode: boolean) => {
@@ -97,6 +110,30 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     const themeName = isDarkMode ? themes.dark : themes.light;
     console.debug(`[MonacoEditor] Initial theme: ${themeName}, isDarkMode: ${isDarkMode}`);
     monaco.editor.setTheme(themeName);
+
+    // Set up fixed widget container for overflow widgets
+    // This creates a special container at the document level for widgets
+    // so they're not constrained by any parent overflow settings
+    if (typeof document !== 'undefined') {
+      // Only create a new container if one doesn't already exist
+      if (!overflowWidgetsDomNodeRef.current) {
+        const widgetsDomNode = document.createElement('div');
+        widgetsDomNode.className = 'monaco-editor-overflow-widgets';
+        widgetsDomNode.style.position = 'fixed';
+        widgetsDomNode.style.top = '0';
+        widgetsDomNode.style.left = '0';
+        widgetsDomNode.style.width = '0';
+        widgetsDomNode.style.height = '0';
+        widgetsDomNode.style.zIndex = '9999';
+        document.body.appendChild(widgetsDomNode);
+        overflowWidgetsDomNodeRef.current = widgetsDomNode;
+      }
+      
+      // Apply the overflow widgets DOM node to the editor
+      editor.updateOptions({
+        overflowWidgetsDomNode: overflowWidgetsDomNodeRef.current
+      });
+    }
 
     // Set schema for validation if provided
     if (schema && monaco) {
@@ -220,6 +257,8 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     bracketPairColorization: {
       enabled: true,
     },
+    // Critical option for widget overflow
+    fixedOverflowWidgets: true, // This positions widgets in a fixed position
   };
 
   // Format JSON
@@ -301,7 +340,7 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
 
       <div 
         className={cn(
-          "border rounded-md transition-all relative",
+          "border rounded-md transition-all",
           !isValid && !disabled 
             ? "border-colors-status-danger shadow-[0_0_0_1px_var(--color-destructive)]" 
             : "border-colors-border-subtle hover:border-colors-primary/50",
@@ -310,6 +349,7 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
         style={{ 
           height: maxHeight,
           boxShadow: isDarkMode && isValid ? "0 0 8px rgba(var(--primary-rgb), 0.15)" : undefined,
+          position: 'relative', // Ensure proper stacking context
         }}
       >
         <Editor

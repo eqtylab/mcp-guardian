@@ -4,24 +4,6 @@
 .monaco-editor-container {
   transition: all 0.2s ease-in-out;
   position: relative;
-  overflow: hidden !important;
-}
-
-/* Fix for widgets to ensure they aren't clipped */
-.monaco-editor .monaco-hover {
-  z-index: 100 !important;
-}
-
-.monaco-editor .suggest-widget {
-  z-index: 90 !important;
-}
-
-.monaco-editor .parameter-hints-widget {
-  z-index: 90 !important;
-}
-
-.monaco-editor-background {
-  overflow: hidden !important;
 }
 
 /* Monaco hover widget styling - enhance the documentation tooltips */
@@ -159,15 +141,9 @@ button:active .format-icon {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 0 10px rgba(var(--neon-purple-rgb), 0.1) !important;
 }
 
-/* Tooltips */
+/* Tooltips styling only (no z-index manipulation) */
 .monaco-editor .monaco-editor-overlaymessage {
-  z-index: 100 !important;
   border-radius: 4px !important;
-}
-
-/* Layer fix for all widgets */
-.monaco-editor .overlayWidgets {
-  z-index: 90 !important;
 }
 
 /* Mobile optimization */
