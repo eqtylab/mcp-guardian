@@ -171,14 +171,23 @@ For styling, always use `./STYLING_GUIDE.md` as your source of truth.
 - Created task to refactor components to use inline Tailwind utility classes directly
 - Will focus on providing clear examples of optimized components for reference
 
+### 2023-05-24
+
+- Started component refactoring to use direct Tailwind utility classes instead of custom CSS
+- Refactored CreateMcpServerDialog.tsx to use inline Tailwind instead of custom classes
+- Converted ToolCall and ToolCallResponse components to use Tailwind utilities directly
+- Refactored ConfirmDialog.tsx to remove dependencies on global CSS classes
+- Updated CSS variable references to use the new naming convention (--colors-accent-primary)
+- Used semantic class organization with helpful comments for better readability
+
 ## Next Steps
 
-1. Focus on CSS optimization as a priority:
+1. Continue CSS optimization process:
 
-   - Begin reducing App.css file size by moving component-specific styles to inline Tailwind
-   - Select 2-3 components as examples for the new styling approach 
-   - Document the component-level styling approach in STYLING_GUIDE.md
-   - Create clear patterns for how to style different UI elements with Tailwind utilities
+   - Refactor remaining dialog components (CreateServerCollectionDialog, CreateGuardProfileDialog, ClaudeExportModal)
+   - Focus next on any components using btn-* classes, which should be converted to Tailwind utilities
+   - After all component-specific styles are removed, identify and clean up unused CSS in App.css
+   - Update component examples in STYLING_GUIDE.md with best practices from refactored components
 
 2. Complete remaining in-progress items:
 

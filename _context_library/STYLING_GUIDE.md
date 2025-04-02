@@ -57,25 +57,25 @@ Tailwind CSS v4 automatically makes these variables available through Tailwind c
 With Tailwind CSS v4, prefer using the utility classes directly:
 
 1. **Backgrounds**: 
-   - `bg-bg-base` for main app background
-   - `bg-bg-surface` for cards
-   - `bg-bg-elevated` for interactive containers
+   - `bg-colors-bg-base` for main app background
+   - `bg-colors-bg-surface` for cards
+   - `bg-colors-bg-elevated` for interactive containers
 
 2. **Text**: 
-   - `text-text-primary` for headings and important text
-   - `text-text-secondary` for body text
-   - `text-text-tertiary` for supplementary information
+   - `text-colors-text-primary` for headings and important text
+   - `text-colors-text-secondary` for body text
+   - `text-colors-text-tertiary` for supplementary information
 
 3. **Accents**: 
-   - `bg-accent-primary` / `text-accent-primary` / `border-accent-primary` for primary actions
-   - `bg-accent-secondary` / `text-accent-secondary` for interactive elements
-   - `bg-accent-tertiary` / `text-accent-tertiary` for highlighting technical information
+   - `bg-colors-accent-primary` / `text-colors-accent-primary` / `border-colors-accent-primary` for primary actions
+   - `bg-colors-accent-secondary` / `text-colors-accent-secondary` for interactive elements
+   - `bg-colors-accent-tertiary` / `text-colors-accent-tertiary` for highlighting technical information
 
 4. **Status**: Use appropriate status colors sparingly to indicate success, warning, danger, or informational states
-   - `bg-status-success` / `text-status-success` for success
-   - `bg-status-warning` / `text-status-warning` for warnings
-   - `bg-status-danger` / `text-status-danger` for errors
-   - `bg-status-info` / `text-status-info` for information
+   - `bg-colors-status-success` / `text-colors-status-success` for success
+   - `bg-colors-status-warning` / `text-colors-status-warning` for warnings
+   - `bg-colors-status-danger` / `text-colors-status-danger` for errors
+   - `bg-colors-status-info` / `text-colors-status-info` for information
 
 ## Typography
 
@@ -136,31 +136,31 @@ With Tailwind CSS v4, we use utility classes directly instead of custom componen
 
 ```html
 <!-- Standard card component -->
-<div class="bg-bg-surface rounded-md border border-border-subtle overflow-hidden mb-4">
-  <div class="p-3 bg-bg-elevated border-b border-border-subtle flex justify-between items-center">
+<div class="bg-colors-bg-surface rounded-md border border-colors-border-subtle overflow-hidden mb-4">
+  <div class="p-3 bg-colors-bg-elevated border-b border-colors-border-subtle flex justify-between items-center">
     <h2>Title</h2>
     <button>Action</button>
   </div>
-  <div class="p-4 bg-bg-surface">
+  <div class="p-4 bg-colors-bg-surface">
     Content goes here
   </div>
 </div>
 
 <!-- Modal dialog with utility styling -->
-<div class="fixed inset-0 flex items-center justify-center bg-bg-base/80">
-  <div class="bg-bg-surface rounded-md border border-border-subtle overflow-hidden max-w-md w-full">
-    <div class="p-3 bg-bg-elevated border-b border-border-subtle flex justify-between items-center">
+<div class="fixed inset-0 flex items-center justify-center bg-colors-bg-base/80">
+  <div class="bg-colors-bg-surface rounded-md border border-colors-border-subtle overflow-hidden max-w-md w-full">
+    <div class="p-3 bg-colors-bg-elevated border-b border-colors-border-subtle flex justify-between items-center">
       <h2>Dialog Title</h2>
       <button>Close</button>
     </div>
-    <div class="p-4 bg-bg-surface">
+    <div class="p-4 bg-colors-bg-surface">
       Dialog content here
     </div>
   </div>
 </div>
 ```
 
-IMPORTANT: All modal dialogs must ensure proper solid backgrounds with no transparency for the dialog content area. Use `bg-bg-surface` for the main dialog background and `bg-bg-elevated` for header sections.
+IMPORTANT: All modal dialogs must ensure proper solid backgrounds with no transparency for the dialog content area. Use `bg-colors-bg-surface` for the main dialog background and `bg-colors-bg-elevated` for header sections.
 
 ### Buttons
 
@@ -168,45 +168,45 @@ With Tailwind CSS v4, button variants use utility compositions:
 
 1. **Default**:
    ```html
-   <button class="py-2 px-3 rounded-sm bg-bg-interactive border border-border-subtle 
-                  text-text-primary text-sm font-medium transition-colors duration-fast
-                  hover:bg-bg-interactive/80 focus:outline-none focus:ring-1 focus:ring-accent-primary">
+   <button class="py-2 px-3 rounded-sm bg-colors-bg-interactive border border-colors-border-subtle 
+                  text-colors-text-primary text-sm font-medium transition-colors
+                  hover:bg-colors-bg-interactive/80 focus:outline-none focus:ring-1 focus:ring-colors-accent-primary">
      Button Text
    </button>
    ```
 
 2. **Primary**:
    ```html
-   <button class="py-2 px-3 rounded-sm bg-accent-primary text-bg-base border-0
-                  text-sm font-medium transition-colors duration-fast
-                  hover:bg-accent-primary/90 focus:outline-none focus:ring-1 focus:ring-accent-primary">
+   <button class="py-2 px-3 rounded-sm bg-colors-accent-primary text-bg-base border-0
+                  text-sm font-medium transition-colors
+                  hover:bg-colors-accent-primary/90 focus:outline-none focus:ring-1 focus:ring-colors-accent-primary">
      Primary Action
    </button>
    ```
 
 3. **Secondary**:
    ```html
-   <button class="py-2 px-3 rounded-sm bg-transparent border border-accent-primary
-                  text-accent-primary text-sm font-medium transition-colors duration-fast
-                  hover:bg-accent-primary/10 focus:outline-none focus:ring-1 focus:ring-accent-primary">
+   <button class="py-2 px-3 rounded-sm bg-transparent border border-colors-accent-primary
+                  text-colors-accent-primary text-sm font-medium transition-colors
+                  hover:bg-colors-accent-primary/10 focus:outline-none focus:ring-1 focus:ring-colors-accent-primary">
      Secondary Action
    </button>
    ```
 
 4. **Success**:
    ```html
-   <button class="py-2 px-3 rounded-sm bg-status-success text-bg-base border-0
-                  text-sm font-medium transition-colors duration-fast
-                  hover:bg-status-success/90 focus:outline-none focus:ring-1 focus:ring-status-success">
+   <button class="py-2 px-3 rounded-sm bg-colors-status-success text-bg-base border-0
+                  text-sm font-medium transition-colors
+                  hover:bg-colors-status-success/90 focus:outline-none focus:ring-1 focus:ring-colors-status-success">
      Confirm Action
    </button>
    ```
 
 5. **Danger**:
    ```html
-   <button class="py-2 px-3 rounded-sm bg-status-danger text-white border-0
-                  text-sm font-medium transition-colors duration-fast
-                  hover:bg-status-danger/90 focus:outline-none focus:ring-1 focus:ring-status-danger">
+   <button class="py-2 px-3 rounded-sm bg-colors-status-danger text-white border-0
+                  text-sm font-medium transition-colors
+                  hover:bg-colors-status-danger/90 focus:outline-none focus:ring-1 focus:ring-colors-status-danger">
      Delete
    </button>
    ```
@@ -234,8 +234,21 @@ Tags provide visual classification:
 
 Tool calls and responses use specialized components with optimized styling:
 
-1. **Tool Call**: `.tool-call` - For outbound tool call requests
-2. **Tool Response**: `.tool-call-response` - For inbound tool responses
+1. **Tool Call**: 
+   ```html
+   <div class="border-l-2 border-colors-accent-secondary pl-4 py-3 pr-4 
+                bg-[hsla(215,85%,65%,0.05)] rounded-sm mb-4">
+     <!-- Tool call content -->
+   </div>
+   ```
+
+2. **Tool Response**: 
+   ```html
+   <div class="border-l-2 border-colors-accent-tertiary pl-4 py-3 pr-4 
+                bg-[hsla(190,90%,45%,0.05)] rounded-sm mb-4">
+     <!-- Tool response content -->
+   </div>
+   ```
 
 ## Utility Classes with Tailwind CSS v4
 
@@ -358,6 +371,87 @@ For an optimal approach to styling, follow these guidelines:
    - Clearer understanding of component styling without switching between files
    - Easier refactoring and component changes without side effects
    - Improved performance through CSS optimization
+
+### Refactoring Examples
+
+#### From Custom CSS Classes to Tailwind Utilities
+
+**Before:**
+```tsx
+<div className="card">
+  <div className="card-header">
+    <h2>Dialog Title</h2>
+    <button className="p-1 bg-transparent border-0">
+      <X size={14} />
+    </button>
+  </div>
+  <div className="card-content">
+    <p className="mb-md">Dialog content here</p>
+    <div className="btn-group justify-end">
+      <button className="btn-sm">Cancel</button>
+      <button className="btn-danger btn-sm">Delete</button>
+    </div>
+  </div>
+</div>
+```
+
+**After:**
+```tsx
+<div className="bg-colors-bg-surface border border-colors-border-subtle rounded-md shadow-md overflow-hidden">
+  {/* Header */}
+  <div className="p-3 bg-colors-bg-elevated border-b border-colors-border-subtle flex justify-between items-center">
+    <h2 className="text-sm m-0 font-medium">Dialog Title</h2>
+    <button className="p-1 bg-transparent border-0 text-colors-text-primary hover:text-colors-text-secondary transition-colors">
+      <X size={14} />
+    </button>
+  </div>
+  
+  {/* Content */}
+  <div className="p-4 bg-colors-bg-surface">
+    <p className="mb-4 text-colors-text-secondary">Dialog content here</p>
+    <div className="flex justify-end gap-2">
+      <button className="py-1 px-2 text-xs font-medium rounded-sm bg-colors-bg-interactive border border-colors-border-subtle
+                         text-colors-text-primary hover:bg-colors-bg-interactive/80">
+        Cancel
+      </button>
+      <button className="py-1 px-2 text-xs font-medium rounded-sm bg-colors-status-danger text-white border-0
+                        hover:bg-colors-status-danger/90">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+#### Best Practices in Refactored Components
+
+1. **Use comments to organize sections:**
+   ```tsx
+   {/* Header */}
+   <div className="...">...</div>
+   
+   {/* Content */}
+   <div className="...">...</div>
+   ```
+
+2. **Format long className strings for readability:**
+   ```tsx
+   <button 
+     className="py-2 px-3 rounded-sm bg-colors-status-success 
+               text-bg-base border-0 text-sm font-medium 
+               transition-colors hover:bg-colors-status-success/90
+               focus:outline-none focus:ring-1 focus:ring-colors-status-success"
+   >
+     Save
+   </button>
+   ```
+
+3. **Use semantic class grouping:**
+   - Layout properties first (flex, grid, positioning)
+   - Sizing and spacing (width, height, padding, margin)
+   - Visual properties (colors, borders, shadows)
+   - Typography (font, text)
+   - Interactive states (hover, focus)
 
 ## JSON Editor Styling
 

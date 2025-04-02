@@ -18,28 +18,36 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message }: ConfirmDi
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
                    w-full max-w-md z-50 
-                   bg-bg-surface
-                   border border-border-subtle
-                   rounded-md shadow-lg
-                   card"
+                   bg-colors-bg-surface
+                   border border-colors-border-subtle
+                   rounded-md shadow-md overflow-hidden"
         role="dialog"
       >
-        <div className="card-header">
-          <h2 className="text-sm m-0">{title}</h2>
+        {/* Header */}
+        <div className="p-3 bg-colors-bg-elevated border-b border-colors-border-subtle flex justify-between items-center">
+          <h2 className="text-sm m-0 font-medium">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 bg-transparent border-0"
+            className="p-1 bg-transparent border-0 text-colors-text-primary hover:text-colors-text-secondary transition-colors"
             aria-label="Close dialog"
           >
             <X size={14} strokeWidth={2.5} />
           </button>
         </div>
 
-        <div className="card-content">
-          <p className="mb-md">{message}</p>
+        {/* Content */}
+        <div className="p-4 bg-colors-bg-surface">
+          <p className="mb-4 text-colors-text-secondary">{message}</p>
 
-          <div className="btn-group justify-end">
-            <button onClick={onClose} className="btn-sm">
+          <div className="flex justify-end gap-2">
+            <button 
+              onClick={onClose} 
+              className="py-1 px-2 text-xs font-medium rounded-sm
+                       bg-colors-bg-interactive border border-colors-border-subtle
+                       text-colors-text-primary transition-colors
+                       hover:bg-colors-bg-interactive/80 focus:outline-none 
+                       focus:ring-1 focus:ring-colors-accent-primary"
+            >
               Cancel
             </button>
             <button
@@ -47,7 +55,10 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message }: ConfirmDi
                 onConfirm();
                 onClose();
               }}
-              className="btn-danger btn-sm"
+              className="py-1 px-2 text-xs font-medium rounded-sm
+                        bg-colors-status-danger text-white border-0
+                        hover:bg-colors-status-danger/90 transition-colors
+                        focus:outline-none focus:ring-1 focus:ring-colors-status-danger"
             >
               Delete
             </button>
