@@ -75,3 +75,45 @@ This document tracks features and improvements that have been deprioritized from
   - Add recovery suggestions for common errors
   - Create error code reference system
   - Implement contextual error handling
+
+## Phase 3 Backlogged Items
+
+### Checkbox and Radio Button Styling
+- **Original Phase:** Phase 3
+- **Tentative New Phase:** Future enhancement (if needed)
+- **Rationale:** After reviewing the codebase, we found that the application doesn't currently use checkboxes or radio buttons in any forms. While we have a checkbox component defined, it's not being used anywhere. This task is backlogged until these form elements are actually needed in the application.
+- **Details:**
+  - Create cyberpunk-styled checkbox component with glow effects
+  - Implement angular radio button with cyberpunk aesthetic
+  - Ensure both components maintain accessibility
+  - Add animation for state changes
+
+### Data Visualization Component Enhancement
+- **Original Phase:** Phase 3
+- **Tentative New Phase:** Future styling phase
+- **Rationale:** While enhancing data visualization components would improve the aesthetic, the current components are functional and meet the immediate needs. This task is backlogged to prioritize view transitions for a more immediate impact on user experience.
+- **Details:**
+  - Apply cyberpunk styling to charts and graphs
+  - Add subtle glow effects to data points
+  - Create neon accent colors for different data series
+  - Implement angular styling for chart containers
+
+### Tooltip and Notification Styling
+- **Original Phase:** Phase 3
+- **Tentative New Phase:** Future styling phase
+- **Rationale:** The current tooltip and notification systems are functional but lack the cyberpunk aesthetic. This enhancement would be nice to have but is not critical for the current phase.
+- **Details:**
+  - Create cyberpunk-styled tooltips with angular corners
+  - Add subtle glow effects to notifications
+  - Implement animated transitions for tooltips and notifications
+  - Ensure consistent styling with other cyberpunk components
+
+### Performance Testing and Optimization
+- **Original Phase:** Phase 3
+- **Tentative New Phase:** Future optimization phase
+- **Rationale:** While performance is important, the current implementation appears to perform well on standard devices. A dedicated optimization phase would be more effective once all styling features are in place.
+- **Details:**
+  - Test performance across different devices and browsers
+  - Optimize animations and transitions for lower-end devices
+  - Reduce unnecessary re-renders in complex components
+  - Implement performance monitoring metrics
