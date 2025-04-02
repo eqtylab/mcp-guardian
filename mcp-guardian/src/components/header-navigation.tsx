@@ -7,19 +7,28 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 // Add custom styles for hover effect
 const navItemHoverStyles = `
   .nav-item {
-    transition: background-color 0.2s ease, color 0.2s ease, padding 0.2s ease, height 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
     display: flex;
     flex-direction: column;
+    height: calc(var(--spacing) * 11);
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--radius) - 2px);
   }
   
   .nav-item:not(.active):hover {
     background-color: darkslategray !important;
+    color: white !important;
+  }
+  
+  .nav-item.active {
+    height: calc(var(--spacing) * 11);
     padding: 10px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: calc(var(--spacing) * 11);
-    border-radius: calc(var(--radius) - 2px);
-    color: white !important;
   }
 `;
 
@@ -74,12 +83,10 @@ export default function HeaderNavigation({
                   <button 
                     onClick={() => setCurrentPage(item.page)}
                     className={cn(
-                      // Base styles
-                      "flex flex-col items-center py-2 px-4 relative rounded-t-md h-14 box-border",
-                      // Default state
-                      "dark:text-gray-300 text-gray-800 transition-all duration-200 nav-item",
+                      // Default state (now handled by CSS)
+                      "dark:text-gray-300 text-gray-800 nav-item",
                       // Active state - blend with content area background matching exactly
-                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative nav-item active"
+                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative active"
                     )}
                     style={isActive ? { 
                       backgroundColor: 'var(--background)',
