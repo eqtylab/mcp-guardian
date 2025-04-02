@@ -18,9 +18,10 @@ const navItemHoverStyles = `
   }
   
   .nav-item:not(.active):hover {
-    background-color: darkslategray !important;
-    color: white !important;
+    background-color: var(--nav-hover) !important;
+    color: var(--nav-hover-text) !important;
     border-radius: calc(var(--radius) - 2px);
+    box-shadow: 0 2px 4px var(--nav-hover-shadow);
   }
   
   .nav-item.active {
@@ -58,70 +59,73 @@ export default function HeaderNavigation({
   currentPage,
   setCurrentPage,
   pendingCount,
-  modifierKey
+  modifierKey,
 }: HeaderNavProps) {
   return (
     <>
       <style>{navItemHoverStyles}</style>
+      <div className="h-1 w-full dark:bg-zinc-900 bg-zinc-200"></div>
       <header className="flex h-14 items-center justify-between dark:bg-zinc-900 bg-zinc-200 px-6 border-b border-border">
-      {/* Left section - Logo */}
-      <div className="flex items-center gap-2">
-        <Shield size={20} className="text-primary" />
-        <span className="dark:text-white text-zinc-800 font-medium">MCP Guardian</span>
-      </div>
-      
-      {/* Center section - Primary Navigation */}
-      <NavigationMenu.Root className="flex-1 flex justify-center">
-        <NavigationMenu.List className="flex items-center gap-4">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPage === item.page;
-            const hasNotification = item.badge && pendingCount > 0;
-            
-            return (
-              <NavigationMenu.Item key={item.page}>
-                <NavigationMenu.Link
-                  active={isActive}
-                  asChild
-                >
-                  <button 
-                    onClick={() => setCurrentPage(item.page)}
-                    className={cn(
-                      // Default state (now handled by CSS)
-                      "dark:text-gray-300 text-gray-800 nav-item",
-                      // Active state - blend with content area background matching exactly
-                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative active"
-                    )}
-                    style={isActive ? { 
-                      backgroundColor: 'var(--background)'
-                    } : undefined}
-                  >
-                    <div className="relative">
-                      <Icon size={18} />
-                      {/* Notification badge */}
-                      {hasNotification && (
-                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-[10px]">
-                          {pendingCount}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-xs mt-1">{item.page}</span>
-                  </button>
-                </NavigationMenu.Link>
-              </NavigationMenu.Item>
-            );
-          })}
-        </NavigationMenu.List>
-      </NavigationMenu.Root>
-      
-      {/* Right section - Actions/Settings */}
-      <div className="flex items-center gap-4">
-        <div className="text-xs dark:text-gray-400 text-gray-700" title="Keyboard Shortcuts">
-          {modifierKey} + (1-5): Navigate
+        {/* Left section - Logo */}
+        <div className="flex items-center gap-2">
+          <Shield size={20} className="text-primary" />
+          <span className="dark:text-white text-zinc-800 font-medium">MCP Guardian</span>
         </div>
-        <ThemeToggle />
-      </div>
-    </header>
+
+        {/* Center section - Primary Navigation */}
+        <NavigationMenu.Root className="flex-1 flex justify-center">
+          <NavigationMenu.List className="flex items-center gap-4">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentPage === item.page;
+              const hasNotification = item.badge && pendingCount > 0;
+
+              return (
+                <NavigationMenu.Item key={item.page}>
+                  <NavigationMenu.Link active={isActive} asChild>
+                    <button
+                      onClick={() => setCurrentPage(item.page)}
+                      className={cn(
+                        // Default state (now handled by CSS)
+                        "dark:text-gray-300 text-gray-800 nav-item",
+                        // Active state - blend with content area background matching exactly
+                        isActive &&
+                          "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative active",
+                      )}
+                      style={
+                        isActive
+                          ? {
+                              backgroundColor: "var(--background)",
+                            }
+                          : undefined
+                      }
+                    >
+                      <div className="relative">
+                        <Icon size={18} />
+                        {/* Notification badge */}
+                        {hasNotification && (
+                          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-[10px]">
+                            {pendingCount}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs mt-1">{item.page}</span>
+                    </button>
+                  </NavigationMenu.Link>
+                </NavigationMenu.Item>
+              );
+            })}
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
+
+        {/* Right section - Actions/Settings */}
+        <div className="flex items-center gap-4">
+          <div className="text-xs dark:text-gray-400 text-gray-700" title="Keyboard Shortcuts">
+            {modifierKey} + (1-5): Navigate
+          </div>
+          <ThemeToggle />
+        </div>
+      </header>
     </>
   );
 }

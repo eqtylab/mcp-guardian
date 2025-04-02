@@ -47,8 +47,9 @@ code {
     --chart-5: hsl(310 65% 50%);
     
     /* Navigation colors */
-    --nav-hover: hsl(180 25% 25%); /* darkslategray for light mode */
+    --nav-hover: hsl(250 50% 40%); /* Purple-ish, matches the theme for light mode */
     --nav-hover-shadow: rgba(0, 0, 0, 0.15);
+    --nav-hover-text: hsl(250 10% 98%);
     --spacing: 4px; /* Base spacing unit */
 
     --radius: 1rem;
@@ -121,8 +122,9 @@ code {
     --chart-5: hsl(310 65% 50%);
     
     /* Navigation colors - dark mode */
-    --nav-hover: hsl(180 40% 35%); /* lighter darkslategray for dark mode */
+    --nav-hover: hsl(250 70% 45%); /* Brighter purple for dark mode */
     --nav-hover-shadow: rgba(0, 0, 0, 0.3);
+    --nav-hover-text: hsl(250 10% 98%);
 
     --sidebar: hsl(250 30% 7%);
     --sidebar-foreground: hsl(250 10% 98%);
@@ -195,6 +197,7 @@ code {
   --color-chart-5: var(--chart-5);
   --color-nav-hover: var(--nav-hover);
   --color-nav-hover-shadow: var(--nav-hover-shadow);
+  --color-nav-hover-text: var(--nav-hover-text);
   --spacing: var(--spacing);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
