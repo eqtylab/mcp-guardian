@@ -78,6 +78,20 @@ This document outlines the plan for migrating from the current JSON editing solu
    - Implement drop-in replacement for current JsonEditor
    - Create enhanced version of JSONViewer
 
+## Component Organization
+
+```
+/components/json-editor/
+  index.tsx                 # Main exports
+  monaco-json-editor.tsx    # Core editor component 
+  json-viewer.tsx           # Read-only viewer
+  schemas/                  # JSON schemas for entity types
+  utils/                    # Helper utilities
+  themes/                   # Monaco themes
+```
+
+This dedicated folder structure provides proper organization for the component ecosystem with all supporting pieces.
+
 ## Implementation Plan
 
 ### Phase 1: Setup and Basic Implementation
@@ -86,6 +100,7 @@ This document outlines the plan for migrating from the current JSON editing solu
    - Add dependencies
    - Configure Vite/Webpack for proper bundling
    - Create basic Monaco Editor wrapper component
+   - Set up component folder structure in `/components/json-editor/`
 
 2. **Basic JSON Editor Component:**
    - Implement core editing functionality
@@ -100,10 +115,11 @@ This document outlines the plan for migrating from the current JSON editing solu
 
 ### Phase 2: Schema Integration
 
-1. **Schema Management:**
-   - Create JSON schemas for all configuration types
-   - Implement schema loading mechanism
-   - Add schema validation to editor
+1. **Schema Generation:**
+   - Convert TypeScript types (from ts-rs) to JSON Schema
+   - Create schemas for all entity types
+   - Focus on frontend validation only (not requiring backend changes)
+   - Store schemas in `/components/json-editor/schemas/`
 
 2. **Enhanced Features:**
    - Add autocompletion based on schemas
@@ -294,7 +310,7 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 
 2. **Schema Management**
    - Challenge: Creating and maintaining accurate schemas
-   - Mitigation: Generate schemas from TypeScript definitions
+   - Mitigation: Generate schemas from TypeScript definitions (already generated from Rust)
    - Impact: Initial investment in schema creation
 
 3. **Performance**
@@ -311,6 +327,11 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - Challenge: Monaco API is extensive and complex
    - Mitigation: Create abstracted components with simpler API
    - Impact: Initial learning investment for developers
+
+6. **Backend Integration**
+   - Challenge: No robust validation in Rust core libraries currently
+   - Mitigation: Implement validation purely on frontend (backlog backend validation)
+   - Impact: Schema definitions may need to be duplicated when backend validation is implemented
 
 ## Testing Strategy
 
@@ -353,6 +374,26 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - Performance optimization
    - Documentation and final adjustments
 
+## Future Enhancements (Backlogged)
+
+1. **Rust Core Validation**
+   - Add schema validation capabilities to Rust core libraries
+   - Synchronize schema definitions between frontend and backend
+   - Implement advanced validation rules (cross-entity references, etc.)
+   - Enable server-side schema validation before persistence
+
+2. **Schema Generation Pipeline**
+   - Create tooling to generate schemas from Rust structs
+   - Maintain a single source of truth for all schema definitions
+   - Automatically generate TypeScript types and JSON Schema
+
+3. **Advanced Error Handling**
+   - Implement detailed error messaging between frontend and backend
+   - Provide context-aware error recovery suggestions
+   - Create user-friendly error presentation
+
 ## Conclusion
 
 The migration to Monaco Editor will significantly enhance the JSON editing experience in MCP Guardian. It will provide better validation, autocompletion, and a more robust editing environment while addressing security concerns with the current implementation. The plan balances rapid implementation with thorough testing to ensure a smooth transition for users.
+
+The initial implementation will focus on frontend validation only, with backend validation capabilities backlogged for future development. This approach allows us to deliver immediate user experience improvements while laying the groundwork for more robust validation in the future.

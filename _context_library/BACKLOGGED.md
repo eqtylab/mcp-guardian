@@ -2,6 +2,20 @@
 
 This document tracks features and improvements that have been deprioritized from current phases and moved to future development cycles. Each entry includes a rationale for backlogging and tentative phase assignment.
 
+## PHASE4 Backlogged Items
+
+### Rust Core JSON Schema Validation
+- **Original Phase:** PHASE4
+- **Tentative New Phase:** PHASE5
+- **Rationale:** The Monaco Editor implementation with frontend validation delivers immediate UX improvements. Backend validation would be valuable but requires significant work in the core libraries that would delay the user benefits of improved JSON editing.
+- **Details:**
+  - Implement JSON Schema validation in Rust core libraries
+  - Create schema synchronization between frontend and backend
+  - Add advanced validation rules (cross-entity references, etc.)
+  - Enable server-side validation before persistence
+  - Implement detailed error messaging between frontend and backend
+  - Consider using crates like `jsonschema` or `valico` for Rust validation
+
 ## Phase 2 Backlogged Items
 
 ### Responsive Header Optimization
