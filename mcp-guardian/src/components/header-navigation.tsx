@@ -21,11 +21,16 @@ const navItemHoverStyles = `
     border-radius: calc(var(--radius) - 2px);
   }
   
+  /* Light mode hover */
   .nav-item:not(.active):hover {
     background-color: var(--nav-hover) !important;
-    color: var(--nav-hover-text) !important;
     border-radius: calc(var(--radius) - 2px);
     box-shadow: 0 2px 4px var(--nav-hover-shadow);
+  }
+  
+  /* Dark mode needs different text color */
+  .dark .nav-item:not(.active):hover {
+    color: var(--nav-hover-text) !important;
   }
   
   /* Ensure text and icons change instantly */
