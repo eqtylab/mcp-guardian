@@ -16,6 +16,7 @@ interface McpServerComponentProps {
   isExpanded: boolean;
   onToggle: () => void;
   enableEdit: boolean;
+  hideCollapsible?: boolean;
 }
 
 const McpServerComponent = ({
@@ -25,6 +26,7 @@ const McpServerComponent = ({
   isExpanded,
   onToggle,
   enableEdit,
+  hideCollapsible = false,
 }: McpServerComponentProps) => {
   const { namespace, name, mcp_server } = namedMcpServer;
   const [configText, setConfigText] = useState("");
@@ -55,6 +57,53 @@ const McpServerComponent = ({
     }
   };
 
+  // For sidebar mode, render without collapsible UI
+  if (hideCollapsible) {
+    return (
+      <>
+        <div className="space-y-4">
+          <JsonEditor
+            value={configText}
+            onChange={setConfigText}
+            disabled={!enableEdit}
+            placeholder="Enter MCP server configuration"
+          />
+
+          {enableEdit && (
+            <div className="flex justify-end gap-4">
+              <Button
+                onClick={updateMcpServer}
+                variant="success"
+                title="Save server changes"
+              >
+                <Save size={16} className="mr-2" />
+                Save Changes
+              </Button>
+
+              <Button
+                onClick={() => setShowDeleteConfirm(true)}
+                variant="danger"
+                title="Delete this server"
+              >
+                <Trash2 size={16} className="mr-2" />
+                Delete Server
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <ConfirmDialog
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleDelete}
+          title="Delete MCP Server"
+          message={`Are you sure you want to delete the server "${namespace}.${name}"? This action cannot be undone.`}
+        />
+      </>
+    );
+  }
+
+  // Original collapsible card view
   return (
     <Card className="mb-4">
       <Collapsible open={isExpanded} onOpenChange={onToggle}>

@@ -19,6 +19,7 @@ interface ServerCollectionComponentProps {
   isExpanded: boolean;
   onToggle: () => void;
   enableEdit: boolean;
+  hideCollapsible?: boolean;
 }
 
 const ServerCollectionComponent = ({
@@ -28,6 +29,7 @@ const ServerCollectionComponent = ({
   isExpanded,
   onToggle,
   enableEdit,
+  hideCollapsible = false,
 }: ServerCollectionComponentProps) => {
   const { namespace, name, server_collection } = namedServerCollection;
   const [configText, setConfigText] = useState("");
@@ -63,6 +65,72 @@ const ServerCollectionComponent = ({
     }
   };
 
+  // For sidebar mode, render without collapsible UI
+  if (hideCollapsible) {
+    return (
+      <>
+        <div className="space-y-4">
+          <JsonEditor
+            value={configText}
+            onChange={setConfigText}
+            disabled={!enableEdit}
+            placeholder="Enter server collection configuration in JSON format"
+          />
+
+          {enableEdit && (
+            <div className="flex justify-end gap-4">
+              <Button
+                onClick={handleSave}
+                variant="success"
+                title="Save collection changes"
+                className="shadow-sm"
+              >
+                <Save size={16} className="mr-2" />
+                Save Changes
+              </Button>
+
+              <Button
+                onClick={() => setShowExportModal(true)}
+                variant="secondary"
+                title="Export this collection to Claude"
+                className="shadow-sm"
+              >
+                <ExternalLink size={16} className="mr-2" />
+                Export to Claude
+              </Button>
+
+              <Button
+                onClick={() => setShowDeleteConfirm(true)}
+                variant="danger"
+                title="Delete this collection"
+                className="shadow-sm"
+              >
+                <Trash2 size={16} className="mr-2" />
+                Delete Collection
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <ClaudeExportModal
+          isOpen={showExportModal}
+          onClose={() => setShowExportModal(false)}
+          serverCollectionNamespace={namespace}
+          serverCollectionName={name}
+        />
+
+        <ConfirmDialog
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleDelete}
+          title="Delete Collection"
+          message={`Are you sure you want to delete the collection "${namespace}.${name}"?`}
+        />
+      </>
+    );
+  }
+
+  // Original collapsible card view
   return (
     <Card className="mb-4">
       <Collapsible open={isExpanded} onOpenChange={onToggle}>

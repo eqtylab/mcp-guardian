@@ -19,6 +19,7 @@ interface GuardProfileComponentProps {
   isExpanded: boolean;
   onToggle: () => void;
   enableEdit: boolean;
+  hideCollapsible?: boolean;
 }
 
 const GuardProfileComponent = ({
@@ -28,6 +29,7 @@ const GuardProfileComponent = ({
   isExpanded,
   onToggle,
   enableEdit,
+  hideCollapsible = false,
 }: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
   const [configText, setConfigText] = useState("");
@@ -83,6 +85,76 @@ const GuardProfileComponent = ({
     }
   };
 
+  // For sidebar mode, render without collapsible UI
+  if (hideCollapsible) {
+    return (
+      <>
+        <Tabs value={currentTab} onValueChange={setCurrentTab} className="mb-4">
+          <TabsList className="grid grid-cols-2 mb-4">
+            <TabsTrigger value="visual" className="flex items-center gap-2">
+              <Webhook size={14} strokeWidth={2.5} />
+              Visual Editor
+            </TabsTrigger>
+            <TabsTrigger value="json" className="flex items-center gap-2">
+              <Code size={14} strokeWidth={2.5} />
+              JSON Editor
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="visual" className="mt-0">
+            <GuardProfileVisualBuilder
+              profile={currentGuardProfile}
+              onChange={handleVisualBuilderChange}
+              readOnly={!enableEdit}
+            />
+          </TabsContent>
+          
+          <TabsContent value="json" className="mt-0">
+            <JsonEditor
+              value={configText}
+              onChange={handleJsonEditorChange}
+              disabled={!enableEdit}
+              placeholder="Enter guard profile configuration"
+            />
+          </TabsContent>
+        </Tabs>
+
+        {enableEdit && (
+          <div className="flex justify-end gap-4">
+            <Button
+              onClick={handleSave}
+              variant="success"
+              size="sm"
+              title="Save profile changes"
+            >
+              <Save size={14} strokeWidth={2.5} className="mr-1" />
+              Save
+            </Button>
+
+            <Button
+              onClick={() => setShowDeleteConfirm(true)}
+              variant="danger"
+              size="sm"
+              title="Delete this profile"
+            >
+              <Trash2 size={14} strokeWidth={2.5} className="mr-1" />
+              Delete
+            </Button>
+          </div>
+        )}
+
+        <ConfirmDialog
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleDelete}
+          title="Delete Guard Profile"
+          message={`Are you sure you want to delete the profile "${namespace}.${profile_name}"? This action cannot be undone.`}
+        />
+      </>
+    );
+  }
+
+  // Original collapsible card view
   return (
     <Card className="mb-2">
       <Collapsible open={isExpanded} onOpenChange={onToggle}>
