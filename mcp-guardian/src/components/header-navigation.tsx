@@ -7,15 +7,19 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 // Add custom styles for hover effect
 const navItemHoverStyles = `
   .nav-item {
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, padding 0.2s ease, height 0.2s ease;
+    display: flex;
+    flex-direction: column;
   }
   
   .nav-item:not(.active):hover {
-    border-radius: 8px;
-    background-color: var(--nav-hover) !important;
+    background-color: darkslategray !important;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    height: calc(var(--spacing) * 11);
+    border-radius: calc(var(--radius) - 2px);
     color: white !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px var(--nav-hover-shadow);
   }
 `;
 
