@@ -4,6 +4,7 @@ import { editor } from "monaco-editor";
 import { Check, AlertCircle, ZapIcon, RefreshCcw } from "lucide-react";
 import { cn } from "../../utils";
 import { defineMonacoThemes } from "./monaco-themes";
+import { detectThemeMode, watchThemeChanges } from "./theme-utils";
 import "./monaco-editor.css";
 
 interface MonacoJsonEditorProps {
@@ -30,10 +31,8 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
   const monacoRef = useRef<Monaco | null>(null);
   const [isValid, setIsValid] = React.useState(true);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const [isDarkMode, setIsDarkMode] = React.useState<boolean>(
-    document.documentElement.classList.contains('dark') 
-    || window.matchMedia('(prefers-color-scheme: dark)').matches
-  );
+  // Initialize theme using the utility function for more accurate detection
+  const [isDarkMode, setIsDarkMode] = React.useState<boolean>(detectThemeMode());
 
   // Function to validate JSON manually (for errors not caught by Monaco)
   const validateJson = (text: string): boolean => {
@@ -63,31 +62,24 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     }
   };
 
-  // Listen for theme changes in the document
+  // Listen for theme changes using our utility function
   useEffect(() => {
-    const handleThemeChange = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    const handleThemeChange = (newDarkMode: boolean) => {
+      console.debug('[MonacoEditor] Theme changed, isDarkMode:', newDarkMode);
+      setIsDarkMode(newDarkMode);
     };
 
-    // Check for theme changes
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          handleThemeChange();
-        }
-      });
-    });
+    // Initial check on mount to ensure we have the right value
+    const initialTheme = detectThemeMode();
+    if (initialTheme !== isDarkMode) {
+      console.debug('[MonacoEditor] Initial theme correction, isDarkMode:', initialTheme);
+      setIsDarkMode(initialTheme);
+    }
 
-    observer.observe(document.documentElement, { attributes: true });
-
-    // Also listen for system preference changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', handleThemeChange);
-
-    return () => {
-      observer.disconnect();
-      mediaQuery.removeEventListener('change', handleThemeChange);
-    };
+    // Set up the theme watcher which handles all the different ways the theme can change
+    const cleanupWatcher = watchThemeChanges(handleThemeChange);
+    
+    return cleanupWatcher;
   }, []);
 
   // Handle editor mount
@@ -102,7 +94,9 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     const themes = defineMonacoThemes(monaco);
     
     // Set the appropriate theme based on current mode
-    monaco.editor.setTheme(isDarkMode ? themes.dark : themes.light);
+    const themeName = isDarkMode ? themes.dark : themes.light;
+    console.debug(`[MonacoEditor] Initial theme: ${themeName}, isDarkMode: ${isDarkMode}`);
+    monaco.editor.setTheme(themeName);
 
     // Set schema for validation if provided
     if (schema && monaco) {
@@ -190,7 +184,9 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
   useEffect(() => {
     if (monacoRef.current && editorRef.current) {
       const themes = defineMonacoThemes(monacoRef.current);
-      monacoRef.current.editor.setTheme(isDarkMode ? themes.dark : themes.light);
+      const themeName = isDarkMode ? themes.dark : themes.light;
+      console.debug(`[MonacoEditor] Applying theme: ${themeName}, isDarkMode: ${isDarkMode}`);
+      monacoRef.current.editor.setTheme(themeName);
     }
   }, [isDarkMode]);
 
