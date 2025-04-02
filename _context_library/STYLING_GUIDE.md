@@ -309,14 +309,16 @@ We have successfully implemented Tailwind CSS v4 with the following:
 ### Best Practices with Tailwind CSS v4
 
 1. **Use Tailwind Utilities**: Prefer Tailwind utility classes over custom CSS classes
-2. **Theme Variables**: Use CSS variables defined in the @theme directive
-3. **Consistency**: Use the established color tokens and utility patterns consistently
-4. **Space Efficiency**: Prioritize compact layouts that minimize scrolling
-5. **Technical Focus**: Remember the audience is technical users who need efficient access to information
-6. **Visual Hierarchy**: Use color and sizing to guide attention to the most important elements
-7. **Dark Mode**: Design with dark mode as the primary experience
-8. **Dynamic Values**: Take advantage of Tailwind v4's dynamic utility values for responsive design
-9. **Performance**: Leverage Tailwind v4's performance optimizations by keeping CSS minimal
+2. **Component-Level Styling**: Use inline Tailwind utilities directly in components instead of custom CSS classes
+3. **Global vs Component Styles**: Keep App.css focused only on reusable patterns and global styles
+4. **Theme Variables**: Use CSS variables defined in the @theme directive when needed
+5. **Consistency**: Use the established color tokens and utility patterns consistently
+6. **Space Efficiency**: Prioritize compact layouts that minimize scrolling
+7. **Technical Focus**: Remember the audience is technical users who need efficient access to information
+8. **Visual Hierarchy**: Use color and sizing to guide attention to the most important elements
+9. **Dark Mode**: Design with dark mode as the primary experience
+10. **Dynamic Values**: Take advantage of Tailwind v4's dynamic utility values for responsive design
+11. **Performance**: Leverage Tailwind v4's performance optimizations by keeping CSS minimal
 
 ### Component Refactoring Approach
 
@@ -327,6 +329,35 @@ When converting existing components to use Tailwind utility classes:
 3. **Remove Custom Classes**: Replace custom classes with utility compositions
 4. **Refactor One Component at a Time**: Test each refactored component before moving to the next
 5. **Maintain Semantics**: Keep semantic HTML structure while changing class names
+
+### Component-Level vs. Global Styling
+
+For an optimal approach to styling, follow these guidelines:
+
+1. **App.css Should Contain:**
+   - CSS variables defined in the @theme directive
+   - Reset styles and base element styling
+   - Truly global styles that affect the entire application
+   - Reusable utility classes that can't be built with Tailwind
+   - Specialized components that require complex CSS (like tool call visualizations)
+
+2. **Component Files Should Contain:**
+   - Direct Tailwind utility classes for layout, spacing, colors, etc.
+   - Component-specific styling that doesn't need to be shared
+   - Composition of utilities to create consistent patterns
+
+3. **When to Use Custom CSS Classes:**
+   - Only for complex components that can't be styled with utilities alone
+   - When the same exact styling pattern is used in 3+ different components
+   - For dynamic styles that need JavaScript/React interaction
+   - For animations or transitions that can't be handled with utility classes
+
+4. **Benefits of Component-Level Styling:**
+   - Better code organization and component encapsulation
+   - Reduced global CSS file size and complexity
+   - Clearer understanding of component styling without switching between files
+   - Easier refactoring and component changes without side effects
+   - Improved performance through CSS optimization
 
 ## JSON Editor Styling
 

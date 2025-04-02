@@ -94,6 +94,13 @@ This phase focuses on refining the existing MCP Guardian Tauri application prima
   - [/] Implement consistent Tailwind patterns across components
   - [x] Take advantage of Tailwind v4's automatic CSS optimization
 
+- [ ] **CSS Optimization and Component Styling Refactor**
+  - [ ] Reduce App.css file size by moving component-specific styles to inline Tailwind
+  - [ ] Refactor components to use Tailwind utility classes directly instead of custom CSS classes
+  - [ ] Keep App.css focused only on reusable patterns and global styles
+  - [ ] Create examples of fully Tailwind-styled components for future reference
+  - [ ] Document best practices for component-level styling vs. global stylesheet
+
 For styling, always use `./STYLING_GUIDE.md` as your source of truth.
 
 - [ ] **File Naming Consistency**
@@ -156,20 +163,35 @@ For styling, always use `./STYLING_GUIDE.md` as your source of truth.
 - Restructured CSS variables with proper organization and semantic naming
 - Maintained visual consistency while improving underlying CSS architecture
 
+### 2023-05-23
+
+- Identified that App.css has grown too large, containing too many component-specific styles
+- Planned optimization strategy to reduce global CSS size by shifting to Tailwind utility classes
+- Established guideline: App.css should only contain reusable patterns and global styles
+- Created task to refactor components to use inline Tailwind utility classes directly
+- Will focus on providing clear examples of optimized components for reference
+
 ## Next Steps
 
-1. Complete remaining in-progress items:
+1. Focus on CSS optimization as a priority:
+
+   - Begin reducing App.css file size by moving component-specific styles to inline Tailwind
+   - Select 2-3 components as examples for the new styling approach 
+   - Document the component-level styling approach in STYLING_GUIDE.md
+   - Create clear patterns for how to style different UI elements with Tailwind utilities
+
+2. Complete remaining in-progress items:
 
    - Finish standardizing CSS class naming conventions
    - Add subtle animations for state transitions
    - Implement more robust form validation
 
-2. Continue Tailwind v4 optimization:
+3. Continue Tailwind v4 optimization:
 
    - [x] Update App.css with proper Tailwind v4 configuration syntax (completed)
    - [x] Convert theme() function calls to CSS var() syntax (completed)
-   - Continue migrating custom CSS classes to Tailwind utilities in remaining components
-   - Create component examples using Tailwind utility patterns to ensure consistency
+   - Refactor components to use direct Tailwind utility classes instead of custom CSS
+   - Keep App.css focused only on truly reusable patterns and global styles
 
 3. Conduct final testing with different screen sizes
 
