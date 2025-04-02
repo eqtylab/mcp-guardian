@@ -301,7 +301,7 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
 
       <div 
         className={cn(
-          "border rounded-md overflow-hidden transition-all",
+          "border rounded-md transition-all relative",
           !isValid && !disabled 
             ? "border-colors-status-danger shadow-[0_0_0_1px_var(--color-destructive)]" 
             : "border-colors-border-subtle hover:border-colors-primary/50",
@@ -319,7 +319,10 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
             const newValue = v || "";
             onChange(newValue);
           }}
-          options={themeOptions}
+          options={{
+            ...themeOptions,
+            fixedOverflowWidgets: false, // This allows widgets to overflow their container
+          }}
           onMount={handleEditorDidMount}
           className={cn(
             "monaco-editor-container transition-opacity",

@@ -1,6 +1,28 @@
 /* Custom styling for Monaco Editor */
 
 /* Enhanced container styling */
+.monaco-editor-container {
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden !important;
+}
+
+/* Fix for widgets to ensure they aren't clipped */
+.monaco-editor .monaco-hover {
+  z-index: 100 !important;
+}
+
+.monaco-editor .suggest-widget {
+  z-index: 90 !important;
+}
+
+.monaco-editor .parameter-hints-widget {
+  z-index: 90 !important;
+}
+
+.monaco-editor-background {
+  overflow: hidden !important;
+}
 
 /* Monaco hover widget styling - enhance the documentation tooltips */
 .monaco-hover {
@@ -33,9 +55,6 @@
 
 .dark .monaco-hover .hover-contents .markdown-hover .codicon {
   color: rgba(var(--neon-blue-rgb), 0.8) !important;
-}
-.monaco-editor-container {
-  transition: all 0.2s ease-in-out;
 }
 
 /* Improve scrollbar styling */
@@ -113,6 +132,42 @@ button:active .format-icon {
 .monaco-editor .margin .line-numbers {
   font-size: 11px !important;
   opacity: 0.6;
+}
+
+/* Suggestion widget styling */
+.monaco-editor .suggest-widget {
+  border-radius: 6px !important;
+  border: 1px solid rgba(var(--primary-rgb), 0.2) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+  overflow: visible !important;
+}
+
+.dark .monaco-editor .suggest-widget {
+  border-color: rgba(var(--neon-purple-rgb), 0.3) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), 0 0 10px rgba(var(--neon-purple-rgb), 0.1) !important;
+}
+
+/* Parameter hints widget styling */
+.monaco-editor .parameter-hints-widget {
+  border-radius: 6px !important;
+  border: 1px solid rgba(var(--primary-rgb), 0.2) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .monaco-editor .parameter-hints-widget {
+  border-color: rgba(var(--neon-purple-rgb), 0.3) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 0 10px rgba(var(--neon-purple-rgb), 0.1) !important;
+}
+
+/* Tooltips */
+.monaco-editor .monaco-editor-overlaymessage {
+  z-index: 100 !important;
+  border-radius: 4px !important;
+}
+
+/* Layer fix for all widgets */
+.monaco-editor .overlayWidgets {
+  z-index: 90 !important;
 }
 
 /* Mobile optimization */
