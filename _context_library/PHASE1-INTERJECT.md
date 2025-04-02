@@ -1,0 +1,182 @@
+# Phase 1 Interject: Radix UI Integration & Component Library Development
+
+## Overview
+
+This interject to Phase 1 focuses on elevating our component architecture by integrating Radix UI for accessible, unstyled primitives and establishing a comprehensive component library. This approach enables us to encapsulate styling and behavior in reusable components rather than global CSS, improving maintainability and consistency.
+
+## Goals
+
+1. **Radix UI Integration**: Integrate Radix UI primitives for accessible, headless components
+2. **Component Library Development**: Create a component library with consistent styling
+3. **CSS Architecture Optimization**: Move component-specific styles from App.css to their respective components
+4. **Documentation & Usage Patterns**: Establish clear patterns for component usage
+
+## Task List and Progress
+
+### 1. Radix UI Integration
+
+- [ ] **Setup & Dependencies**
+  - [ ] Add Radix UI core dependencies
+  - [ ] Configure Radix UI with Tailwind CSS
+  - [ ] Create integration examples
+
+- [ ] **Accessibility Audit**
+  - [ ] Review current components for accessibility issues
+  - [ ] Document accessibility improvements needed
+  - [ ] Create accessibility testing plan
+
+### 2. Component Library Development
+
+- [ ] **Core Component Library Structure**
+  - [ ] Create a `/components/ui` directory for reusable components
+  - [ ] Establish component architecture (props, variants, etc.)
+  - [ ] Define naming conventions and file structure
+
+- [ ] **Button Component System**
+  - [ ] Create `Button.tsx` component with variants (primary, secondary, success, danger)
+  - [ ] Implement size variants (small, medium, large)
+  - [ ] Support for icons and loading states
+  - [ ] Document usage patterns
+
+- [ ] **Dialog Component System**
+  - [ ] Create `Dialog.tsx` component using Radix UI Dialog primitive
+  - [ ] Implement header, content, and footer compound components
+  - [ ] Design consistent styling with animations
+  - [ ] Support various sizes and fullscreen mode
+
+- [ ] **Form Components**
+  - [ ] Create `Input`, `Textarea`, `Select` components
+  - [ ] Implement validation states and error messages
+  - [ ] Create `Label` and `FormControl` components
+  - [ ] Support for helper text and required indicators
+
+- [ ] **Card Component System**
+  - [ ] Create `Card.tsx` component with header, content, and footer
+  - [ ] Support various visual styles and sizes
+  - [ ] Implement loading states and empty states
+
+- [ ] **Data Display Components**
+  - [ ] Create `Tag/Badge` component with variants
+  - [ ] Implement `JSONViewer` for technical JSON display
+  - [ ] Create `ToolCall` visualization components
+
+### 3. CSS Architecture Optimization
+
+- [ ] **Refactor App.css**
+  - [ ] Move button styles from App.css to Button component
+  - [ ] Move dialog/card styles from App.css to respective components
+  - [ ] Move form element styles to form components
+  - [ ] Keep only theme variables and truly global styles in App.css
+
+- [ ] **Component-Specific Styling**
+  - [ ] Implement consistent class naming within components
+  - [ ] Use CSS variables from theme in components
+  - [ ] Document component variant API
+
+### 4. Migration & Documentation
+
+- [ ] **Component Migration Plan**
+  - [ ] Identify all existing components to be migrated
+  - [ ] Prioritize components by usage frequency
+  - [ ] Create migration schedule
+
+- [ ] **Component Documentation**
+  - [ ] Document each component's API, variants, and usage
+  - [ ] Create example usage patterns
+  - [ ] Document accessibility features
+
+## Implementation Strategy
+
+### Component Architecture
+
+Each UI component should follow these principles:
+
+1. **Composable**: Support composition through children or compound components
+2. **Self-contained**: Include all necessary styles within the component
+3. **Accessible**: Built on Radix UI primitives where appropriate
+4. **Themeable**: Use CSS variables from our theme
+5. **Variant-based**: Support various visual styles through variant props
+
+### Example Component Structure
+
+```tsx
+// components/ui/Button.tsx
+import { forwardRef } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-colors-accent-primary",
+  {
+    variants: {
+      variant: {
+        primary: "bg-colors-accent-primary text-[hsla(220,18%,10%,0.9)] hover:bg-[color-mix(in_srgb,var(--colors-accent-primary),white_15%)]",
+        secondary: "bg-transparent border border-colors-accent-primary text-colors-accent-primary hover:bg-[hsla(195,80%,50%,0.08)]",
+        success: "bg-colors-status-success text-[hsla(220,18%,10%,0.9)] hover:bg-[color-mix(in_srgb,var(--colors-status-success),white_15%)]",
+        danger: "bg-colors-status-danger text-white hover:bg-[color-mix(in_srgb,var(--colors-status-danger),white_15%)]",
+      },
+      size: {
+        sm: "h-7 px-2 text-xs",
+        md: "h-9 px-3 text-sm",
+        lg: "h-10 px-4 text-sm",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+    },
+  }
+);
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+  isLoading?: boolean;
+}
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, isLoading, children, ...props }, ref) => {
+    return (
+      <button 
+        className={buttonVariants({ variant, size, className })} 
+        ref={ref}
+        disabled={isLoading || props.disabled}
+        {...props}
+      >
+        {isLoading && <span className="mr-2">Loading...</span>}
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";
+
+export { Button, buttonVariants };
+```
+
+### Usage Example
+
+```tsx
+// Before
+<button className="btn-primary">Save</button>
+<button className="btn-sm btn-secondary">Cancel</button>
+
+// After
+<Button variant="primary">Save</Button>
+<Button variant="secondary" size="sm">Cancel</Button>
+```
+
+## Success Criteria
+
+- [ ] All core UI components migrated to Radix UI + component library
+- [ ] App.css reduced to only theme variables and global styles
+- [ ] Improved accessibility across all components
+- [ ] Consistent styling and behavior across application
+- [ ] Well-documented component API and usage patterns
+- [ ] Reduced duplication of styling code
+- [ ] Clear separation of concerns between global styling and component-specific styling
+
+## Next Steps
+
+1. Begin by creating the component library structure and implementing the most frequently used components (Button, Dialog, Card)
+2. Gradually migrate existing components to use the new component library
+3. Refactor App.css to remove component-specific styles as they are migrated
+4. Document the component library for future development

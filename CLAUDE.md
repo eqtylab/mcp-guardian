@@ -23,13 +23,19 @@ All reference for current work is located in `./_context_library`. Use this to d
 - Create detailed phase plans in `./_context_library/PHASE{N}.md` files
 
 - For planning component development (React):
-- ALWAYS use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling
-- Use Tailwind CSS v4 utility classes for component-specific styling
-- App.css should contain:
+- ALWAYS use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling guidelines
+- CRITICALLY IMPORTANT: Refer to `./_context_library/PHASE1-INTERJECT.md` for component architecture
+- Use Radix UI primitives for accessible, unstyled component foundations
+- Create reusable UI components in `/components/ui` directory
+- Component styling approach:
+  - Encapsulate component styles within the components themselves
+  - Use Tailwind CSS v4 utility classes for styling
+  - Use CSS variables from theme for consistent design
+  - Implement variant-based APIs (primary/secondary, sm/md/lg, etc.)
+- App.css should ONLY contain:
   - Theme variables (@theme directive)
   - Reset styles and base element styling
-  - Reusable UI patterns (buttons, cards, form elements)
-  - DO NOT add page-specific or niche component styles to App.css
+  - AVOID component-specific styles in App.css - they belong in the components
 - Keep component files small and modular - use composition for reusability
 - Use strongly typed TypeScript/TSX throughout
 
