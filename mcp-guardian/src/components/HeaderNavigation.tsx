@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
-import { Shield } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Shield, ChevronDown } from "lucide-react";
+import { cn } from "../utils";
+import { Badge } from "./ui/Badge";
 
 interface NavItemProps {
-  icon: any;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   label: string;
   isActive: boolean;
   description: string;
@@ -13,17 +15,23 @@ interface NavItemProps {
 const HeaderNavItem = ({ icon: Icon, label, isActive, description, onClick, badge }: NavItemProps) => (
   <button
     onClick={onClick}
-    className={`header-nav-item ${isActive ? "active" : ""}`}
+    className={cn(
+      "flex items-center gap-2 px-3 py-2 text-sm font-medium transition-colors",
+      "focus:bg-colors-bg-interactive focus:outline-none focus:ring-2 focus:ring-colors-accent-primary focus:ring-inset",
+      "disabled:opacity-50 disabled:pointer-events-none",
+      "bg-transparent hover:bg-colors-bg-interactive hover:text-colors-text-primary",
+      isActive ? "bg-colors-bg-interactive text-colors-text-primary border-l-2 border-colors-accent-primary" : "",
+    )}
     title={description}
     role="tab"
     aria-selected={isActive}
   >
-    <Icon size={18} strokeWidth={2} />
+    <Icon size={18} />
     <span>{label}</span>
     {badge !== undefined && (
-      <span className={`nav-badge ${badge > 0 ? "" : "empty"}`}>
+      <Badge variant={badge > 0 ? "warning" : "default"} className="ml-1 min-w-4 text-center">
         {badge}
-      </span>
+      </Badge>
     )}
   </button>
 );
@@ -34,30 +42,44 @@ interface MoreMenuProps {
   items: {
     label: string;
     onClick: () => void;
-    icon?: any;
+    icon?: React.ComponentType<{ className?: string; size?: number }>;
   }[];
 }
 
 const MoreMenu = ({ isOpen, toggleMenu, items }: MoreMenuProps) => (
-  <div className="more-menu-container">
+  <div className="relative">
     <button
       onClick={toggleMenu}
-      className={`header-nav-item ${isOpen ? "active" : ""}`}
+      className={cn(
+        "flex items-center gap-2 px-3 py-2 text-sm font-medium transition-colors",
+        "focus:bg-colors-bg-interactive focus:outline-none focus:ring-2 focus:ring-colors-accent-primary focus:ring-inset",
+        "disabled:opacity-50 disabled:pointer-events-none",
+        "bg-transparent hover:bg-colors-bg-interactive hover:text-colors-text-primary",
+        isOpen ? "bg-colors-bg-interactive text-colors-text-primary" : "",
+      )}
       title="More options"
+      aria-expanded={isOpen}
     >
-      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none">
-        <circle cx="12" cy="12" r="1" />
-        <circle cx="19" cy="12" r="1" />
-        <circle cx="5" cy="12" r="1" />
-      </svg>
       <span>More</span>
+      <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen ? "rotate-180" : "")} />
     </button>
     
     {isOpen && (
-      <div className="more-menu">
+      <div className="absolute right-0 mt-1 w-40 rounded-md border border-colors-border-subtle bg-colors-bg-surface shadow-md">
         {items.map((item, index) => (
-          <button key={index} className="more-menu-item" onClick={item.onClick}>
-            {item.icon && <item.icon size={16} strokeWidth={2} />}
+          <button 
+            key={index} 
+            className={cn(
+              "flex w-full items-center gap-2 px-3 py-2 text-sm text-colors-text-primary",
+              "hover:bg-colors-bg-interactive hover:text-colors-text-primary",
+              "focus:bg-colors-bg-interactive focus:outline-none"
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              item.onClick();
+            }}
+          >
+            {item.icon && <item.icon size={16} />}
             <span>{item.label}</span>
           </button>
         ))}
@@ -69,7 +91,7 @@ const MoreMenu = ({ isOpen, toggleMenu, items }: MoreMenuProps) => (
 interface HeaderNavigationProps {
   navItems: Array<{
     page: string;
-    icon: any;
+    icon: React.ComponentType<{ className?: string; size?: number }>;
     description: string;
     badge?: boolean;
   }>;
@@ -116,15 +138,13 @@ const HeaderNavigation = ({
   }, [isMoreMenuOpen]);
   
   return (
-    <header className="header-navigation">
-      <div className="header-left">
-        <div className="header-logo">
-          <Shield size={18} className="text-accent-primary" />
-          <span>MCP Guardian</span>
-        </div>
+    <header className="flex h-14 items-center justify-between border-b border-colors-border-subtle bg-colors-bg-surface px-4">
+      <div className="flex items-center gap-2">
+        <Shield size={18} className="text-colors-accent-primary" />
+        <span className="text-sm font-medium">MCP Guardian</span>
       </div>
       
-      <nav className="header-center" role="tablist" aria-label="Main Navigation">
+      <nav className="flex items-center" role="tablist" aria-label="Main Navigation">
         {primaryNavItems.map((item) => (
           <HeaderNavItem
             key={item.page}
@@ -136,9 +156,7 @@ const HeaderNavigation = ({
             badge={item.badge ? pendingCount : undefined}
           />
         ))}
-      </nav>
-      
-      <div className="header-right">
+        
         {moreNavItems.length > 0 && (
           <MoreMenu
             isOpen={isMoreMenuOpen}
@@ -149,10 +167,10 @@ const HeaderNavigation = ({
             items={moreNavItems}
           />
         )}
-        
-        <div className="keyboard-hint" title="Keyboard Shortcuts">
-          {modifierKey} + (1-5): Navigate
-        </div>
+      </nav>
+      
+      <div className="text-xs text-colors-text-tertiary" title="Keyboard Shortcuts">
+        {modifierKey} + (1-5): Navigate
       </div>
     </header>
   );
