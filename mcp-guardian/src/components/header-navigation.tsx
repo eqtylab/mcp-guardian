@@ -7,7 +7,7 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 // Add custom styles for hover effect
 const navItemHoverStyles = `
   .nav-item {
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: all 0.15s ease;
     display: flex;
     flex-direction: column;
     height: calc(var(--spacing) * 11);
