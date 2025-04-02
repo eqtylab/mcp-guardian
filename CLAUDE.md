@@ -1,6 +1,6 @@
 # Important
 
-All reference for current work is located in `./_context_library`. Use this to directory to understand:
+All reference for current work is located in `_context_library/`. Use this to directory to understand:
 
 - How to develop user tasks
 - Current phase of work, and implementation progress
@@ -8,25 +8,25 @@ All reference for current work is located in `./_context_library`. Use this to d
 
 **Note:**
 
-- All project management record keeping should be placed in `./_context_library`.
+- All project management record keeping should be placed in `_context_library/`.
 - This directory will be empty during your onboarding process.
 
 ### Onboarding Process
 
-- Focuses primarily on discovery, and note taking in `./_context_library/DISCOVERY.md`.
-- As you work on tasks, you will add implementation notes and progress updates to `./_context_library/PHASE{N}.md`.
+- Focuses primarily on discovery, and note taking in `_context_library/DISCOVERY.md`.
+- As you work on tasks, you will add implementation notes and progress updates to `_context_library/PHASE{N}.md`.
 
 ### Planning Process
 
-- Review `./_context_library/GOALS.md` to understand critical objectives for both Tauri app and core library
-- Consult `./_context_library/DEVELOPMENT_PLAN.md` for overall development strategy
-- Create detailed phase plans in `./_context_library/PHASE{N}.md` files
+- Review `_context_library/GOALS.md` to understand critical objectives for both Tauri app and core library
+- Consult `_context_library/DEVELOPMENT_PLAN.md` for overall development strategy
+- Create detailed phase plans in `_context_library/PHASE{N}.md` files
 
 - For planning component development (React):
-- ALWAYS use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling guidelines
-- CRITICALLY IMPORTANT: Refer to `./_context_library/PHASE1-INTERJECT.md` for component architecture
+- ALWAYS use `_context_library/STYLING_GUIDE.md` as your source of truth for styling guidelines
+- CRITICALLY IMPORTANT: Refer to `_context_library/PHASE1-INTERJECT.md` for component architecture
 - Use Radix UI primitives for accessible, unstyled component foundations
-- Create reusable UI components in `/components/ui` directory
+- Create reusable UI components in `mcp-guardian/src/components/ui` directory
 - Component styling approach:
   - Encapsulate component styles within the components themselves
   - Use Tailwind CSS v4 utility classes for styling
@@ -49,17 +49,17 @@ MCP Guardian is a tool to help govern and _firewall_ MCP servers.
 
 The current implementation is:
 
-- A core lib `./mcp-guardian-core`
-- A MCP server proxy `./mcp-guardian-proxy`
+- A core lib `mcp-guardian-core/`
+- A MCP server proxy `mcp-guardian-proxy/`
 
 The current interfaces are:
 
-- A Tauri (Rust) based desktop application `./mcp-guardian`
-- A CLI `./mcp-guardian-cli`
+- A Tauri (Rust) based desktop application `mcp-guardian/`
+- A CLI `mcp-guardian-cli/`
 
 The scope of work primarily focuses on the Tauri application.
 
-The documentation for MCP Guardian is located in `./docs`.
+The documentation for MCP Guardian is located in `docs/`.
 
 ## Development Process
 
@@ -168,15 +168,15 @@ Use playwright to search the web for information, or use it to test the applicat
 
 ### ProjectManagement Files
 
-- **./CLAUDE.md**: (ROOT LEVEL) Project-specific guidelines and commands
-- **./\_context_library/GOALS.md**: Critical objectives for both Tauri app and enterprise core library
-- **./\_context_library/DEVELOPMENT_PLAN.md**: Overall development strategy and phasing
-- **./\_context_library/DISCOVERY.md**: Technical and business analysis of the project
-- **./\_context_library/PHASE{N}.md**: Implementation notes for each development phase
+- **`CLAUDE.md`:** (ROOT LEVEL) Project-specific guidelines and commands
+- **`_context_library/GOALS.md`:** Critical objectives for both Tauri app and enterprise core library
+- **`_context_library/DEVELOPMENT_PLAN.md`:** Overall development strategy and phasing
+- **`_context_library/DISCOVERY.md`:** Technical and business analysis of the project
+- **`_context_library/PHASE{N}.md`:** Implementation notes for each development phase
 
 ### ProjectManagement Coordination Process
 
-All project management record keeping should be placed in `./_context_library`.
+All project management record keeping should be placed in `_context_library/`.
 
 1. **When starting a new task**:
 
@@ -185,12 +185,12 @@ All project management record keeping should be placed in `./_context_library`.
 
 2. **During implementation**:
 
-   - Mark tasks as in-progress [/] in `./_context_library/PHASE{N}.md`
-   - Create or update `./_context_library/CLAUDE_TROUBLESHOOT.md` when encountering issues
+   - Mark tasks as in-progress [/] in `_context_library/PHASE{N}.md`
+   - Create or update `_context_library/CLAUDE_TROUBLESHOOT.md` when encountering issues
    - Reference appropriate documentation in code comments
 
 3. **After completing a task**:
-   - Mark tasks as complete [x] in `./_context_library/PHASE{N}.md`
+   - Mark tasks as complete [x] in `_context_library/PHASE{N}.md`
    - Add implementation notes with timestamps
    - Update other documents if implementation deviates from plan
 
@@ -204,6 +204,6 @@ All project management record keeping should be placed in `./_context_library`.
    - Create small examples before full implementation
 
 2. When encountering significant issues:
-   - Document in `./_context_library/CLAUDE_TROUBLESHOOT.md` with detailed explanations
+   - Document in `_context_library/CLAUDE_TROUBLESHOOT.md` with detailed explanations
    - Include error messages, root causes, and resolutions
    - Note any workarounds or simplifications needed for MVP
