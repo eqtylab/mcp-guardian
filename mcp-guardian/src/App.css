@@ -1,36 +1,38 @@
 @import "tailwindcss";
 
-/* Tailwind v4 Configuration - Technical Cybersecurity Focus */
+/* Configure Tailwind v4 with directive comments */
+/* @config { darkMode: "class" } */
+
 @theme {
-  --colors-bg-base: hsl(220 18% 8%);
-  --colors-bg-surface: hsl(220 16% 11%);
-  --colors-bg-elevated: hsl(220 14% 13%);
-  --colors-bg-interactive: hsl(220 12% 16%);
-
-  --colors-text-primary: hsl(220 15% 92%);
-  --colors-text-secondary: hsl(220 10% 70%);
-  --colors-text-tertiary: hsl(220 8% 50%);
-
-  --colors-accent-primary: hsl(195 80% 50%);
-  --colors-accent-secondary: hsl(215 85% 65%);
-  --colors-accent-tertiary: hsl(190 90% 45%);
-
-  --colors-status-success: hsl(142 70% 45%);
-  --colors-status-warning: hsl(45 90% 55%);
-  --colors-status-danger: hsl(358 75% 55%);
-  --colors-status-info: hsl(210 80% 60%);
-
-  --colors-border-subtle: hsla(220 15% 25% / 0.6);
-  --colors-border-strong: hsla(220 20% 35% / 0.8);
-  --colors-border-focus: hsl(195 80% 50%);
-
+  /* Define all theme color mappings directly */
+  --colors-background: var(--background);
+  --colors-foreground: var(--foreground);
+  --colors-muted: var(--muted);
+  --colors-muted-foreground: var(--muted-foreground);
+  --colors-card: var(--card);
+  --colors-card-foreground: var(--card-foreground);
+  --colors-popover: var(--popover);
+  --colors-popover-foreground: var(--popover-foreground);
+  --colors-border: var(--border);
+  --colors-input: var(--input);
+  --colors-primary: var(--primary);
+  --colors-primary-foreground: var(--primary-foreground);
+  --colors-secondary: var(--secondary);
+  --colors-secondary-foreground: var(--secondary-foreground);
+  --colors-accent: var(--accent);
+  --colors-accent-foreground: var(--accent-foreground);
+  --colors-destructive: var(--destructive);
+  --colors-destructive-foreground: var(--destructive-foreground);
+  --colors-ring: var(--ring);
+  
+  /* Non-color theme variables */
   --shadows-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadows-md: 0 2px 4px rgba(0, 0, 0, 0.4);
   --shadows-lg: 0 2px 8px rgba(0, 0, 0, 0.5);
 
-  --borderRadius-sm: 3px;
-  --borderRadius-md: 4px;
-  --borderRadius-lg: 6px;
+  --borderRadius-sm: calc(var(--radius) - 0.5rem);
+  --borderRadius-md: calc(var(--radius) - 0.25rem);
+  --borderRadius-lg: var(--radius);
 
   --fontFamily-sans: "Inter", system-ui, -apple-system, sans-serif;
   --fontFamily-mono: "JetBrains Mono", "SF Mono", "Roboto Mono", Menlo, monospace;
@@ -49,53 +51,197 @@
   --animation-progress-indeterminate: progress-indeterminate 1.5s infinite cubic-bezier(0.65, 0.05, 0.36, 1);
 }
 
+@layer base {
+  :root {
+    --background: hsl(250 30% 99%);
+    --foreground: hsl(250 10% 10%);
+    --muted: hsl(254 32% 93%);
+    --muted-foreground: hsl(254 10% 29%);
+    --popover: hsl(250 30% 99%);
+    --popover-foreground: hsl(250 10% 10%);
+    --card: hsl(250 30% 99%);
+    --card-foreground: hsl(250 10% 10%);
+    --border: hsl(250 13% 91%);
+    --input: hsl(250 13% 91%);
+
+    --primary: hsl(254 72% 52%);
+    --primary-foreground: hsl(0 0% 100%);
+    --secondary: hsl(280 70% 50%);
+    --secondary-foreground: hsl(0 0% 100%);
+    --accent: hsl(14 72% 52%);
+    --accent-foreground: hsl(0 0% 100%);
+    --destructive: hsl(18 86% 37%);
+    --destructive-foreground: hsl(0 0% 100%);
+    --ring: hsl(254 72% 52%);
+
+    /* Chart colors */
+    --chart-1: hsl(254 72% 52%);
+    --chart-2: hsl(280 70% 50%);
+    --chart-3: hsl(14 72% 52%);
+    --chart-4: hsl(230 70% 60%);
+    --chart-5: hsl(310 65% 50%);
+
+    --radius: 1rem;
+
+    /* Sidebar styling */
+    --sidebar: hsl(250 30% 97%);
+    --sidebar-foreground: hsl(250 10% 10%);
+    --sidebar-primary: hsl(254 72% 52%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(280, 79%, 71%);
+    --sidebar-accent-foreground: hsl(250 10% 10%);
+    --sidebar-border: hsl(250 13% 91%);
+    --sidebar-ring: hsl(254 72% 52%);
+
+    /* Pills styling */
+    --pill-border-default: rgba(99, 102, 241, 0.3);
+    --pill-text-default: rgb(79, 70, 229);
+    --pill-bg-default: rgba(255, 255, 255, 0.7);
+    --pill-hover-bg: rgba(238, 242, 255, 0.8);
+    --pill-hover-border: rgba(99, 102, 241, 0.4);
+
+    --pill-selected-border: rgb(99, 102, 241);
+    --pill-selected-text: rgb(55, 48, 163);
+    --pill-selected-bg-start: rgba(224, 231, 255, 0.9);
+    --pill-selected-bg-end: rgba(199, 210, 254, 0.9);
+
+    /* Effects */
+    --shimmer-color-1: rgba(99, 102, 241, 0.2);
+    --shimmer-color-2: rgba(165, 180, 252, 0.2);
+    --glow-color: rgba(99, 102, 241, 0.3);
+
+    /* Add cosmic specific variables */
+    --cosmic-card-bg: linear-gradient(to bottom, rgba(79, 70, 229, 0.05), rgba(0, 0, 0, 0.02));
+    --cosmic-card-border: rgba(79, 70, 229, 0.15);
+    --cosmic-card-shadow: 0 4px 12px rgba(13, 12, 37, 0.05);
+    --cosmic-card-hover-shadow: 0 6px 24px rgba(79, 70, 229, 0.15);
+    --cosmic-blur: 8px;
+  }
+
+  .dark {
+    --background: hsl(250 30% 5%);
+    --foreground: hsl(250 10% 98%);
+    --muted: hsl(254 32% 7%);
+    --muted-foreground: hsl(254 10% 71%);
+    --popover: hsl(250 30% 6%);
+    --popover-foreground: hsl(250 10% 98%);
+    --card: hsl(250 30% 6%);
+    --card-foreground: hsl(250 10% 98%);
+    --border: hsl(250 27.9% 16.9%);
+    --input: hsl(250 27.9% 16.9%);
+
+    --primary: hsl(254 72% 52%);
+    --primary-foreground: hsl(0 0% 100%);
+    --secondary: hsl(280 70% 50%);
+    --secondary-foreground: hsl(0 0% 100%);
+    --accent: hsl(14 72% 52%);
+    --accent-foreground: hsl(0 0% 100%);
+    --destructive: hsl(18 86% 46%);
+    --destructive-foreground: hsl(0 0% 100%);
+    --ring: hsl(254 72% 52%);
+
+    --chart-1: hsl(254 72% 52%);
+    --chart-2: hsl(280 70% 50%);
+    --chart-3: hsl(14 72% 52%);
+    --chart-4: hsl(230 70% 60%);
+    --chart-5: hsl(310 65% 50%);
+
+    --sidebar: hsl(250 30% 7%);
+    --sidebar-foreground: hsl(250 10% 98%);
+    --sidebar-primary: hsl(254 72% 52%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(280 70% 60%);
+    --sidebar-accent-foreground: hsl(0 0% 100%);
+    --sidebar-border: hsl(250 27.9% 16.9%);
+    --sidebar-ring: hsl(254 72% 52%);
+
+    --pill-border-default: rgba(99, 102, 241, 0.3);
+    --pill-text-default: rgba(224, 231, 255, 0.8);
+    --pill-bg-default: linear-gradient(to right, rgba(30, 27, 75, 0.3), rgba(0, 0, 0, 0.5));
+    --pill-hover-bg: linear-gradient(to right, rgba(30, 27, 75, 0.4), rgba(0, 0, 0, 0.6));
+    --pill-hover-border: rgba(124, 58, 237, 0.5);
+
+    --pill-selected-border: rgba(129, 140, 248, 0.7);
+    --pill-selected-text: rgb(238, 242, 255);
+    --pill-selected-bg-start: rgba(30, 27, 75, 0.8);
+    --pill-selected-bg-end: rgba(0, 0, 0, 0.8);
+
+    --shimmer-color-1: rgba(99, 102, 241, 0.3);
+    --shimmer-color-2: rgba(165, 180, 252, 0.3);
+    --glow-color: rgba(99, 102, 241, 0.4);
+
+    --cosmic-card-bg: linear-gradient(to bottom, rgba(79, 70, 229, 0.07), rgba(0, 0, 0, 0.2));
+    --cosmic-card-border: rgba(79, 70, 229, 0.2);
+    --cosmic-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    --cosmic-card-hover-shadow: 0 6px 24px rgba(79, 70, 229, 0.2);
+    --cosmic-blur: 12px;
+  }
+}
+
 /* Custom keyframes */
 @keyframes progress-indeterminate {
-  0% { transform: translateX(-100%); }
-  50% { transform: translateX(0%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* Base Elements */
 html {
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 html,
 body {
   @apply w-screen h-screen m-0 p-0 overflow-hidden;
-  background-color: var(--colors-bg-base);
-  color: var(--colors-text-primary);
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--fontFamily-sans);
   font-size: 14px;
   line-height: 1.5;
 }
 
 /* Typography System */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply font-medium;
-  color: var(--colors-text-primary);
+  color: var(--foreground);
   margin: 0 0 0.75rem 0;
 }
 
-h1 { font-size: var(--fontSize-xl); }
-h2 { font-size: var(--fontSize-lg); }
-h3 { font-size: var(--fontSize-base); }
+h1 {
+  font-size: var(--fontSize-xl);
+}
+h2 {
+  font-size: var(--fontSize-lg);
+}
+h3 {
+  font-size: var(--fontSize-base);
+}
 
 p {
   margin: 0 0 0.75rem 0;
-  color: var(--colors-text-secondary);
+  color: var(--muted-foreground);
 }
 
 /* Links */
 a {
-  color: var(--colors-accent-primary);
+  color: var(--primary);
   text-decoration: none;
   transition: color var(--transitionDuration-fast) var(--transitionTimingFunction-DEFAULT);
 }
 
 a:hover {
-  color: color-mix(in srgb, var(--colors-accent-primary), white 15%);
+  color: color-mix(in srgb, var(--primary), white 15%);
 }
 
 /* Layout Core */
@@ -112,15 +258,15 @@ a:hover {
 
 /* Helper Classes */
 .muted {
-  color: var(--colors-text-tertiary);
+  color: var(--muted-foreground);
   font-size: var(--fontSize-sm);
 }
 
 /* Legacy Navigation - Will be migrated to NavigationMenu component */
 .sidebar {
-  background-color: var(--colors-bg-surface);
+  background-color: var(--sidebar);
   width: 210px;
-  border-right: 1px solid var(--colors-border-subtle);
+  border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -128,7 +274,7 @@ a:hover {
 
 .sidebar-header {
   padding: 1rem;
-  border-bottom: 1px solid var(--colors-border-subtle);
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .nav-item {
@@ -136,7 +282,7 @@ a:hover {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  color: var(--colors-text-secondary);
+  color: var(--sidebar-foreground);
   transition: all var(--transitionDuration-fast) var(--transitionTimingFunction-DEFAULT);
   border-left: 2px solid transparent;
   cursor: pointer;
@@ -148,19 +294,19 @@ a:hover {
 }
 
 .nav-item:hover {
-  background-color: var(--colors-bg-elevated);
-  color: var(--colors-text-primary);
+  background-color: var(--muted);
+  color: var(--sidebar-foreground);
 }
 
 .nav-item.active {
-  color: var(--colors-text-primary);
-  background-color: var(--colors-bg-elevated);
-  border-left-color: var(--colors-accent-primary);
+  color: var(--sidebar-foreground);
+  background-color: var(--muted);
+  border-left-color: var(--primary);
 }
 
 .sidebar-footer {
   padding: 0.5rem;
-  border-top: 1px solid var(--colors-border-subtle);
+  border-top: 1px solid var(--sidebar-border);
   display: flex;
   justify-content: center;
   align-items: center;

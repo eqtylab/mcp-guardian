@@ -3,15 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-colors-accent-primary shadow-sm",
+  "inline-flex items-center justify-center rounded-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm",
   {
     variants: {
       variant: {
-        primary: "bg-colors-accent-primary text-[hsla(220,18%,10%,0.9)] hover:bg-[color-mix(in_srgb,var(--colors-accent-primary),white_15%)]",
-        secondary: "bg-transparent border border-colors-accent-primary text-colors-accent-primary hover:bg-[hsla(195,80%,50%,0.08)]",
-        success: "bg-[color-mix(in_srgb,var(--colors-status-success),black_10%)] text-[hsla(220,18%,10%,0.9)] hover:bg-[color-mix(in_srgb,var(--colors-status-success),white_15%)] border border-[rgba(0,0,0,0.1)]",
-        danger: "bg-colors-status-danger text-white hover:bg-[color-mix(in_srgb,var(--colors-status-danger),white_15%)]",
-        ghost: "bg-transparent hover:bg-colors-bg-interactive text-colors-text-primary",
+        primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+        secondary: "bg-transparent border border-primary text-primary hover:bg-primary/10",
+        accent: "bg-accent text-accent-foreground hover:bg-accent/90",
+        success: "bg-[hsl(142,70%,45%)] text-white hover:bg-[hsl(142,70%,45%)]/90 border border-[rgba(0,0,0,0.1)]",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        ghost: "bg-transparent hover:bg-muted text-foreground",
       },
       size: {
         sm: "h-7 px-2 text-xs",

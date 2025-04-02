@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import { NamedMcpServer } from "./bindings/NamedMcpServer";
 import { NamedGuardProfile } from "./bindings/NamedGuardProfile";
 import { NamedServerCollection } from "./bindings/NamedServerCollection";
+import HeaderNavigation from "./components/header-navigation";
 import "./App.css";
 
 enum Page {
@@ -55,35 +56,8 @@ const getGuardProfiles = (): Promise<NamedGuardProfile[]> => invoke("list_guard_
 const getServerCollections = (): Promise<NamedServerCollection[]> => invoke("list_server_collections", {});
 const getPendingMessages = (): Promise<any> => invoke("get_pending_messages", {});
 
-interface NavItemProps {
-  icon: any;
-  label: string;
-  isActive: boolean;
-  description: string;
-  onClick: () => void;
-  badge?: number;
-}
-
-const NavItem = ({ icon: Icon, label, isActive, description, onClick, badge }: NavItemProps) => (
-  <button
-    onClick={onClick}
-    className={`nav-item ${isActive ? "active" : ""}`}
-    title={description}
-    role="tab"
-    aria-selected={isActive}
-  >
-    <Icon size={16} strokeWidth={2} />
-    <span>{label}</span>
-    {badge !== undefined && (
-      <span className={`nav-badge ${badge > 0 ? "" : "empty"}`}>
-        {badge}
-      </span>
-    )}
-  </button>
-);
-
 const App = () => {
-  const [currentPage, setCurrentPage] = useState<Page>(Page.SPLASH);
+  const [currentPage, setCurrentPage] = useState<string>(Page.SPLASH);
   const [mcpServers, setMcpServers] = useState<NamedMcpServer[]>([]);
   const [guardProfiles, setGuardProfiles] = useState<NamedGuardProfile[]>([]);
   const [serverCollections, setServerCollections] = useState<NamedServerCollection[]>([]);
@@ -130,55 +104,40 @@ const App = () => {
   const modifierKey = isMac ? "⌘" : "Alt";
 
   return (
-    <main className="main-container">
-      <nav className="sidebar" role="tablist" aria-label="Main Navigation">
-        <div className="sidebar-header">
-          <h3 className="flex-row gap-sm m-0 text-sm">
-            <Shield size={16} className="text-accent-primary" />
-            <span>MCP Guardian</span>
-          </h3>
-        </div>
-        
-        <div className="flex-1">
-          {NAV_ITEMS.map((item) => (
-            <NavItem
-              key={item.page}
-              icon={item.icon}
-              label={item.page}
-              isActive={currentPage === item.page}
-              description={item.description}
-              onClick={() => setCurrentPage(item.page)}
-              badge={item.badge ? pendingCount : undefined}
+    <main className="flex flex-col h-screen overflow-hidden bg-background text-foreground">
+      <HeaderNavigation 
+        navItems={NAV_ITEMS}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pendingCount={pendingCount}
+        modifierKey={modifierKey}
+      />
+      
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-5">
+          {currentPage === Page.SPLASH ? (
+            <SplashPage />
+          ) : currentPage === Page.SERVERS ? (
+            <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
+          ) : currentPage === Page.GUARD_PROFILES ? (
+            <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
+          ) : currentPage === Page.SERVER_COLLECTIONS ? (
+            <ServerCollectionsPage
+              serverCollections={serverCollections}
+              updateServerCollections={updateServerCollections}
             />
-          ))}
+          ) : currentPage === Page.PENDING_MESSAGES ? (
+            <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
+          ) : (
+            <div>Page not found</div>
+          )}
         </div>
-
-        <div className="sidebar-footer">
-          <div className="muted">
-            {modifierKey} + (1-5): Navigate
-          </div>
-        </div>
-      </nav>
-
-      <div className="content-container">
-        {currentPage === Page.SPLASH ? (
-          <SplashPage />
-        ) : currentPage === Page.SERVERS ? (
-          <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
-        ) : currentPage === Page.GUARD_PROFILES ? (
-          <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
-        ) : currentPage === Page.SERVER_COLLECTIONS ? (
-          <ServerCollectionsPage
-            serverCollections={serverCollections}
-            updateServerCollections={updateServerCollections}
-          />
-        ) : currentPage === Page.PENDING_MESSAGES ? (
-          <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
-        ) : (
-          <div>Page not found</div>
-        )}
       </div>
-      <ToastContainer position="bottom-right" theme="dark" />
+      <ToastContainer 
+        position="bottom-right" 
+        theme="auto" 
+        className="!text-foreground !bg-card !border !border-border"
+      />
     </main>
   );
 };

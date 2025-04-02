@@ -7,12 +7,13 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-colors-bg-elevated text-colors-text-secondary",
-        primary: "bg-[hsla(195,80%,50%,0.15)] text-colors-accent-primary",
-        secondary: "bg-colors-bg-interactive text-colors-text-primary",
-        success: "bg-[hsla(142,70%,45%,0.15)] text-colors-status-success",
-        warning: "bg-[hsla(45,90%,55%,0.15)] text-colors-status-warning",
-        danger: "bg-[hsla(358,75%,55%,0.15)] text-colors-status-danger",
+        default: "bg-muted text-muted-foreground",
+        primary: "bg-primary/15 text-primary",
+        secondary: "bg-secondary/15 text-secondary",
+        accent: "bg-accent/15 text-accent",
+        success: "bg-[hsl(142,70%,45%)]/15 text-[hsl(142,70%,45%)]",
+        warning: "bg-[hsl(45,90%,55%)]/15 text-[hsl(45,90%,55%)]",
+        danger: "bg-destructive/15 text-destructive",
       },
     },
     defaultVariants: {
