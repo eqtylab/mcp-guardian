@@ -91,6 +91,35 @@ code {
     --cosmic-card-shadow: 0 4px 12px rgba(13, 12, 37, 0.05);
     --cosmic-card-hover-shadow: 0 6px 24px rgba(79, 70, 229, 0.15);
     --cosmic-blur: 8px;
+    
+    /* Cyberpunk visual system - Neon colors (light mode) */
+    --neon-blue: hsl(210, 90%, 40%);
+    --neon-purple: hsl(280, 90%, 45%);
+    --neon-cyan: hsl(180, 90%, 40%);
+    --neon-pink: hsl(320, 90%, 45%);
+    --neon-green: hsl(140, 90%, 40%);
+
+    /* RGB values for shadows and effects */
+    --neon-blue-rgb: 38, 102, 178;
+    --neon-purple-rgb: 117, 38, 178;
+    --neon-cyan-rgb: 38, 178, 178;
+    --neon-pink-rgb: 178, 38, 117;
+    --neon-green-rgb: 38, 178, 87;
+
+    /* Glow effects */
+    --neon-blue-glow: 0 0 5px rgba(var(--neon-blue-rgb), 0.5), 0 0 10px rgba(var(--neon-blue-rgb), 0.3);
+    --neon-purple-glow: 0 0 5px rgba(var(--neon-purple-rgb), 0.5), 0 0 10px rgba(var(--neon-purple-rgb), 0.3);
+    --neon-cyan-glow: 0 0 5px rgba(var(--neon-cyan-rgb), 0.5), 0 0 10px rgba(var(--neon-cyan-rgb), 0.3);
+    --neon-pink-glow: 0 0 5px rgba(var(--neon-pink-rgb), 0.5), 0 0 10px rgba(var(--neon-pink-rgb), 0.3);
+    --neon-green-glow: 0 0 5px rgba(var(--neon-green-rgb), 0.5), 0 0 10px rgba(var(--neon-green-rgb), 0.3);
+
+    /* Grid patterns */
+    --grid-color: rgba(var(--neon-purple-rgb), 0.05);
+    --grid-accent-color: rgba(var(--neon-cyan-rgb), 0.07);
+
+    /* Text effects */
+    --text-glow-color: rgba(var(--neon-purple-rgb), 0.3);
+    --text-glow-accent: rgba(var(--neon-cyan-rgb), 0.3);
   }
 
   .dark {
@@ -167,6 +196,35 @@ code {
     --cosmic-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     --cosmic-card-hover-shadow: 0 6px 24px rgba(79, 70, 229, 0.2);
     --cosmic-blur: 12px;
+
+    /* Cyberpunk visual system - Neon colors */
+    --neon-blue: hsl(210, 100%, 60%);
+    --neon-purple: hsl(280, 100%, 65%);
+    --neon-cyan: hsl(180, 100%, 60%);
+    --neon-pink: hsl(320, 100%, 65%);
+    --neon-green: hsl(140, 100%, 60%);
+
+    /* RGB values for shadows and effects */
+    --neon-blue-rgb: 51, 153, 255;
+    --neon-purple-rgb: 191, 64, 255;
+    --neon-cyan-rgb: 64, 224, 228;
+    --neon-pink-rgb: 236, 72, 153;
+    --neon-green-rgb: 16, 185, 129;
+
+    /* Glow effects */
+    --neon-blue-glow: 0 0 10px rgba(var(--neon-blue-rgb), 0.7), 0 0 20px rgba(var(--neon-blue-rgb), 0.4);
+    --neon-purple-glow: 0 0 10px rgba(var(--neon-purple-rgb), 0.7), 0 0 20px rgba(var(--neon-purple-rgb), 0.4);
+    --neon-cyan-glow: 0 0 10px rgba(var(--neon-cyan-rgb), 0.7), 0 0 20px rgba(var(--neon-cyan-rgb), 0.4);
+    --neon-pink-glow: 0 0 10px rgba(var(--neon-pink-rgb), 0.7), 0 0 20px rgba(var(--neon-pink-rgb), 0.4);
+    --neon-green-glow: 0 0 10px rgba(var(--neon-green-rgb), 0.7), 0 0 20px rgba(var(--neon-green-rgb), 0.4);
+
+    /* Grid patterns */
+    --grid-color: rgba(var(--neon-purple-rgb), 0.07);
+    --grid-accent-color: rgba(var(--neon-cyan-rgb), 0.1);
+
+    /* Text effects */
+    --text-glow-color: rgba(var(--neon-purple-rgb), 0.5);
+    --text-glow-accent: rgba(var(--neon-cyan-rgb), 0.5);
   }
 }
 
@@ -221,4 +279,87 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Professional animations and effects */
+@keyframes subtle-glow {
+  0%, 100% { box-shadow: 0 0 5px var(--glow-color); }
+  50% { box-shadow: 0 0 8px var(--glow-color); }
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes subtle-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes subtle-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* Media query for reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .cyber-animation-decorative {
+    display: none !important;
+  }
+}
+
+/* Professional utility classes */
+.cyber-text-glow {
+  text-shadow: 0 0 3px var(--text-glow-color);
+}
+
+.cyber-border-glow {
+  box-shadow: 0 0 5px var(--glow-color);
+  border-color: var(--glow-color);
+}
+
+.cyber-grid {
+  position: relative;
+}
+
+.cyber-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 60px 60px; /* Larger grid for subtlety */
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05; /* Very subtle in both modes */
+}
+
+/* Light mode adjustments for utility classes */
+:root:not(.dark) .cyber-text-glow {
+  text-shadow: 0 0 2px var(--text-glow-color);
+  font-weight: 500; /* Slightly boosted weight for readability */
+}
+
+.cyber-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-color-1),
+    var(--shimmer-color-2),
+    var(--shimmer-color-1)
+  );
+  background-size: 200% 100%;
+  animation: subtle-shimmer 4s infinite; /* Slower animation */
 }

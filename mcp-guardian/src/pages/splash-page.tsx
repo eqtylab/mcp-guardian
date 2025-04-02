@@ -1,22 +1,30 @@
 import PACKAGE_JSON from "../../package.json";
 import GuardianLogo from "../assets/guardian-logo.png";
 import { Badge } from "../components/ui/badge";
-import { Card, CardHeader, CardContent } from "../components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
 const SplashPage = () => {
   const { version } = PACKAGE_JSON;
 
   return (
-    <div className="p-0">
+    <div className="p-0 relative">
+      {/* More subtle background grid overlay */}
+      <div className="absolute inset-0 cyber-grid -z-10 opacity-15 pointer-events-none"></div>
+      
       <div className="flex justify-between items-center mb-6">
         <h1>MCP Guardian</h1>
         <Badge variant="secondary" className="text-xs">v{version}</Badge>
       </div>
 
-      <Card className="mb-6">
+      <Card 
+        variant="cyber" 
+        grid="none" 
+        glow="none" 
+        className="mb-6 border-border"
+      >
         <CardHeader>
-          <h2 className="m-0">Security Control Plane</h2>
+          <CardTitle className="text-lg">Security Control Plane</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-6">
@@ -40,6 +48,7 @@ const SplashPage = () => {
                 src={GuardianLogo}
                 alt="Guardian Logo"
                 style={{ width: "100%", height: "auto" }}
+                className="relative z-10"
               />
             </div>
           </div>
@@ -47,23 +56,31 @@ const SplashPage = () => {
       </Card>
 
       <div className="flex gap-4 mb-6">
-        <Card className="flex-1">
+        <Card 
+          variant="angular" 
+          grid="none" 
+          className="flex-1 border-[rgba(var(--neon-blue-rgb),0.2)]"
+        >
           <CardHeader>
-            <h3 className="m-0 text-sm">Getting Started</h3>
+            <CardTitle className="text-sm">Getting Started</CardTitle>
           </CardHeader>
           <CardContent>
             <ol className="m-0 pl-4 text-sm">
-              <li className="mb-2">Create <strong>MCP Server</strong> configurations</li>
-              <li className="mb-2">Define <strong>Guard Profiles</strong> for security rules</li>
-              <li className="mb-2">Combine them in <strong>Server Collections</strong></li>
-              <li>Monitor and approve requests in <strong>Pending Messages</strong></li>
+              <li className="mb-2">Create <strong className="text-primary">MCP Server</strong> configurations</li>
+              <li className="mb-2">Define <strong className="text-primary">Guard Profiles</strong> for security rules</li>
+              <li className="mb-2">Combine them in <strong className="text-primary">Server Collections</strong></li>
+              <li>Monitor and approve requests in <strong className="text-primary">Pending Messages</strong></li>
             </ol>
           </CardContent>
         </Card>
 
-        <Card className="flex-1">
+        <Card 
+          variant="angular" 
+          grid="none" 
+          className="flex-1 border-[rgba(var(--neon-blue-rgb),0.2)]"
+        >
           <CardHeader>
-            <h3 className="m-0 text-sm">Key Features</h3>
+            <CardTitle className="text-sm">Key Features</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="m-0 pl-4 text-sm">
@@ -92,6 +109,7 @@ const SplashPage = () => {
         </Button>
         <Button 
           asChild
+          variant="primary"
           size="sm"
         >
           <a 
