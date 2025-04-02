@@ -1,0 +1,90 @@
+/* Custom styling for Monaco Editor */
+
+/* Enhanced container styling */
+.monaco-editor-container {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Improve scrollbar styling */
+.monaco-editor .monaco-scrollable-element > .scrollbar > .slider {
+  border-radius: 10px !important;
+  background: rgba(var(--primary-rgb), 0.3) !important;
+}
+
+.monaco-editor .monaco-scrollable-element > .scrollbar:hover > .slider {
+  background: rgba(var(--primary-rgb), 0.5) !important;
+}
+
+/* Dark mode specific styling */
+.dark .monaco-editor .monaco-scrollable-element > .scrollbar > .slider {
+  background: rgba(var(--neon-purple-rgb), 0.3) !important;
+}
+
+.dark .monaco-editor .monaco-scrollable-element > .scrollbar:hover > .slider {
+  background: rgba(var(--neon-purple-rgb), 0.5) !important;
+}
+
+/* Property name styling in dark mode */
+.dark .monaco-editor .mtk8 {
+  text-shadow: 0 0 2px rgba(var(--neon-blue-rgb), 0.3) !important;
+}
+
+/* String value styling in dark mode */
+.dark .monaco-editor .mtk5 {
+  text-shadow: 0 0 2px rgba(var(--neon-green-rgb), 0.3) !important;
+}
+
+/* Number value styling in dark mode */
+.dark .monaco-editor .mtk6 {
+  text-shadow: 0 0 2px rgba(var(--neon-pink-rgb), 0.3) !important;
+}
+
+/* Boolean and null value styling in dark mode */
+.dark .monaco-editor .mtk9 {
+  text-shadow: 0 0 2px rgba(var(--neon-purple-rgb), 0.3) !important;
+}
+
+/* Cursor styling */
+.monaco-editor .cursor {
+  transition: opacity 0.2s ease-in-out !important;
+}
+
+/* Editor focus styling */
+.monaco-editor-container:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.15) !important;
+}
+
+/* Enhanced scrollbar in dark mode */
+.dark .monaco-editor-container:focus-within {
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2), 0 0 15px rgba(var(--neon-purple-rgb), 0.15) !important;
+}
+
+/* Format button animation */
+button:active .format-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Loading state styling */
+.monaco-editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  color: var(--colors-primary);
+}
+
+/* Line number styling */
+.monaco-editor .margin .line-numbers {
+  font-size: 11px !important;
+  opacity: 0.6;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .monaco-editor {
+    font-size: 11px !important;
+  }
+}

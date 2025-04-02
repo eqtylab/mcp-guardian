@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from "react";
 import Editor, { EditorProps, Monaco } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
-import { Check, AlertCircle } from "lucide-react";
+import { Check, AlertCircle, ZapIcon, RefreshCcw } from "lucide-react";
 import { cn } from "../../utils";
+import { defineMonacoThemes } from "./monaco-themes";
+import "./monaco-editor.css";
 
 interface MonacoJsonEditorProps {
   value: string;
@@ -28,6 +30,10 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
   const monacoRef = useRef<Monaco | null>(null);
   const [isValid, setIsValid] = React.useState(true);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [isDarkMode, setIsDarkMode] = React.useState<boolean>(
+    document.documentElement.classList.contains('dark') 
+    || window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
 
   // Function to validate JSON manually (for errors not caught by Monaco)
   const validateJson = (text: string): boolean => {
@@ -57,6 +63,33 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     }
   };
 
+  // Listen for theme changes in the document
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    };
+
+    // Check for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          handleThemeChange();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    // Also listen for system preference changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', handleThemeChange);
+
+    return () => {
+      observer.disconnect();
+      mediaQuery.removeEventListener('change', handleThemeChange);
+    };
+  }, []);
+
   // Handle editor mount
   const handleEditorDidMount = (
     editor: editor.IStandaloneCodeEditor,
@@ -64,6 +97,12 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
   ) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
+
+    // Define and register our custom themes
+    const themes = defineMonacoThemes(monaco);
+    
+    // Set the appropriate theme based on current mode
+    monaco.editor.setTheme(isDarkMode ? themes.dark : themes.light);
 
     // Set schema for validation if provided
     if (schema && monaco) {
@@ -126,6 +165,14 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     }
   }, [disabled]);
 
+  // Update theme when dark mode changes
+  useEffect(() => {
+    if (monacoRef.current && editorRef.current) {
+      const themes = defineMonacoThemes(monacoRef.current);
+      monacoRef.current.editor.setTheme(isDarkMode ? themes.dark : themes.light);
+    }
+  }, [isDarkMode]);
+
   // Custom Monaco theme options matching application style
   const themeOptions: EditorProps["options"] = {
     minimap: { enabled: false },
@@ -135,22 +182,84 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     automaticLayout: true,
     formatOnPaste: true,
     wordWrap: "on",
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: "var(--fontFamily-mono)",
     tabSize: 2,
+    renderLineHighlight: "all",
+    cursorStyle: "line-thin",
+    cursorWidth: 2,
+    cursorBlinking: "smooth",
+    roundedSelection: true,
+    smoothScrolling: true,
+    scrollbar: {
+      verticalScrollbarSize: 12,
+      horizontalScrollbarSize: 12,
+      alwaysConsumeMouseWheel: false,
+    },
+    padding: {
+      top: 12,
+      bottom: 12,
+    },
+    glyphMargin: false,
+    renderWhitespace: "none",
+    quickSuggestions: true,
+    folding: true,
+    bracketPairColorization: {
+      enabled: true,
+    },
+  };
+
+  // Format JSON
+  const formatJson = () => {
+    if (editorRef.current) {
+      try {
+        // Get current value
+        const value = editorRef.current.getValue();
+        // Parse and re-stringify for consistent formatting
+        const parsed = JSON.parse(value);
+        const formatted = JSON.stringify(parsed, null, 2);
+        
+        // Only update if it actually changed the formatting
+        if (formatted !== value) {
+          // Update the editor with well-formatted JSON
+          editorRef.current.setValue(formatted);
+          // Also update the parent component's state
+          onChange(formatted);
+        } else {
+          // Otherwise just run the built-in formatter
+          formatDocument();
+        }
+        
+        // Indicate valid JSON
+        setIsValid(true);
+        setErrorMessage("");
+      } catch (e: any) {
+        // If we can't parse it, just try the built-in formatter
+        formatDocument();
+      }
+    }
   };
 
   return (
     <div className="relative space-y-2">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
-          {label && <span className="text-sm font-medium">{label}</span>}
-          {!disabled && (
+          {label && (
+            <span className="text-sm font-medium flex items-center gap-1">
+              <span>{label}</span>
+              {isValid ? (
+                <Check size={14} className="text-colors-status-success" />
+              ) : (
+                <AlertCircle size={14} className="text-colors-status-danger" />
+              )}
+            </span>
+          )}
+          {!disabled && !label && (
             <div className="flex items-center gap-2">
               {isValid ? (
-                <Check size={16} className="text-colors-status-success" />
+                <Check size={14} className="text-colors-status-success" />
               ) : (
-                <AlertCircle size={16} className="text-colors-status-danger" />
+                <AlertCircle size={14} className="text-colors-status-danger" />
               )}
               <span
                 className={cn(
@@ -163,15 +272,31 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
             </div>
           )}
         </div>
+        <div className="flex gap-2">
+          {!disabled && (
+            <button
+              onClick={formatJson}
+              className="flex items-center gap-1 px-2 py-1 rounded text-xs bg-colors-muted hover:bg-colors-primary hover:text-white transition-colors"
+              title="Format JSON"
+            >
+              <RefreshCcw size={12} className="format-icon transition-transform duration-300" />
+              <span>Format</span>
+            </button>
+          )}
+        </div>
       </div>
 
       <div 
         className={cn(
-          "border rounded-md overflow-hidden",
-          !isValid && !disabled ? "border-colors-status-danger" : "border-colors-border-subtle"
+          "border rounded-md overflow-hidden transition-all",
+          !isValid && !disabled 
+            ? "border-colors-status-danger shadow-[0_0_0_1px_var(--color-destructive)]" 
+            : "border-colors-border-subtle hover:border-colors-primary/50",
+          isDarkMode ? "shadow-md" : "",
         )}
         style={{ 
-          height: maxHeight 
+          height: maxHeight,
+          boxShadow: isDarkMode && isValid ? "0 0 8px rgba(var(--primary-rgb), 0.15)" : undefined,
         }}
       >
         <Editor
@@ -183,13 +308,23 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
           }}
           options={themeOptions}
           onMount={handleEditorDidMount}
-          theme="vs-dark"
-          className={disabled ? "opacity-70" : ""}
+          className={cn(
+            "monaco-editor-container transition-opacity",
+            disabled ? "opacity-60" : ""
+          )}
+          loading={
+            <div className="h-full w-full flex items-center justify-center">
+              <span className="text-colors-primary">Loading editor...</span>
+            </div>
+          }
         />
       </div>
 
       {!isValid && errorMessage && (
-        <p className="text-colors-status-danger text-xs mt-1">{errorMessage}</p>
+        <p className="text-colors-status-danger text-xs mt-1 flex items-center gap-1">
+          <AlertCircle size={12} />
+          <span>{errorMessage}</span>
+        </p>
       )}
     </div>
   );
