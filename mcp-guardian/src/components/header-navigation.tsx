@@ -29,7 +29,7 @@ export default function HeaderNavigation({
   modifierKey
 }: HeaderNavProps) {
   return (
-    <header className="flex h-14 items-center justify-between bg-zinc-900 dark:bg-zinc-900 bg-zinc-200 px-6 z-0">
+    <header className="flex h-14 items-center justify-between dark:bg-zinc-900 bg-zinc-200 px-6 border-b border-border">
       {/* Left section - Logo */}
       <div className="flex items-center gap-2">
         <Shield size={20} className="text-primary" />
@@ -54,13 +54,16 @@ export default function HeaderNavigation({
                     onClick={() => setCurrentPage(item.page)}
                     className={cn(
                       // Base styles
-                      "flex flex-col items-center py-2 px-4 relative rounded-t-md",
+                      "flex flex-col items-center py-2 px-4 relative rounded-t-md h-14 box-border",
                       // Default state
                       "dark:text-gray-300 text-gray-800 hover:text-primary dark:hover:text-white hover:bg-muted transition-all duration-200",
                       // Active state - blend with content area background matching exactly
-                      isActive && "text-foreground border-t border-l border-r border-border z-10 relative pb-[2px] mb-[-2px]"
+                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
                     )}
-                    style={isActive ? { backgroundColor: 'var(--background)' } : undefined}
+                    style={isActive ? { 
+                      backgroundColor: 'var(--background)',
+                      marginBottom: '-1px' 
+                    } : undefined}
                   >
                     <div className="relative">
                       <Icon size={18} />
