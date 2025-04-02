@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$version": "1.0.0",
+  "additionalProperties": false,
   "definitions": {
     "FilterActionGuardConfig": {
       "oneOf": [
@@ -111,6 +112,7 @@
       "description": "Different types of message interceptors that can be configured",
       "oneOf": [
         {
+          "additionalProperties": false,
           "description": "Chain multiple interceptors together in sequence",
           "properties": {
             "chain": {
@@ -133,6 +135,7 @@
           "type": "object"
         },
         {
+          "additionalProperties": false,
           "description": "Filter messages based on pattern matching and conditions",
           "properties": {
             "filter_logic": {
@@ -160,6 +163,7 @@
           "type": "object"
         },
         {
+          "additionalProperties": false,
           "description": "Log messages to a file for auditing and debugging",
           "properties": {
             "log_level": {
@@ -179,6 +183,7 @@
           "type": "object"
         },
         {
+          "additionalProperties": false,
           "description": "Require manual user approval for messages before they are processed",
           "properties": {
             "type": {
@@ -210,7 +215,6 @@
   "required": [
     "primary_message_interceptor"
   ],
-  "additionalProperties": false,
   "title": "GuardProfile",
   "type": "object"
 }
