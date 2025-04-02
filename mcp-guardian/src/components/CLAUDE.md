@@ -1,12 +1,12 @@
-# Guard Profile Builder Component
+### Guard Profile Builder Component
 
-## Key Implementation Details
+#### Key Implementation Details
 
 - Uses React Flow (from @xyflow/react) to visualize and edit guard profile configurations
 - Two-way conversion between GuardProfile JSON and visual representation
 - All interceptor types supported: Filter, Chain, MessageLog, ManualApproval
 
-## Component Structure
+#### Component Structure
 
 ```
 src/components/guard-profile-builder/
@@ -20,13 +20,13 @@ src/components/guard-profile-builder/
     └── messagelog-node.tsx
 ```
 
-## Type Definitions
+#### Type Definitions
 
 - Each node type has a corresponding interface that extends Record<string, unknown>
 - The core interfaces are FilterNodeData, MessageLogNodeData, ManualApprovalNodeData, and ChainNodeData
 - GuardProfileNode is a union type of all node types
 
-## Advanced Usage
+#### Advanced Usage
 
 - convertProfileToFlow(): Converts GuardProfile JSON to ReactFlow nodes and edges
 - convertFlowToProfile(): Converts ReactFlow nodes and edges back to GuardProfile
