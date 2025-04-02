@@ -26,18 +26,71 @@ interface CreateGuardProfileDialogProps {
 const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardProfileDialogProps) => {
   const [namespace, setNamespace] = useState("");
   const [name, setName] = useState("");
+  const [isValid, setIsValid] = useState(true);
+  
+  // Default to a valid ManualApproval profile which is the simplest type
   const [config, setConfig] = useState(
     JSON.stringify(
       {
         primary_message_interceptor: {
-          type: "",
-        },
+          type: "ManualApproval"
+        }
       },
       null,
-      2,
-    ),
+      2
+    )
   );
-  const [isValid, setIsValid] = useState(true);
+  
+  // Let's add template loading buttons to help users
+  const setTemplate = (templateType: string) => {
+    let newConfig;
+    
+    switch(templateType) {
+      case "ManualApproval":
+        newConfig = {
+          primary_message_interceptor: {
+            type: "ManualApproval"
+          }
+        };
+        break;
+      case "MessageLog":
+        newConfig = {
+          primary_message_interceptor: {
+            type: "MessageLog",
+            log_level: "Info"
+          }
+        };
+        break;
+      case "Filter":
+        newConfig = {
+          primary_message_interceptor: {
+            type: "Filter",
+            filter_logic: {
+              direction: "inbound"
+            },
+            match_action: "send",
+            non_match_action: "drop"
+          }
+        };
+        break;
+      case "Chain":
+        newConfig = {
+          primary_message_interceptor: {
+            type: "Chain",
+            chain: []
+          }
+        };
+        break;
+      default:
+        newConfig = {
+          primary_message_interceptor: {
+            type: "ManualApproval"
+          }
+        };
+    }
+    
+    setConfig(JSON.stringify(newConfig, null, 2));
+  };
 
   const validateConfig = (text: string) => {
     try {
@@ -106,6 +159,51 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., my-profile"
               />
+            </FormField>
+            
+            <FormField>
+              <FormLabel htmlFor="profile-template">Choose a Template</FormLabel>
+              <div className="flex flex-wrap gap-2 mt-2 mb-3">
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => setTemplate("ManualApproval")}
+                  title="Require manual approval for all messages"
+                >
+                  Manual Approval
+                </Button>
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => setTemplate("MessageLog")}
+                  title="Log all messages for debugging"
+                >
+                  Message Log
+                </Button>
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => setTemplate("Filter")}
+                  title="Filter messages based on conditions"
+                >
+                  Filter
+                </Button>
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => setTemplate("Chain")}
+                  title="Chain multiple interceptors together"
+                >
+                  Chain
+                </Button>
+              </div>
+              <p className="text-xs text-colors-text-tertiary mb-3">
+                Click on a template to pre-fill the editor with a valid configuration
+              </p>
             </FormField>
 
             <FormField>
