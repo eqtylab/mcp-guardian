@@ -15,7 +15,8 @@ import { Button } from "./ui/button";
 import { FormField, FormLabel } from "./ui/form-field";
 import { Input } from "./ui/input";
 
-import JsonEditor from "./json-valid-editor";
+import MonacoJsonEditor from "./json-editor/monaco-json-editor";
+import serverCollectionSchema from "./json-editor/schemas/server_collection_schema.json";
 
 interface CreateServerCollectionDialogProps {
   isOpen: boolean;
@@ -111,13 +112,19 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
               />
             </FormField>
 
-            <FormField error={!isValid ? "Invalid JSON configuration" : undefined}>
+            <FormField>
               <FormLabel htmlFor="config">Configuration</FormLabel>
-              <JsonEditor
+              <MonacoJsonEditor
                 value={config}
-                onChange={setConfig}
-                placeholder="Enter server collection configuration"
+                onChange={(newValue) => {
+                  setConfig(newValue);
+                  validateConfig(newValue);
+                }}
+                schema={serverCollectionSchema}
+                schemaUri="http://mcp-guardian/schemas/server_collection_schema.json"
+                label="Server Collection Configuration"
                 maxHeight="300px"
+                placeholder="Enter server collection configuration"
               />
             </FormField>
           </div>

@@ -5,12 +5,13 @@ import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2, Shield, Code, Webhook } from "lucide-react";
 import ConfirmDialog from "./confirm-dialog";
-import JsonEditor from "./json-valid-editor";
+import MonacoJsonEditor from "./json-editor/monaco-json-editor";
 import GuardProfileVisualBuilder from "./guard-profile-builder";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import guardProfileSchema from "./json-editor/schemas/guard_profile_schema.json";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
@@ -110,11 +111,14 @@ const GuardProfileComponent = ({
           </TabsContent>
           
           <TabsContent value="json" className="mt-0">
-            <JsonEditor
+            <MonacoJsonEditor
               value={configText}
               onChange={handleJsonEditorChange}
               disabled={!enableEdit}
               placeholder="Enter guard profile configuration"
+              schema={guardProfileSchema}
+              schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
+              label="Guard Profile Configuration"
             />
           </TabsContent>
         </Tabs>
@@ -190,11 +194,14 @@ const GuardProfileComponent = ({
               </TabsContent>
               
               <TabsContent value="json" className="mt-0">
-                <JsonEditor
+                <MonacoJsonEditor
                   value={configText}
                   onChange={handleJsonEditorChange}
                   disabled={!enableEdit}
                   placeholder="Enter guard profile configuration"
+                  schema={guardProfileSchema}
+                  schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
+                  label="Guard Profile Configuration"
                 />
               </TabsContent>
             </Tabs>

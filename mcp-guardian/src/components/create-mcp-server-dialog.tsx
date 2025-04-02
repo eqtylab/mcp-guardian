@@ -13,8 +13,9 @@ import {
 } from "./ui/cyber-dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
 import { FormField, FormLabel } from "./ui/form-field";
+import MonacoJsonEditor from "./json-editor/monaco-json-editor";
+import mcpServerSchema from "./json-editor/schemas/mcp_server_schema.json";
 
 interface CreateMcpServerDialogProps {
   isOpen: boolean;
@@ -106,21 +107,19 @@ const CreateMcpServerDialog = ({ isOpen, onClose, onSuccess }: CreateMcpServerDi
               />
             </FormField>
 
-            <FormField error={!isValid ? "Invalid JSON configuration" : undefined}>
+            <FormField>
               <FormLabel htmlFor="config">Configuration</FormLabel>
-              <Textarea
-                id="config"
-                variant="cyber"
-                glow="focus"
+              <MonacoJsonEditor
                 value={config}
-                onChange={(e) => {
-                  setConfig(e.target.value);
-                  validateConfig(e.target.value);
+                onChange={(newValue) => {
+                  setConfig(newValue);
+                  validateConfig(newValue);
                 }}
-                className="font-mono text-sm"
-                rows={10}
+                schema={mcpServerSchema}
+                schemaUri="http://mcp-guardian/schemas/mcp_server_schema.json"
+                label="MCP Server Configuration"
+                maxHeight="300px"
                 placeholder="Enter server configuration in JSON format"
-                error={!isValid}
               />
             </FormField>
           </div>

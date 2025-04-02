@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Editor, { EditorProps, Monaco } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
-import { Check, AlertCircle, ZapIcon, RefreshCcw } from "lucide-react";
+import { Check, AlertCircle, RefreshCcw } from "lucide-react";
 import { cn } from "../../utils";
 import { defineMonacoThemes } from "./monaco-themes";
 import { detectThemeMode, watchThemeChanges } from "./theme-utils";
@@ -116,7 +116,6 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
       });
       
       // Configure hover settings to make documentation more visible
-      const jsonEditorOptions = editor.getOptions();
       editor.updateOptions({
         hover: {
           enabled: true,
@@ -126,9 +125,6 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
         // Enhance tooltips/documentation experience
         inlayHints: {
           enabled: "on",
-        },
-        lightbulb: {
-          enabled: true,
         },
       });
     }

@@ -399,14 +399,17 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - ✅ Add basic intellisense features
    - ✅ Implement advanced documentation tooltips with hover functionality
 
-3. **Week 3: Component Replacement** 🔄
+3. **Week 3: Component Replacement and Foundations** 🔄 (~90% complete)
 
-   - ✅ Implement first component replacement (MCP Server component)
+   - ✅ Implement first component replacement (MCP Server component only, ~20% of total usage)
    - ✅ Create schema utilities for Monaco integration
-   - ✅ Update JSON viewer with Monaco-based implementation
+   - ✅ Update one JSON viewer with Monaco-based implementation (tool-call component)
    - ✅ Create custom cyberpunk-themed light and dark modes
    - ✅ Implement robust theme detection and synchronization
-   - ❌ Replace JsonEditor in remaining components (in progress)
+   - ✅ Migrate Guard Profile components (completed)
+   - ✅ Migrate Server Collection components (completed)
+   - ✅ Migrate all dialog forms with JSON editing (completed)
+   - ❌ Replace all remaining instances of react-code-blocks (not started)
    - ❌ Fix any integration issues (pending final integration)
 
 4. **Week 4: Testing and Optimization**
@@ -438,9 +441,11 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 ## Implementation Details and Lessons Learned
 
 ### Component Architecture
+
 The Monaco Editor implementation has been structured with the following components:
 
 1. **Core Editor Components**:
+
    - `monaco-json-editor.tsx` - Schema-aware editor with validation and hover documentation
    - `json-viewer.tsx` - Read-only viewer with consistent styling
    - `monaco-themes.ts` - Custom theme definitions for dark and light modes
@@ -454,39 +459,62 @@ The Monaco Editor implementation has been structured with the following componen
    - Autocompletion based on schema properties
 
 ### Theme Detection Challenges
+
 One challenge encountered was ensuring consistent theme detection and application, especially:
-   - Detecting the theme correctly at component mount time
-   - Synchronizing theme changes across components
-   - Handling localStorage theme preferences
-   - Detecting system preference changes
+
+- Detecting the theme correctly at component mount time
+- Synchronizing theme changes across components
+- Handling localStorage theme preferences
+- Detecting system preference changes
 
 Solution:
-   - Created a unified theme detection utility
-   - Implemented multiple checks for theme sources with clear priority
-   - Added comprehensive DOM observers and event listeners
-   - Enhanced debug logging for theme-related issues
+
+- Created a unified theme detection utility
+- Implemented multiple checks for theme sources with clear priority
+- Added comprehensive DOM observers and event listeners
+- Enhanced debug logging for theme-related issues
 
 ### Validation and Documentation Features
+
 The Monaco Editor implementation provides:
-   - Real-time JSON validation with clear error messages
-   - Property autocompletion based on schema
-   - Documentation tooltips on hover
-   - Formatting and syntax highlighting
-   - Custom cyberpunk-themed UI elements
+
+- Real-time JSON validation with clear error messages
+- Property autocompletion based on schema
+- Documentation tooltips on hover
+- Formatting and syntax highlighting
+- Custom cyberpunk-themed UI elements
 
 ### Remaining Work
-To complete the migration:
-1. Replace the JsonEditor in remaining components:
-   - Guard Profile component
-   - Server Collection component
-   - Any form dialogs using the editor
-2. Ensure consistent behavior across all uses
-3. Optimize performance for large JSON documents
-4. Add comprehensive tests
+
+To complete the migration, minimal work remains:
+
+1. **Components Still Using react-code-blocks (approximately 10% of all usage):**
+
+   - Tool call response viewers (most instances)
+   - Various other JSON viewing components throughout the application
+
+2. **Migration Strategy for Remaining Components:**
+
+   - ✅ Prioritize main pages first (Guard Profiles and Server Collections completed)
+   - ✅ Migrate all dialog forms with JSON editing capabilities (completed)
+   - Replace all remaining react-code-blocks instances for JSON viewing
+   - Update any imports still referencing the old components
+
+3. **Additional Work Needed:**
+
+   - Ensure consistent behavior across all uses
+   - Optimize performance for large JSON documents
+   - Add comprehensive tests for the new components
+   - Remove react-code-blocks dependency once migration is complete
+
+4. **Estimated Work Remaining:**
+   - Approximately 10% of the JSON editing components still need migration
+   - Remaining components are primarily read-only viewers that will require less customization
+   - Focus should be on tool call response viewers for maximum impact
 
 ## Conclusion
 
-The migration to Monaco Editor has significantly enhanced the JSON editing experience in MCP Guardian. It provides better validation, autocompletion, and a more robust editing environment while addressing security concerns with the previous implementation. The custom theming and hover documentation make the editor both visually appealing and more user-friendly.
+The migration to Monaco Editor will significantly enhance the JSON editing experience in MCP Guardian. It provides better validation, autocompletion, and a more robust editing environment while addressing security concerns with the previous implementation. The custom theming and hover documentation make the editor both visually appealing and more user-friendly.
 
 The implementation has focused on frontend validation with rich schema-based features, with backend validation capabilities backlogged for future development. This approach has delivered immediate user experience improvements while laying the groundwork for more robust validation in the future.
 

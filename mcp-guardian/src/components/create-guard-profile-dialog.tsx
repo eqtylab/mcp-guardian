@@ -14,7 +14,8 @@ import {
 import { Button } from "./ui/button";
 import { FormField, FormLabel } from "./ui/form-field";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import MonacoJsonEditor from "./json-editor/monaco-json-editor";
+import guardProfileSchema from "./json-editor/schemas/guard_profile_schema.json";
 
 interface CreateGuardProfileDialogProps {
   isOpen: boolean;
@@ -107,21 +108,19 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
               />
             </FormField>
 
-            <FormField error={!isValid ? "Invalid JSON configuration" : undefined}>
+            <FormField>
               <FormLabel htmlFor="config">Configuration</FormLabel>
-              <Textarea
-                id="config"
-                variant="cyber"
-                glow="focus"
+              <MonacoJsonEditor
                 value={config}
-                onChange={(e) => {
-                  setConfig(e.target.value);
-                  validateConfig(e.target.value);
+                onChange={(newValue) => {
+                  setConfig(newValue);
+                  validateConfig(newValue);
                 }}
-                className="font-mono"
-                rows={10}
+                schema={guardProfileSchema}
+                schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
+                label="Guard Profile Configuration"
+                maxHeight="300px"
                 placeholder="Enter guard profile configuration in JSON format"
-                error={!isValid}
               />
             </FormField>
           </div>

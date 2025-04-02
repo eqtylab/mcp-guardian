@@ -7,7 +7,8 @@ import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2, ExternalLink } from "lucide-react";
 import ClaudeExportModal from "./claude-export-modal";
 import ConfirmDialog from "./confirm-dialog";
-import JsonEditor from "./json-valid-editor";
+import MonacoJsonEditor from "./json-editor/monaco-json-editor";
+import serverCollectionSchema from "./json-editor/schemas/server_collection_schema.json";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
@@ -70,11 +71,14 @@ const ServerCollectionComponent = ({
     return (
       <>
         <div className="space-y-4">
-          <JsonEditor
+          <MonacoJsonEditor
             value={configText}
             onChange={setConfigText}
             disabled={!enableEdit}
             placeholder="Enter server collection configuration in JSON format"
+            schema={serverCollectionSchema}
+            schemaUri="http://mcp-guardian/schemas/server_collection_schema.json"
+            label="Server Collection Configuration"
           />
 
           {enableEdit && (
@@ -143,11 +147,14 @@ const ServerCollectionComponent = ({
 
         <CollapsibleContent>
           <CardContent className="p-4 space-y-4">
-            <JsonEditor
+            <MonacoJsonEditor
               value={configText}
               onChange={setConfigText}
               disabled={!enableEdit}
               placeholder="Enter server collection configuration in JSON format"
+              schema={serverCollectionSchema}
+              schemaUri="http://mcp-guardian/schemas/server_collection_schema.json"
+              label="Server Collection Configuration"
             />
 
             {enableEdit && (

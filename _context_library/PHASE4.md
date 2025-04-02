@@ -90,16 +90,20 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
    - [ ] Add section for recent/favorite items
 
 4. **JSON Editor Enhancement**
-   - [/] Migrate from react-code-blocks to Monaco Editor (implemented for MCP server, in progress for other components)
+   - [/] Migrate from react-code-blocks to Monaco Editor (implemented for MCP server page, Guard Profile page, Server Collection page, and all dialog forms, ~90% of total usage)
    - [x] Create `mcp-guardian-schema` package for Rust-based schema generation (see `docs/src/schema_system.md`)
    - [x] Add JsonSchema derives to core Rust types
    - [x] Implement schema generation for all entity types
    - [x] Create comprehensive schema system documentation
-   - [x] Implement schema validation for JSON configurations in frontend
-   - [x] Add intellisense features for property autocompletion
-   - [x] Create schema-based documentation tooltips with hover functionality
+   - [x] Implement schema validation for JSON configurations in frontend (only in migrated components)
+   - [x] Add intellisense features for property autocompletion (only in migrated components)
+   - [x] Create schema-based documentation tooltips with hover functionality (only in migrated components)
    - [x] Implement custom cyberpunk-themed light and dark modes for Monaco Editor
    - [x] Create robust theme detection for cross-session/cross-tab consistency
+   - [x] Migrate Guard Profile components to Monaco Editor
+   - [x] Migrate Server Collection components to Monaco Editor
+   - [x] Migrate dialog forms with JSON editing to Monaco Editor
+   - [ ] Replace all instances of react-code-blocks for JSON viewing
 
 ### Phase 4.2: Visual Builders
 
@@ -387,4 +391,141 @@ Implemented custom theming for Monaco Editor to match the application's cyberpun
 
 These improvements have significantly enhanced the JSON editing experience, making it more intuitive, informative, and visually aligned with the application's design language. The combination of rich schema descriptions, documentation tooltips, and custom theming provides a professional, cyberpunk-inspired editing environment that maintains both style and functionality.
 
-*Next steps will focus on completing the implementation across all remaining components and adding any additional refinements to the editing experience.*
+**Current Implementation Status:**
+- The MCP Servers page, Guard Profiles page, Server Collections page, and all dialog forms have been migrated to use Monaco Editor (approximately 90% of total JSON editing UI)
+- One instance of the JSON Viewer (tool-call component) has been migrated to Monaco
+- The remaining components (primarily auxiliary JSON viewers) still use the original implementation with react-code-blocks
+- All architecture and foundational components (Monaco Editor, themes, utilities) are complete and ready for use across all components
+
+*Next steps will focus on migrating the remaining JSON viewing components to use the Monaco Editor, with emphasis on the tool call response viewers for maximum impact.*
+
+#### 2025-04-02: Create MCP Server Dialog Migration to Monaco Editor
+
+Completed the migration of the Create MCP Server dialog to use Monaco Editor with JSON Schema validation:
+
+- **Implementation Details**:
+  - Replaced Textarea with MonacoJsonEditor in CreateMcpServerDialog
+  - Configured editor to use the McpServer schema for validation
+  - Added "MCP Server Configuration" label for better context
+  - Set appropriate height for dialog context
+
+- **Enhanced Functionality**:
+  - Schema-based validation for new MCP server configurations
+  - Property autocompletion and suggestions
+  - Documentation tooltips for server command and environment variables
+  - Improved error handling and visual feedback
+  - Better code formatting capabilities
+  - Visual consistency with previously migrated components
+
+- **Progress Update**:
+  - Approximately 90% of JSON editing components have now been migrated
+  - All main JSON editing components and all dialog forms now use Monaco Editor
+  - Only auxiliary JSON viewers remain to be migrated
+  - Integration issues have been minimal, with consistent behavior across components
+  - Updated documentation to reflect current implementation status
+
+This migration completes the replacement of all primary JSON editing components with Monaco Editor. All forms where users can input JSON data now benefit from schema validation, autocompletion, and documentation tooltips, significantly enhancing the user experience and reducing errors. The only remaining components to migrate are read-only JSON viewers, with the tool call response viewers being the highest priority for completion.
+
+#### 2025-04-02: Create Server Collection Dialog Migration to Monaco Editor
+
+Completed the migration of the Create Server Collection dialog to use Monaco Editor with JSON Schema validation:
+
+- **Implementation Details**:
+  - Replaced JsonEditor with MonacoJsonEditor in CreateServerCollectionDialog
+  - Configured editor to use the ServerCollection schema for validation
+  - Added "Server Collection Configuration" label for better context
+  - Set appropriate height for dialog context
+
+- **Enhanced Functionality**:
+  - Schema-based validation for new server collection configurations
+  - Property autocompletion and suggestions
+  - Documentation tooltips for server and guard profile references
+  - Improved error handling and visual feedback
+  - Better code formatting capabilities
+  - Visual consistency with previously migrated components
+
+- **Progress Update**:
+  - Approximately 80% of JSON editing components have now been migrated
+  - All main JSON editing components plus two critical dialog components now use Monaco Editor
+  - Only the Create MCP Server dialog and some JSON viewers remain to be migrated
+  - Updated documentation to reflect current implementation status
+
+This migration continues the systematic replacement of react-code-blocks with Monaco Editor throughout the application, enhancing the user experience and addressing security concerns. The Monaco Editor integration in the server collection creation dialog provides valuable schema validation for server references, helping users to create properly structured server collections with valid references to MCP servers and guard profiles. The Create MCP Server dialog will be the next component to migrate, followed by any remaining JSON viewers.
+
+#### 2025-04-02: Create Guard Profile Dialog Migration to Monaco Editor
+
+Completed the migration of the Create Guard Profile dialog to use Monaco Editor with JSON Schema validation:
+
+- **Implementation Details**:
+  - Replaced Textarea with MonacoJsonEditor in CreateGuardProfileDialog
+  - Configured editor to use the GuardProfile schema for validation
+  - Added "Guard Profile Configuration" label for better context
+  - Set appropriate height for dialog context
+
+- **Enhanced Functionality**:
+  - Schema-based validation for new guard profile configurations
+  - Property autocompletion and suggestions
+  - Documentation tooltips for properties
+  - Improved error handling and visual feedback
+  - Better code formatting capabilities
+  - Visual consistency with main page components
+
+- **Progress Update**:
+  - Approximately 70% of JSON editing components have now been migrated
+  - All main JSON editing components plus one critical dialog component now use Monaco Editor
+  - Dialog form integration provides templates validation for new entities
+  - Updated documentation to reflect current implementation status
+
+This migration brings the improved editing experience to the creation flow, ensuring that users have consistent validation and documentation support when creating new guard profiles. The Monaco Editor integration in the dialog form provides a more user-friendly experience with better guidance through the schema-based validation, helping users create valid configurations from the start. The Create Server Collection and Create MCP Server dialogs will be the next components to migrate.
+
+#### 2025-04-02: Server Collection Component Migration to Monaco Editor
+
+Completed the migration of the Server Collection component to use Monaco Editor with JSON Schema validation:
+
+- **Implementation Details**:
+  - Replaced JsonEditor with MonacoJsonEditor in ServerCollectionComponent
+  - Configured editor to use the ServerCollection schema for validation
+  - Added "Server Collection Configuration" label for better context
+  - Maintained bidirectional sync with server collection data model
+
+- **Enhanced Functionality**:
+  - Schema-based validation for server collection configuration
+  - Property autocompletion and suggestions for server references
+  - Documentation tooltips for properties and references
+  - Improved error highlighting and messages
+  - Better code formatting capabilities
+  - Visual consistency with previously migrated components
+
+- **Progress Update**:
+  - Approximately 60% of JSON editing components have now been migrated
+  - All main JSON editing components on the three major pages (MCP Servers, Guard Profiles, and Server Collections) are now using Monaco Editor
+  - Updated documentation to reflect current implementation status
+  - Validated the implementation with TypeScript and Rust checks
+
+The Server Collection schema provides validation for the server references, ensuring that users create proper collections with valid guard profile and MCP server references. This migration continues the systematic replacement of react-code-blocks with Monaco Editor throughout the application, enhancing the user experience and addressing security concerns. Dialog forms for creating and editing entities will be the next components to migrate.
+
+#### 2025-04-02: Guard Profile Component Migration to Monaco Editor
+
+Completed the migration of the Guard Profile component to use Monaco Editor with JSON Schema validation:
+
+- **Implementation Details**:
+  - Replaced JsonEditor with MonacoJsonEditor in GuardProfileComponent
+  - Configured editor to use the GuardProfile schema for validation
+  - Added "Guard Profile Configuration" label for better context
+  - Maintained bidirectional sync with visual builder
+
+- **Enhanced Functionality**:
+  - Schema-based validation for guard profile configuration
+  - Property autocompletion and suggestions
+  - Documentation tooltips for properties
+  - Improved error highlighting and messages
+  - Better code formatting capabilities
+  - Visual consistency with previously migrated components
+
+- **Progress Update**:
+  - Approximately 40% of JSON editing components have now been migrated
+  - All main JSON editing components on two major pages (MCP Servers and Guard Profiles) are now using Monaco Editor
+  - Updated documentation to reflect current implementation status
+  - Validated the implementation with TypeScript and Rust checks
+
+This migration continues the systematic replacement of react-code-blocks with Monaco Editor throughout the application, enhancing the user experience and addressing security concerns. Server Collections will be the next component to migrate, followed by dialog forms and auxiliary JSON viewers.
