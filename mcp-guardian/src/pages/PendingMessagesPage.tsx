@@ -22,86 +22,79 @@ const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: Pending
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Pending Messages</h1>
+    <div className="p-0">
+      <div className="flex-row space-between mb-md">
+        <h1>Pending Messages</h1>
 
         {Object.entries(pendingMessages).length > 0 && (
-          <div className="flex items-center gap-2">
-            <AlertCircle size={18} className="text-shield-300" />
-            <span className="text-sm font-medium">{Object.entries(pendingMessages).length} pending message(s)</span>
+          <div className="tag tag-warning">
+            {Object.entries(pendingMessages).length} pending
           </div>
         )}
       </div>
 
       {Object.entries(pendingMessages).length === 0 ? (
-        <div className="component-container text-center py-12">
-          <h2 className="text-xl font-medium text-primary-700 dark:text-cream-200">No pending messages to review</h2>
-          <p className="mt-2 text-primary-600 dark:text-cream-300">New messages requiring approval will appear here</p>
+        <div className="card">
+          <div className="card-content text-center">
+            <p className="text-sm mb-0">
+              No pending messages to review. Messages requiring approval will appear here.
+            </p>
+          </div>
         </div>
       ) : (
-        <div className="space-y-4">
-          {Object.entries(pendingMessages).map(([id, value]: [string, any], i) => {
-            const direction = id.split("_")[0] === "inbound" ? "Inbound" : "Outbound";
-            const messageComponent = (() => {
-              if (direction === "Outbound") {
-                if (value.method === "tools/call") {
-                  return () => <ToolCall name={value.params.name} args={value.params.arguments} />;
-                } else {
-                  return () => <div className="font-mono text-sm">{JSON.stringify(value, null, 2)}</div>;
-                }
+        Object.entries(pendingMessages).map(([id, value]: [string, any], i) => {
+          const direction = id.split("_")[0] === "inbound" ? "Inbound" : "Outbound";
+          const messageComponent = (() => {
+            if (direction === "Outbound") {
+              if (value.method === "tools/call") {
+                return () => <ToolCall name={value.params.name} args={value.params.arguments} />;
               } else {
-                if (value.result?.content) {
-                  return () => <ToolCallResponse content={value.result.content} />;
-                }
-                return () => <div className="font-mono text-sm">{JSON.stringify(value, null, 2)}</div>;
+                return () => <div className="json-editor">{JSON.stringify(value, null, 2)}</div>;
               }
-            })() as any;
+            } else {
+              if (value.result?.content) {
+                return () => <ToolCallResponse content={value.result.content} />;
+              }
+              return () => <div className="json-editor">{JSON.stringify(value, null, 2)}</div>;
+            }
+          })() as any;
 
-            return (
-              <div key={`message-${i}`} className="component-container space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full
-                      ${
-                        direction === "Inbound"
-                          ? "bg-cream-100 text-primary-900 dark:bg-primary-700 dark:text-cream-50"
-                          : "bg-shield-100 text-primary-900 dark:bg-shield-300 dark:text-primary-900"
-                      }`}
-                    >
-                      {direction}
-                    </span>
-                    <span className="text-sm font-mono text-primary-700 dark:text-cream-200">ID: {id}</span>
+          return (
+            <div key={`message-${i}`} className="card mb-md">
+              <div className="card-header">
+                <div className="flex-row gap-sm">
+                  <div className={`tag ${direction === "Inbound" ? "" : "tag-primary"}`}>
+                    {direction}
                   </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleApprove(id)}
-                      className="flex items-center gap-2 px-3 py-1.5 text-sm btn-success"
-                      title="Approve this message"
-                    >
-                      <CheckCircle size={16} />
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleDeny(id)}
-                      className="flex items-center gap-2 px-3 py-1.5 text-sm btn-danger"
-                      title="Deny this message"
-                    >
-                      <XCircle size={16} />
-                      Deny
-                    </button>
-                  </div>
+                  <div className="text-xs text-text-tertiary">ID: {id}</div>
                 </div>
 
-                <div className="p-4 bg-cream-100 dark:bg-primary-700 rounded-[var(--radius-brand)]">
-                  {React.createElement(messageComponent)}
+                <div className="btn-group">
+                  <button
+                    onClick={() => handleApprove(id)}
+                    className="btn-success btn-sm"
+                    title="Approve this message"
+                  >
+                    <CheckCircle size={14} strokeWidth={2.5} />
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => handleDeny(id)}
+                    className="btn-danger btn-sm"
+                    title="Deny this message"
+                  >
+                    <XCircle size={14} strokeWidth={2.5} />
+                    Deny
+                  </button>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              <div className="card-content">
+                {React.createElement(messageComponent)}
+              </div>
+            </div>
+          );
+        })
       )}
     </div>
   );

@@ -71,34 +71,36 @@ const ClaudeExportModal = ({
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
                    w-full max-w-2xl max-h-[85vh] overflow-y-auto z-50 
-                   bg-cream-50 dark:bg-primary-800 
-                   rounded-lg shadow-xl"
+                   bg-bg-surface
+                   border border-border-subtle
+                   rounded-md shadow-lg
+                   card"
         role="dialog"
       >
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold">Export Server Collection</h2>
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-cream-100 dark:hover:bg-primary-700 rounded"
-              aria-label="Close dialog"
-            >
-              <X size={18} />
-            </button>
-          </div>
+        <div className="card-header">
+          <h2 className="text-sm m-0">Export Server Collection</h2>
+          <button
+            onClick={onClose}
+            className="p-1 bg-transparent border-0"
+            aria-label="Close dialog"
+          >
+            <X size={14} strokeWidth={2.5} />
+          </button>
+        </div>
 
-          <div className="space-y-4">
+        <div className="card-content">
+          <div className="flex-col gap-md">
             <div>
-              <label className="block font-medium mb-2">Claude Desktop Config:</label>
+              <label className="block mb-sm">Claude Desktop Config:</label>
               <textarea
                 value={claudeConfig}
-                className="w-full h-96 font-mono text-sm p-3 bg-cream-100 dark:bg-primary-700 rounded-md"
+                className="json-editor w-full h-80"
                 readOnly
               />
             </div>
 
             <div>
-              <label className="block font-medium mb-2">Proxy Path:</label>
+              <label className="block mb-sm">Proxy Path:</label>
               <input
                 type="text"
                 className="w-full"
@@ -108,11 +110,11 @@ const ClaudeExportModal = ({
               />
             </div>
 
-            <div className="flex justify-end gap-4 mt-6">
-              <button onClick={onClose} className="bg-cream-100 dark:bg-primary-700">
+            <div className="btn-group justify-end mt-md">
+              <button onClick={onClose} className="btn-sm">
                 Cancel
               </button>
-              <button onClick={applyClaudeConfig} className="btn-success">
+              <button onClick={applyClaudeConfig} className="btn-success btn-sm">
                 Apply to Claude Desktop
               </button>
             </div>

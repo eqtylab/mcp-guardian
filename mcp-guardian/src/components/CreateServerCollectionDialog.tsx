@@ -61,29 +61,31 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
                    w-full max-w-2xl max-h-[85vh] overflow-y-auto z-50 
-                   bg-cream-50 dark:bg-primary-800 
-                   rounded-lg shadow-xl"
+                   bg-bg-surface
+                   border border-border-subtle
+                   rounded-md shadow-lg
+                   card"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
       >
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 id="dialog-title" className="text-lg font-bold">
-              Create New Server Collection
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-cream-100 dark:hover:bg-primary-700 rounded"
-              aria-label="Close dialog"
-            >
-              <X size={18} />
+        <div className="card-header">
+          <h2 id="dialog-title" className="text-sm m-0">
+            Create New Server Collection
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-1 bg-transparent border-0"
+            aria-label="Close dialog"
+          >
+              <X size={14} strokeWidth={2.5} />
             </button>
-          </div>
+        </div>
 
-          <div className="space-y-4">
+        <div className="card-content">
+          <div className="flex-col gap-md">
             <div>
-              <label htmlFor="namespace" className="block mb-2 font-medium">
+              <label htmlFor="namespace" className="block mb-sm">
                 Namespace
               </label>
               <input
@@ -97,7 +99,7 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
             </div>
 
             <div>
-              <label htmlFor="name" className="block mb-2 font-medium">
+              <label htmlFor="name" className="block mb-sm">
                 Name
               </label>
               <input
@@ -111,7 +113,7 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
             </div>
 
             <div>
-              <label htmlFor="config" className="block mb-2 font-medium">
+              <label htmlFor="config" className="block mb-sm">
                 Configuration
               </label>
               <JsonEditor
@@ -122,8 +124,8 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
               />
             </div>
 
-            <div className="flex justify-end gap-4 mt-6">
-              <button onClick={onClose} className="bg-cream-100 dark:bg-primary-700">
+            <div className="btn-group justify-end mt-md">
+              <button onClick={onClose} className="btn-sm">
                 Cancel
               </button>
               <button
@@ -151,7 +153,7 @@ const CreateServerCollectionDialog = ({ isOpen, onClose, onSuccess }: CreateServ
                     notifyError(e);
                   }
                 }}
-                className="btn-success"
+                className="btn-success btn-sm"
                 disabled={!isValid || !namespace || !name}
               >
                 Create Collection

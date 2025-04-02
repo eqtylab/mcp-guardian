@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
-import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Save, Trash2, Shield } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
 import JsonEditor from "./JsonValidEditor";
 
@@ -43,27 +43,32 @@ const GuardProfileComponent = ({
   };
 
   return (
-    <div className="component-container">
-      <button
+    <div className="card mb-sm">
+      <div 
+        className="card-header cursor-pointer"
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 hover:bg-cream-100 dark:hover:bg-primary-700 rounded-t-lg"
         title={`${namespace}.${profile_name} guard profile configuration`}
       >
-        <span className="font-medium">{`${namespace}.${profile_name}`}</span>
-        {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
-      </button>
+        <div className="flex-row gap-sm">
+          <Shield size={14} strokeWidth={2.5} className="text-accent-primary" />
+          <span>{`${namespace}.${profile_name}`}</span>
+        </div>
+        {isExpanded ? <ChevronDown size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
+      </div>
 
       {isExpanded && (
-        <div className="p-4 space-y-4">
-          <JsonEditor
-            value={configText}
-            onChange={setConfigText}
-            disabled={!enableEdit}
-            placeholder="Enter guard profile configuration"
-          />
+        <div className="card-content">
+          <div className="json-editor mb-md">
+            <JsonEditor
+              value={configText}
+              onChange={setConfigText}
+              disabled={!enableEdit}
+              placeholder="Enter guard profile configuration"
+            />
+          </div>
 
           {enableEdit && (
-            <div className="flex justify-end space-x-4">
+            <div className="btn-group justify-end">
               <button
                 onClick={async () => {
                   try {
@@ -79,20 +84,20 @@ const GuardProfileComponent = ({
                     notifyError(e);
                   }
                 }}
-                className="btn-success flex items-center gap-2"
+                className="btn-success btn-sm"
                 title="Save profile changes"
               >
-                <Save size={16} />
-                Save Changes
+                <Save size={14} strokeWidth={2.5} />
+                Save
               </button>
 
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="btn-danger flex items-center gap-2"
+                className="btn-danger btn-sm"
                 title="Delete this profile"
               >
-                <Trash2 size={16} />
-                Delete Profile
+                <Trash2 size={14} strokeWidth={2.5} />
+                Delete
               </button>
             </div>
           )}

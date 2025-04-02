@@ -5,33 +5,91 @@ const SplashPage = () => {
   const { version } = PACKAGE_JSON;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-cream-50 dark:bg-primary-800 p-3">
-      <div className="space-y-3 text-center">
-        <h1 className="text-2xl font-bold text-primary-900 dark:text-cream-50">MCP Guardian</h1>
+    <div className="p-0">
+      <div className="flex-row space-between mb-lg">
+        <h1>MCP Guardian</h1>
+        <div className="tag text-xs">v{version}</div>
+      </div>
 
-        <img
-          className="w-[300px] h-auto transition-transform duration-300 hover:scale-105"
-          src={GuardianLogo}
-          alt="Guardian Logo"
-        />
-
-        <div className="space-y-0.5 text-primary-700 dark:text-cream-200">
-          <p className="hover:text-shield-300 transition-colors">
-            <a href="https://mcp-guardian.org" target="_blank" rel="noopener noreferrer">
-              mcp-guardian.org
-            </a>
-          </p>
-
-          <p className="hover:text-shield-300 transition-colors">
-            <a href="https://github.com/eqtylab/mcp-guardian" target="_blank" rel="noopener noreferrer">
-              github.com/eqtylab/mcp-guardian
-            </a>
-          </p>
-
-          <p className="mt-1.5 text-sm font-mono bg-cream-100 dark:bg-primary-700 px-2 py-0.5 rounded-md inline-block">
-            v{version}
-          </p>
+      <div className="card mb-lg">
+        <div className="card-header">
+          <h2 className="m-0">Security Control Plane</h2>
         </div>
+        <div className="card-content">
+          <div className="flex-row gap-lg">
+            <div className="flex-col gap-md flex-1">
+              <p>
+                MCP Guardian provides a technical security layer between AI assistants and external 
+                resources, enabling real-time monitoring and control over tool access.
+              </p>
+              
+              <div className="flex-col gap-sm">
+                <div className="flex-row gap-sm">
+                  <div className="tag tag-primary">Tooling Security</div>
+                  <div className="tag tag-primary">AI Governance</div>
+                  <div className="tag tag-primary">Access Control</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{ width: "180px" }}>
+              <img
+                src={GuardianLogo}
+                alt="Guardian Logo"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-row gap-md mb-lg">
+        <div className="card flex-1">
+          <div className="card-header">
+            <h3 className="m-0 text-sm">Getting Started</h3>
+          </div>
+          <div className="card-content">
+            <ol className="m-0 pl-4 text-sm">
+              <li className="mb-sm">Create <strong>MCP Server</strong> configurations</li>
+              <li className="mb-sm">Define <strong>Guard Profiles</strong> for security rules</li>
+              <li className="mb-sm">Combine them in <strong>Server Collections</strong></li>
+              <li>Monitor and approve requests in <strong>Pending Messages</strong></li>
+            </ol>
+          </div>
+        </div>
+
+        <div className="card flex-1">
+          <div className="card-header">
+            <h3 className="m-0 text-sm">Key Features</h3>
+          </div>
+          <div className="card-content">
+            <ul className="m-0 pl-4 text-sm">
+              <li className="mb-sm">Full visibility into AI tool interactions</li>
+              <li className="mb-sm">Fine-grained approval workflows</li>
+              <li className="mb-sm">Structured logging of all activities</li>
+              <li>Centralized security policy management</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-row gap-sm">
+        <a 
+          href="https://mcp-guardian.org" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="btn-secondary btn-sm"
+        >
+          Documentation
+        </a>
+        <a 
+          href="https://github.com/eqtylab/mcp-guardian" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="btn-sm"
+        >
+          GitHub Repository
+        </a>
       </div>
     </div>
   );

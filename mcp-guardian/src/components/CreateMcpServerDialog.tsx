@@ -59,31 +59,28 @@ const CreateMcpServerDialog = ({ isOpen, onClose, onSuccess }: CreateMcpServerDi
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
              w-full max-w-2xl max-h-[85vh] overflow-y-auto z-50 
-             bg-cream-50 dark:bg-primary-800 
-             rounded-lg shadow-xl"
+             bg-bg-surface
+             border border-border-subtle
+             rounded-md shadow-lg
+             card"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
-        <div className="p-4">
-          {" "}
-          {/* Reduced padding */}
-          <div className="flex justify-between items-center mb-4">
-            {" "}
-            {/* Reduced margin */}
-            <h2 id="modal-title" className="text-lg font-bold">
-              Create New MCP Server
-            </h2>{" "}
-            {/* Smaller text */}
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-cream-100 dark:hover:bg-primary-700 rounded"
-              aria-label="Close dialog"
-            >
-              <X size={18} /> {/* Smaller icon */}
-            </button>
-          </div>
-          <div className="space-y-4">
+        <div className="card-header">
+          <h2 id="modal-title" className="text-sm m-0">
+            Create New MCP Server
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-1 bg-transparent border-0"
+            aria-label="Close dialog"
+          >
+            <X size={14} strokeWidth={2.5} />
+          </button>
+        </div>
+        <div className="card-content">
+          <div className="flex-col gap-md">
             <div>
               <label htmlFor="namespace" className="block mb-2 font-medium">
                 Namespace

@@ -67,26 +67,15 @@ interface NavItemProps {
 const NavItem = ({ icon: Icon, label, isActive, description, onClick, badge }: NavItemProps) => (
   <button
     onClick={onClick}
-    className={`
-      w-full px-3 py-2.5
-      flex items-center gap-2.5
-      text-left transition-colors duration-200
-      hover:bg-cream-100 dark:hover:bg-primary-700
-      ${isActive ? "bg-cream-100 dark:bg-primary-700" : ""}
-    `}
+    className={`nav-item ${isActive ? "active" : ""}`}
     title={description}
     role="tab"
     aria-selected={isActive}
   >
-    <Icon size={16} />
-    <span className="font-medium text-sm">{label}</span>
+    <Icon size={16} strokeWidth={2} />
+    <span>{label}</span>
     {badge !== undefined && (
-      <span
-        className={`
-        ml-auto px-2 py-0.5 text-xs font-medium rounded-full
-        ${badge > 0 ? "bg-shield-200" : "bg-cream-200 dark:bg-primary-600"}
-      `}
-      >
+      <span className={`nav-badge ${badge > 0 ? "" : "empty"}`}>
         {badge}
       </span>
     )}
@@ -141,12 +130,15 @@ const App = () => {
   const modifierKey = isMac ? "⌘" : "Alt";
 
   return (
-    <main className="flex h-screen">
-      <nav
-        className="w-48 border-r border-cream-100 dark:border-primary-700 flex flex-col"
-        role="tablist"
-        aria-label="Main Navigation"
-      >
+    <main className="main-container">
+      <nav className="sidebar" role="tablist" aria-label="Main Navigation">
+        <div className="sidebar-header">
+          <h3 className="flex-row gap-sm m-0 text-sm">
+            <Shield size={16} className="text-accent-primary" />
+            <span>MCP Guardian</span>
+          </h3>
+        </div>
+        
         <div className="flex-1">
           {NAV_ITEMS.map((item) => (
             <NavItem
@@ -161,34 +153,32 @@ const App = () => {
           ))}
         </div>
 
-        <div className="p-3 border-t border-cream-100 dark:border-primary-700">
-          <div className="text-xs text-primary-700 dark:text-cream-200">
-            <p>{modifierKey} + (1-5): Navigate pages</p>
+        <div className="sidebar-footer">
+          <div className="muted">
+            {modifierKey} + (1-5): Navigate
           </div>
         </div>
       </nav>
 
-      <div className="flex-1 overflow-auto">
-        <div className="min-h-full p-6">
-          {currentPage === Page.SPLASH ? (
-            <SplashPage />
-          ) : currentPage === Page.SERVERS ? (
-            <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
-          ) : currentPage === Page.GUARD_PROFILES ? (
-            <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
-          ) : currentPage === Page.SERVER_COLLECTIONS ? (
-            <ServerCollectionsPage
-              serverCollections={serverCollections}
-              updateServerCollections={updateServerCollections}
-            />
-          ) : currentPage === Page.PENDING_MESSAGES ? (
-            <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
-          ) : (
-            <div>Page not found</div>
-          )}
-        </div>
+      <div className="content-container">
+        {currentPage === Page.SPLASH ? (
+          <SplashPage />
+        ) : currentPage === Page.SERVERS ? (
+          <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
+        ) : currentPage === Page.GUARD_PROFILES ? (
+          <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
+        ) : currentPage === Page.SERVER_COLLECTIONS ? (
+          <ServerCollectionsPage
+            serverCollections={serverCollections}
+            updateServerCollections={updateServerCollections}
+          />
+        ) : currentPage === Page.PENDING_MESSAGES ? (
+          <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
+        ) : (
+          <div>Page not found</div>
+        )}
       </div>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" theme="dark" />
     </main>
   );
 };
