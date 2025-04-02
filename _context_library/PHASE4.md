@@ -90,14 +90,16 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
    - [ ] Add section for recent/favorite items
 
 4. **JSON Editor Enhancement**
-   - [/] Migrate from react-code-blocks to Monaco Editor (initial implementation complete, in progress for all components)
+   - [/] Migrate from react-code-blocks to Monaco Editor (implemented for MCP server, in progress for other components)
    - [x] Create `mcp-guardian-schema` package for Rust-based schema generation (see `docs/src/schema_system.md`)
    - [x] Add JsonSchema derives to core Rust types
    - [x] Implement schema generation for all entity types
    - [x] Create comprehensive schema system documentation
-   - [/] Implement schema validation for JSON configurations in frontend (implemented in new components)
-   - [/] Add intellisense features for property autocompletion (basic implementation complete)
-   - [ ] Create schema-based documentation tooltips
+   - [x] Implement schema validation for JSON configurations in frontend
+   - [x] Add intellisense features for property autocompletion
+   - [x] Create schema-based documentation tooltips with hover functionality
+   - [x] Implement custom cyberpunk-themed light and dark modes for Monaco Editor
+   - [x] Create robust theme detection for cross-session/cross-tab consistency
 
 ### Phase 4.2: Visual Builders
 
@@ -344,4 +346,45 @@ This initial Monaco Editor integration provides significant UX improvements incl
 
 The implementation follows the migration plan outlined in PHASE4_JSONMIGRATION.md and will continue with full replacement of all JSON editing components in the application.
 
-*Additional notes will be added as implementation progresses with decisions and lessons learned.*
+#### 2025-04-02: Enhanced JSON Schema Descriptions and Documentation
+
+Extended the Rust structs with detailed descriptions that are automatically reflected in the JSON schemas:
+
+- **Rich Schema Descriptions**:
+  - Added `#[schemars(description = "...")]` attributes to all core Rust structs and fields
+  - Generated comprehensive documentation for all properties in JSON schemas
+  - Implemented clear, concise descriptions for all entity types and their properties
+  - Enhanced user understanding of configuration options
+
+- **Documentation Tooltips**:
+  - Configured Monaco Editor to display property descriptions on hover
+  - Implemented custom hover styling to match application theme
+  - Enhanced documentation visibility and readability
+  - Created seamless integration between schema descriptions and editor UI
+
+#### 2025-04-02: Custom Cyberpunk Theming for Monaco Editor
+
+Implemented custom theming for Monaco Editor to match the application's cyberpunk aesthetic:
+
+- **Custom Theme Definitions**:
+  - Created cyberpunk-inspired dark and light themes
+  - Customized syntax highlighting with neon colors for dark mode
+  - Implemented professional, readable color scheme for light mode
+  - Added subtle glow effects for key syntax elements
+
+- **Advanced Theme Detection**:
+  - Implemented robust theme detection that checks multiple sources
+  - Added localStorage preference detection for cross-session consistency
+  - Created DOM observation for real-time theme changes
+  - Added fallback to system preference when no explicit theme is set
+  - Ensured consistent theme application across the application
+
+- **Styling Enhancements**:
+  - Added custom CSS for editor containers and UI elements
+  - Enhanced tooltips with cyberpunk styling
+  - Improved scrollbars and selection highlighting
+  - Created smooth transitions between theme states
+
+These improvements have significantly enhanced the JSON editing experience, making it more intuitive, informative, and visually aligned with the application's design language. The combination of rich schema descriptions, documentation tooltips, and custom theming provides a professional, cyberpunk-inspired editing environment that maintains both style and functionality.
+
+*Next steps will focus on completing the implementation across all remaining components and adding any additional refinements to the editing experience.*

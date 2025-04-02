@@ -390,21 +390,22 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - ✅ Create basic MonacoJsonEditor component
    - ✅ Set up testing environment
 
-2. **Week 2: Schema Integration** 🔄
+2. **Week 2: Schema Integration** ✅
 
    - ✅ Create `mcp-guardian-schema` package for schema generation
    - ✅ Generate JSON schemas for all entity types
    - ✅ Create directory structure and export schemas
    - ✅ Implement schema validation in Monaco Editor
    - ✅ Add basic intellisense features
-   - ❌ Implement advanced documentation tooltips (pending)
+   - ✅ Implement advanced documentation tooltips with hover functionality
 
 3. **Week 3: Component Replacement** 🔄
 
    - ✅ Implement first component replacement (MCP Server component)
    - ✅ Create schema utilities for Monaco integration
    - ✅ Update JSON viewer with Monaco-based implementation
-   - ✅ Theme integration with application style
+   - ✅ Create custom cyberpunk-themed light and dark modes
+   - ✅ Implement robust theme detection and synchronization
    - ❌ Replace JsonEditor in remaining components (in progress)
    - ❌ Fix any integration issues (pending final integration)
 
@@ -434,8 +435,59 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - Provide context-aware error recovery suggestions
    - Create user-friendly error presentation
 
+## Implementation Details and Lessons Learned
+
+### Component Architecture
+The Monaco Editor implementation has been structured with the following components:
+
+1. **Core Editor Components**:
+   - `monaco-json-editor.tsx` - Schema-aware editor with validation and hover documentation
+   - `json-viewer.tsx` - Read-only viewer with consistent styling
+   - `monaco-themes.ts` - Custom theme definitions for dark and light modes
+   - `theme-utils.ts` - Robust theme detection and synchronization
+   - `monaco-editor.css` - Custom styling for the editor and hover tooltips
+
+2. **Integration with JSON Schema System**:
+   - Schema-aware Monaco configuration
+   - Direct integration with Rust-generated JSON schemas
+   - Enhanced hover documentation through schema descriptions
+   - Autocompletion based on schema properties
+
+### Theme Detection Challenges
+One challenge encountered was ensuring consistent theme detection and application, especially:
+   - Detecting the theme correctly at component mount time
+   - Synchronizing theme changes across components
+   - Handling localStorage theme preferences
+   - Detecting system preference changes
+
+Solution:
+   - Created a unified theme detection utility
+   - Implemented multiple checks for theme sources with clear priority
+   - Added comprehensive DOM observers and event listeners
+   - Enhanced debug logging for theme-related issues
+
+### Validation and Documentation Features
+The Monaco Editor implementation provides:
+   - Real-time JSON validation with clear error messages
+   - Property autocompletion based on schema
+   - Documentation tooltips on hover
+   - Formatting and syntax highlighting
+   - Custom cyberpunk-themed UI elements
+
+### Remaining Work
+To complete the migration:
+1. Replace the JsonEditor in remaining components:
+   - Guard Profile component
+   - Server Collection component
+   - Any form dialogs using the editor
+2. Ensure consistent behavior across all uses
+3. Optimize performance for large JSON documents
+4. Add comprehensive tests
+
 ## Conclusion
 
-The migration to Monaco Editor will significantly enhance the JSON editing experience in MCP Guardian. It will provide better validation, autocompletion, and a more robust editing environment while addressing security concerns with the current implementation. The plan balances rapid implementation with thorough testing to ensure a smooth transition for users.
+The migration to Monaco Editor has significantly enhanced the JSON editing experience in MCP Guardian. It provides better validation, autocompletion, and a more robust editing environment while addressing security concerns with the previous implementation. The custom theming and hover documentation make the editor both visually appealing and more user-friendly.
 
-The initial implementation will focus on frontend validation only, with backend validation capabilities backlogged for future development. This approach allows us to deliver immediate user experience improvements while laying the groundwork for more robust validation in the future.
+The implementation has focused on frontend validation with rich schema-based features, with backend validation capabilities backlogged for future development. This approach has delivered immediate user experience improvements while laying the groundwork for more robust validation in the future.
+
+The combination of the JSON Schema system and Monaco Editor provides a powerful editing experience that helps users understand and correctly configure the application, reducing errors and improving productivity.
