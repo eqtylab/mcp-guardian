@@ -7,7 +7,7 @@ import ToolCallResponse from "../components/messages/tool-call-response";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card, CardHeader, CardContent } from "../components/ui/card";
-import { JSONViewer } from "../components/ui/jsonviewer";
+import { JsonViewer } from "../components/json-editor";
 
 interface PendingMessagesPageProps {
   pendingMessages: any;
@@ -26,6 +26,21 @@ const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: Pending
   };
 
   const pendingCount = Object.entries(pendingMessages).length;
+
+  const renderMessageContent = React.useCallback((value: any, direction: string) => {
+    if (direction === "Outbound") {
+      if (value.method === "tools/call") {
+        return <ToolCall name={value.params.name} args={value.params.arguments} />;
+      } else {
+        return <JsonViewer data={value} maxHeight="300px" />;
+      }
+    } else {
+      if (value.result?.content) {
+        return <ToolCallResponse content={value.result.content} />;
+      }
+      return <JsonViewer data={value} maxHeight="300px" />;
+    }
+  }, []);
 
   return (
     <div className="p-0">
@@ -50,21 +65,7 @@ const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: Pending
       ) : (
         Object.entries(pendingMessages).map(([id, value]: [string, any], i) => {
           const direction = id.split("_")[0] === "inbound" ? "Inbound" : "Outbound";
-          const messageComponent = (() => {
-            if (direction === "Outbound") {
-              if (value.method === "tools/call") {
-                return () => <ToolCall name={value.params.name} args={value.params.arguments} />;
-              } else {
-                return () => <JSONViewer data={value} />;
-              }
-            } else {
-              if (value.result?.content) {
-                return () => <ToolCallResponse content={value.result.content} />;
-              }
-              return () => <JSONViewer data={value} />;
-            }
-          })() as any;
-
+          
           return (
             <Card key={`message-${i}`} className="mb-4">
               <CardHeader className="flex justify-between items-center px-4 py-3">
@@ -98,7 +99,7 @@ const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: Pending
               </CardHeader>
 
               <CardContent>
-                {React.createElement(messageComponent)}
+                {renderMessageContent(value, direction)}
               </CardContent>
             </Card>
           );

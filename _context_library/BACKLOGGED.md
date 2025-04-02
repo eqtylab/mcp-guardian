@@ -4,6 +4,20 @@ This document tracks features and improvements that have been deprioritized from
 
 ## PHASE4 Backlogged Items
 
+### Message Rewriting Capabilities
+- **Original Phase:** N/A (New idea)
+- **Tentative New Phase:** PHASE5
+- **Rationale:** This is a powerful feature that would enhance the guardian's capabilities, but requires significant changes to the message processing system and should be developed after the current migration work is complete.
+- **Details:**
+  - Add UI controls for manual message rewriting in pending messages view
+  - Implement backend support for modifying messages before forwarding
+  - Create a framework for automated/intelligent message transformation
+  - Develop guard profiles that can automatically rewrite certain message types
+  - Support for content filtering, redaction, and enhancement through rewriting
+  - Consider privacy and security implications of message modification
+  - Add comprehensive logging for all message modifications
+  - Create templates for common rewriting scenarios
+
 ### Rust Core JSON Schema Validation
 - **Original Phase:** PHASE4
 - **Tentative New Phase:** PHASE5

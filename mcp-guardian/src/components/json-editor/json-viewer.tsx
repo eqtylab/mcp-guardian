@@ -31,14 +31,15 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
   // Initialize theme using the utility function for more accurate detection
   const [isDarkMode, setIsDarkMode] = React.useState<boolean>(detectThemeMode());
   
-  // Format the JSON data
+  // Format the JSON data and store it in a key that will prevent re-renders
+  // when data objects have the same content but different references
   const jsonString = React.useMemo(() => {
     try {
       return JSON.stringify(data, null, 2);
     } catch (error) {
       return String(data);
     }
-  }, [data]);
+  }, [JSON.stringify(data)]); // Use stringify to compare content, not references
 
   // Listen for theme changes using our utility function
   useEffect(() => {
@@ -149,8 +150,10 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
           }}
         >
           <Editor
+            key={`editor-${jsonString.length}`} // Key based on content length helps reduce flashing during re-renders
             defaultLanguage="json"
             value={jsonString}
+            defaultValue={jsonString} // Add defaultValue to reduce flicker
             options={{
               readOnly: true,
               minimap: { enabled: false },

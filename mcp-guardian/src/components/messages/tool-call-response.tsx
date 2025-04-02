@@ -1,5 +1,5 @@
 import { MessageSquare } from "lucide-react";
-import { JSONViewer } from "../ui/jsonviewer";
+import { JsonViewer } from "../json-editor";
 import { cn } from "../../utils";
 
 interface ToolCallResponseProps {
@@ -32,10 +32,14 @@ const ToolCallResponse = ({ content, className }: ToolCallResponseProps) => {
             data = item;
           }
 
+          // Create a unique stable key using index and content hash to avoid re-renders
+          const contentKey = `item-${i}-${typeof data === 'object' ? JSON.stringify(data).length : String(data).length}`;
+          
           return (
-            <JSONViewer 
-              key={i} 
+            <JsonViewer 
+              key={contentKey} 
               data={data} 
+              maxHeight="200px"
             />
           );
         })}

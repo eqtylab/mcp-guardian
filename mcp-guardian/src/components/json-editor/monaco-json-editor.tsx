@@ -129,10 +129,14 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
         overflowWidgetsDomNodeRef.current = widgetsDomNode;
       }
       
-      // Apply the overflow widgets DOM node to the editor
-      editor.updateOptions({
-        overflowWidgetsDomNode: overflowWidgetsDomNodeRef.current
-      });
+      // Apply the overflow widgets DOM node to the editor using a method that doesn't rely on TypeScript types
+      // The editor has this property in runtime but TypeScript doesn't know about it
+      const editorInstance = editor as any;
+      if (editorInstance && typeof editorInstance.updateOptions === 'function') {
+        editorInstance.updateOptions({
+          overflowWidgetsDomNode: overflowWidgetsDomNodeRef.current
+        });
+      }
     }
 
     // Set schema for validation if provided
