@@ -4,6 +4,20 @@ import { cn } from "../utils";
 import { ThemeToggle } from "./theme-toggle";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
+// Add custom styles for hover effect
+const navItemHoverStyles = `
+  .nav-item {
+    transition: all 0.2s ease;
+  }
+  
+  .nav-item:not(.active):hover {
+    height: calc(var(--spacing) * 13);
+    border-radius: 8px;
+    background-color: var(--nav-hover) !important;
+    color: white !important;
+  }
+`;
+
 interface HeaderNavProps {
   navItems: Array<{
     page: string;
@@ -29,7 +43,9 @@ export default function HeaderNavigation({
   modifierKey
 }: HeaderNavProps) {
   return (
-    <header className="flex h-14 items-center justify-between dark:bg-zinc-900 bg-zinc-200 px-6 border-b border-border">
+    <>
+      <style>{navItemHoverStyles}</style>
+      <header className="flex h-14 items-center justify-between dark:bg-zinc-900 bg-zinc-200 px-6 border-b border-border">
       {/* Left section - Logo */}
       <div className="flex items-center gap-2">
         <Shield size={20} className="text-primary" />
@@ -56,9 +72,9 @@ export default function HeaderNavigation({
                       // Base styles
                       "flex flex-col items-center py-2 px-4 relative rounded-t-md h-14 box-border",
                       // Default state
-                      "dark:text-gray-300 text-gray-800 hover:text-primary dark:hover:text-white hover:bg-muted transition-all duration-200",
+                      "dark:text-gray-300 text-gray-800 transition-all duration-200 nav-item",
                       // Active state - blend with content area background matching exactly
-                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
+                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative nav-item active"
                     )}
                     style={isActive ? { 
                       backgroundColor: 'var(--background)',
@@ -91,5 +107,6 @@ export default function HeaderNavigation({
         <ThemeToggle />
       </div>
     </header>
+    </>
   );
 }
