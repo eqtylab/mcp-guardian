@@ -1,54 +1,19 @@
 @import "tailwindcss";
 
-/* Configure Tailwind v4 with directive comments */
-/* @config { darkMode: "class" } */
+@custom-variant dark (&:is(.dark *));
 
-@theme {
-  /* Define all theme color mappings directly */
-  --colors-background: var(--background);
-  --colors-foreground: var(--foreground);
-  --colors-muted: var(--muted);
-  --colors-muted-foreground: var(--muted-foreground);
-  --colors-card: var(--card);
-  --colors-card-foreground: var(--card-foreground);
-  --colors-popover: var(--popover);
-  --colors-popover-foreground: var(--popover-foreground);
-  --colors-border: var(--border);
-  --colors-input: var(--input);
-  --colors-primary: var(--primary);
-  --colors-primary-foreground: var(--primary-foreground);
-  --colors-secondary: var(--secondary);
-  --colors-secondary-foreground: var(--secondary-foreground);
-  --colors-accent: var(--accent);
-  --colors-accent-foreground: var(--accent-foreground);
-  --colors-destructive: var(--destructive);
-  --colors-destructive-foreground: var(--destructive-foreground);
-  --colors-ring: var(--ring);
-  
-  /* Non-color theme variables */
-  --shadows-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadows-md: 0 2px 4px rgba(0, 0, 0, 0.4);
-  --shadows-lg: 0 2px 8px rgba(0, 0, 0, 0.5);
+body {
+  @apply m-0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  --borderRadius-sm: calc(var(--radius) - 0.5rem);
-  --borderRadius-md: calc(var(--radius) - 0.25rem);
-  --borderRadius-lg: var(--radius);
-
-  --fontFamily-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --fontFamily-mono: "JetBrains Mono", "SF Mono", "Roboto Mono", Menlo, monospace;
-
-  --fontSize-xs: 0.75rem;
-  --fontSize-sm: 0.875rem;
-  --fontSize-base: 1rem;
-  --fontSize-lg: 1.125rem;
-  --fontSize-xl: 1.25rem;
-
-  --transitionTimingFunction-DEFAULT: cubic-bezier(0.4, 0, 0.2, 1);
-  --transitionDuration-fast: 150ms;
-  --transitionDuration-normal: 200ms;
-  
-  /* Custom animations */
-  --animation-progress-indeterminate: progress-indeterminate 1.5s infinite cubic-bezier(0.65, 0.05, 0.36, 1);
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 @layer base {
@@ -111,7 +76,11 @@
     --glow-color: rgba(99, 102, 241, 0.3);
 
     /* Add cosmic specific variables */
-    --cosmic-card-bg: linear-gradient(to bottom, rgba(79, 70, 229, 0.05), rgba(0, 0, 0, 0.02));
+    --cosmic-card-bg: linear-gradient(
+      to bottom,
+      rgba(79, 70, 229, 0.05),
+      rgba(0, 0, 0, 0.02)
+    );
     --cosmic-card-border: rgba(79, 70, 229, 0.15);
     --cosmic-card-shadow: 0 4px 12px rgba(13, 12, 37, 0.05);
     --cosmic-card-hover-shadow: 0 6px 24px rgba(79, 70, 229, 0.15);
@@ -157,8 +126,16 @@
 
     --pill-border-default: rgba(99, 102, 241, 0.3);
     --pill-text-default: rgba(224, 231, 255, 0.8);
-    --pill-bg-default: linear-gradient(to right, rgba(30, 27, 75, 0.3), rgba(0, 0, 0, 0.5));
-    --pill-hover-bg: linear-gradient(to right, rgba(30, 27, 75, 0.4), rgba(0, 0, 0, 0.6));
+    --pill-bg-default: linear-gradient(
+      to right,
+      rgba(30, 27, 75, 0.3),
+      rgba(0, 0, 0, 0.5)
+    );
+    --pill-hover-bg: linear-gradient(
+      to right,
+      rgba(30, 27, 75, 0.4),
+      rgba(0, 0, 0, 0.6)
+    );
     --pill-hover-border: rgba(124, 58, 237, 0.5);
 
     --pill-selected-border: rgba(129, 140, 248, 0.7);
@@ -170,7 +147,11 @@
     --shimmer-color-2: rgba(165, 180, 252, 0.3);
     --glow-color: rgba(99, 102, 241, 0.4);
 
-    --cosmic-card-bg: linear-gradient(to bottom, rgba(79, 70, 229, 0.07), rgba(0, 0, 0, 0.2));
+    --cosmic-card-bg: linear-gradient(
+      to bottom,
+      rgba(79, 70, 229, 0.07),
+      rgba(0, 0, 0, 0.2)
+    );
     --cosmic-card-border: rgba(79, 70, 229, 0.2);
     --cosmic-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     --cosmic-card-hover-shadow: 0 6px 24px rgba(79, 70, 229, 0.2);
@@ -178,137 +159,50 @@
   }
 }
 
-/* Custom keyframes */
-@keyframes progress-indeterminate {
-  0% {
-    transform: translateX(-100%);
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-  50% {
-    transform: translateX(0%);
+  body {
+    @apply bg-background text-foreground;
   }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* Base Elements */
-html {
-  color-scheme: light dark;
-}
-
-html,
-body {
-  @apply w-screen h-screen m-0 p-0 overflow-hidden;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--fontFamily-sans);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Typography System */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-medium;
-  color: var(--foreground);
-  margin: 0 0 0.75rem 0;
-}
-
-h1 {
-  font-size: var(--fontSize-xl);
-}
-h2 {
-  font-size: var(--fontSize-lg);
-}
-h3 {
-  font-size: var(--fontSize-base);
-}
-
-p {
-  margin: 0 0 0.75rem 0;
-  color: var(--muted-foreground);
-}
-
-/* Links */
-a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: color var(--transitionDuration-fast) var(--transitionTimingFunction-DEFAULT);
-}
-
-a:hover {
-  color: color-mix(in srgb, var(--primary), white 15%);
-}
-
-/* Layout Core */
-.main-container {
-  @apply h-screen flex overflow-hidden;
-}
-
-/* Content Area */
-.content-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1.25rem;
-}
-
-/* Helper Classes */
-.muted {
-  color: var(--muted-foreground);
-  font-size: var(--fontSize-sm);
-}
-
-/* Legacy Navigation - Will be migrated to NavigationMenu component */
-.sidebar {
-  background-color: var(--sidebar);
-  width: 210px;
-  border-right: 1px solid var(--sidebar-border);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.sidebar-header {
-  padding: 1rem;
-  border-bottom: 1px solid var(--sidebar-border);
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1rem;
-  color: var(--sidebar-foreground);
-  transition: all var(--transitionDuration-fast) var(--transitionTimingFunction-DEFAULT);
-  border-left: 2px solid transparent;
-  cursor: pointer;
-  margin: 0;
-  width: 100%;
-  text-align: left;
-  border-radius: 0;
-  background: transparent;
-}
-
-.nav-item:hover {
-  background-color: var(--muted);
-  color: var(--sidebar-foreground);
-}
-
-.nav-item.active {
-  color: var(--sidebar-foreground);
-  background-color: var(--muted);
-  border-left-color: var(--primary);
-}
-
-.sidebar-footer {
-  padding: 0.5rem;
-  border-top: 1px solid var(--sidebar-border);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }
