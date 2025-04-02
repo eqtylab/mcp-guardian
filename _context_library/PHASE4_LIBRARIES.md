@@ -234,18 +234,50 @@ const InterceptorNode = ({ data, isSelected }) => {
 };
 ```
 
-### 2. **react-tooltip**
-**Website**: https://github.com/ReactTooltip/react-tooltip
+### 2. **Radix UI Tooltip**
+**Website**: https://www.radix-ui.com/primitives/docs/components/tooltip
 
 **Benefits**:
-- Easy-to-use tooltips
-- Customizable appearance
-- Works with portals
-- Various triggering options
+- Already part of your UI component library
+- Consistent with other Radix components
+- Fully accessible
+- Customizable with your existing styling approach
+- Well-documented
 
 **Use Case**:
 - Contextual help throughout the interface
 - Explaining complex options
+- Providing hints for UI elements
+
+**Example Implementation**:
+```tsx
+import * as Tooltip from '@radix-ui/react-tooltip';
+
+const InterceptorToolboxItem = ({ type, icon, description }) => {
+  return (
+    <Tooltip.Provider>
+      <Tooltip.Root>
+        <Tooltip.Trigger asChild>
+          <button className="toolbox-item">
+            {icon}
+            <span>{type}</span>
+          </button>
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content 
+            className="tooltip-content" 
+            sideOffset={5}
+            variant="cyber"
+            glow="subtle"
+          >
+            {description}
+            <Tooltip.Arrow className="tooltip-arrow" />
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
+  );
+};
 
 ## Integration Considerations
 
@@ -273,11 +305,13 @@ For the Guard Profile Visual Builder, I recommend:
 1. **React Flow** for the node-based visualization
 2. **React Hook Form** for the property forms
 3. **Framer Motion** for animations and transitions
+4. **Radix UI components** for tooltips and other UI primitives
 
 For the Server Collection Relationship Diagram:
 
 1. **React Flow** for the relationship graph
 2. **@dnd-kit/core** for drag-drop capabilities
+3. **Radix UI components** for consistent UI elements
 
 This combination provides a robust foundation for building the visual interfaces while maintaining good performance and accessibility.
 
