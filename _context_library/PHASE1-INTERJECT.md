@@ -48,8 +48,8 @@ This interject to Phase 1 focuses on elevating our component architecture by int
 - [x] **Form Components**
   - [x] Create `Input.tsx` component with validation states
   - [x] Create `Textarea.tsx` component
-  - [ ] Create `Select.tsx` component using Radix UI Select primitive
-  - [ ] Create `Checkbox.tsx` component using Radix UI Checkbox primitive
+  - [x] Create `Select.tsx` component using Radix UI Select primitive
+  - [x] Create `Checkbox.tsx` component using Radix UI Checkbox primitive
   - [x] Create `Label.tsx` and `FormField.tsx` components for layout and validation
   - [x] Support for helper text and required indicators
 
@@ -62,15 +62,15 @@ This interject to Phase 1 focuses on elevating our component architecture by int
   - [x] Create `Badge.tsx` component with variants (status, size)
   - [x] Create `JSONViewer.tsx` component for technical JSON display
   - [ ] Create `Collapsible.tsx` component using Radix UI Collapsible
-  - [ ] Create improved `ToolCall.tsx` and `ToolCallResponse.tsx` components
+  - [x] Create improved `ToolCall.tsx` and `ToolCallResponse.tsx` components
 
 - [ ] **Navigation Components**
   - [ ] Create `Tabs.tsx` component using Radix UI Tabs
   - [ ] Create `NavigationMenu.tsx` using Radix UI NavigationMenu
   - [ ] Create `Breadcrumb.tsx` component 
 
-- [ ] **Feedback Components**
-  - [ ] Create `Toast.tsx` component using Radix UI Toast
+- [/] **Feedback Components**
+  - [x] Create `Toast.tsx` component using Radix UI Toast
   - [ ] Create `Alert.tsx` component for status notifications
   - [ ] Create `ProgressIndicator.tsx` for operation feedback
 
