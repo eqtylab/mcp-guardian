@@ -20,15 +20,19 @@ const navItemHoverStyles = `
   .nav-item:not(.active):hover {
     background-color: darkslategray !important;
     color: white !important;
+    border-radius: calc(var(--radius) - 2px);
   }
   
   .nav-item.active {
-    height: calc(var(--spacing) * 11);
+    height: 56px; /* h-14 = 56px */
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: -1px;
   }
 `;
 
@@ -89,8 +93,7 @@ export default function HeaderNavigation({
                       isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative active"
                     )}
                     style={isActive ? { 
-                      backgroundColor: 'var(--background)',
-                      marginBottom: '-1px' 
+                      backgroundColor: 'var(--background)'
                     } : undefined}
                   >
                     <div className="relative">
