@@ -4,10 +4,10 @@ import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
 import ConfirmDialog from "./confirm-dialog";
-import JsonEditor from "./json-valid-editor";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
+import { MonacoJsonEditor, SCHEMA_URIS, SCHEMAS } from "./json-editor";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
@@ -62,11 +62,15 @@ const McpServerComponent = ({
     return (
       <>
         <div className="space-y-4">
-          <JsonEditor
+          <MonacoJsonEditor
             value={configText}
             onChange={setConfigText}
             disabled={!enableEdit}
             placeholder="Enter MCP server configuration"
+            schema={SCHEMAS.MCP_SERVER}
+            schemaUri={SCHEMA_URIS.MCP_SERVER}
+            maxHeight="400px"
+            label={`${namespace}.${name}`}
           />
 
           {enableEdit && (
@@ -116,11 +120,13 @@ const McpServerComponent = ({
 
         <CollapsibleContent>
           <CardContent className="p-4 space-y-4">
-            <JsonEditor
+            <MonacoJsonEditor
               value={configText}
               onChange={setConfigText}
               disabled={!enableEdit}
               placeholder="Enter MCP server configuration"
+              schema={SCHEMAS.MCP_SERVER}
+              schemaUri={SCHEMA_URIS.MCP_SERVER}
             />
 
             {enableEdit && (

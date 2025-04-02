@@ -1,5 +1,5 @@
 import { Code } from "lucide-react";
-import { JSONViewer } from "../ui/jsonviewer";
+import { JsonViewer } from "../json-editor";
 import { cn } from "../../utils";
 
 interface ToolCallProps {
@@ -21,7 +21,13 @@ const ToolCall = ({ name, args, className }: ToolCallProps) => {
       </div>
 
       <div className="text-xs text-colors-text-secondary mb-2">Arguments:</div>
-      <JSONViewer data={args} />
+      <JsonViewer 
+        data={args} 
+        maxHeight="200px"
+        title="Tool Call Arguments" 
+        collapsible={true} 
+        expanded={true}
+      />
     </div>
   );
 };
