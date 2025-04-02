@@ -31,6 +31,13 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
 
   // Function to validate JSON manually (for errors not caught by Monaco)
   const validateJson = (text: string): boolean => {
+    if (!text || text.trim() === "") {
+      // Handle empty input case
+      setIsValid(false);
+      setErrorMessage("JSON content cannot be empty");
+      return false;
+    }
+    
     try {
       JSON.parse(text);
       setIsValid(true);
@@ -77,8 +84,31 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
       validateJson(editor.getValue());
     });
 
-    // Set initial validation state
-    validateJson(value);
+    // Set initial validation state (ensure we have valid JSON)
+    let initialValue = value;
+    if (!initialValue || initialValue.trim() === "") {
+      initialValue = "{}";
+      // Update parent component's state with valid JSON
+      onChange(initialValue);
+    }
+    
+    // Validate and ensure proper formatting
+    try {
+      // Try to parse and re-stringify to ensure valid JSON
+      const parsed = JSON.parse(initialValue);
+      const formatted = JSON.stringify(parsed, null, 2);
+      if (formatted !== initialValue) {
+        // If the format changed, update the editor and parent state
+        editor.setValue(formatted);
+        onChange(formatted);
+      }
+      setIsValid(true);
+      setErrorMessage("");
+    } catch (e: any) {
+      // If the JSON is invalid, show error but don't change the content
+      setIsValid(false);
+      setErrorMessage(e.message);
+    }
 
     // Focus the editor if not disabled
     if (!disabled) {

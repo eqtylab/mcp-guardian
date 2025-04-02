@@ -29,11 +29,21 @@ const McpServerComponent = ({
   hideCollapsible = false,
 }: McpServerComponentProps) => {
   const { namespace, name, mcp_server } = namedMcpServer;
-  const [configText, setConfigText] = useState("");
+  const [configText, setConfigText] = useState("{}"); // Initialize with valid empty JSON
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
-    setConfigText(JSON.stringify(mcp_server, null, 2));
+    // Ensure mcp_server is not null or undefined before stringifying
+    if (mcp_server) {
+      try {
+        setConfigText(JSON.stringify(mcp_server, null, 2));
+      } catch (error) {
+        console.error("Error stringifying mcp_server:", error);
+        setConfigText("{}"); // Set a valid empty object as fallback
+      }
+    } else {
+      setConfigText("{}"); // Set a valid empty object if mcp_server is null or undefined
+    }
   }, [mcp_server]);
 
   const handleDelete = async () => {
