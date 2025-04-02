@@ -1,6 +1,9 @@
 // components/JsonEditor.tsx
 import React, { useState } from "react";
 import { Check, AlertCircle, Code } from "lucide-react";
+import { Button } from "./ui/Button";
+import { Textarea } from "./ui/Textarea";
+import { cn } from "../utils";
 
 interface JsonEditorProps {
   value: string;
@@ -50,58 +53,62 @@ const JsonEditor: React.FC<JsonEditorProps> = ({
     <div className="relative space-y-2">
       <div className="flex items-center justify-between mb-2">
         <div
-          className={`flex items-center gap-2
-          ${disabled ? "hidden" : ""}
-          `}
+          className={cn(
+            "flex items-center gap-2",
+            disabled ? "hidden" : ""
+          )}
         >
           {isValid ? (
-            <Check size={16} className="text-[var(--color-success)]" />
+            <Check size={16} className="text-colors-status-success" />
           ) : (
-            <AlertCircle size={16} className="text-[var(--color-danger)]" />
+            <AlertCircle size={16} className="text-colors-status-danger" />
           )}
           <span
-            className={`text-sm 
-            ${isValid ? "text-[var(--color-success)]" : "text-[var(--color-danger)]"}
-            
-            `}
+            className={cn(
+              "text-sm",
+              isValid ? "text-colors-status-success" : "text-colors-status-danger"
+            )}
           >
             {isValid ? "Valid JSON" : "Invalid JSON"}
           </span>
         </div>
-        <button
-          onClick={formatJson}
-          disabled={disabled}
-          className={`p-1.5 hover:bg-cream-100 dark:hover:bg-primary-700 rounded flex items-center gap-1
-            ${disabled ? "hidden" : ""}`}
-          title="Format JSON"
-        >
-          <Code size={16} />
-          <span className="text-sm">Format</span>
-        </button>
+        
+        {!disabled && (
+          <Button
+            onClick={formatJson}
+            variant="ghost"
+            size="sm"
+            className="gap-1 p-1.5"
+            title="Format JSON"
+          >
+            <Code size={16} />
+            <span className="text-sm">Format</span>
+          </Button>
+        )}
       </div>
 
-      <textarea
+      <Textarea
         value={value}
         onChange={(e) => {
           onChange(e.target.value);
           validateJson(e.target.value);
         }}
         disabled={disabled}
-        className={`
-          w-full font-mono text-sm p-3
-          bg-cream-100 dark:bg-primary-700
-          rounded-[var(--radius-brand)]
-          ${!isValid ? "border-[var(--color-danger)]" : "border-transparent"}
-          ${disabled ? "opacity-50 cursor-not-allowed" : ""}
-        `}
+        className={cn(
+          "w-full font-mono text-sm",
+          !isValid && "border-colors-status-danger"
+        )}
         style={{
           maxHeight,
           minHeight: "200px",
         }}
         placeholder={placeholder}
+        error={!isValid}
       />
 
-      {!isValid && errorMessage && <p className="text-[var(--color-danger)] text-sm mt-1">{errorMessage}</p>}
+      {!isValid && errorMessage && (
+        <p className="text-colors-status-danger text-sm mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 };

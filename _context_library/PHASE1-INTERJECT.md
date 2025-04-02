@@ -1,6 +1,6 @@
 # Phase 1 Interject: Radix UI Integration & Component Library Development
 
-> **FOR-NEXT-DEVELOPER:** This phase is nearly complete with only accessibility auditing remaining. The component library is fully implemented and documented in `_context_library/examples/radix-components.md`. Focus on continuing to migrate existing components (especially in pages) to use these new components and consider implementing the accessibility audit. See the "Next Steps" section at the bottom of this document for detailed guidance.
+> **FOR-NEXT-DEVELOPER:** The component library is fully implemented and documented in `_context_library/examples/radix-components.md`. Accessibility auditing and component testing have been backlogged for Phase 2 (see BACKLOGGED.md). This phase will only be considered complete once ALL existing components are migrated to use the new component library. See the "Next Steps" section at the bottom of this document for detailed guidance on migration.
 
 ## Overview
 
@@ -23,10 +23,10 @@ This interject to Phase 1 focuses on elevating our component architecture by int
   - [x] Configure Radix UI with Tailwind CSS
   - [x] Create integration examples
 
-- [/] **Accessibility Audit** (Planned for next iteration)
-  - [ ] Review current components for accessibility issues
-  - [ ] Document accessibility improvements needed
-  - [ ] Create accessibility testing plan
+- [-] **Accessibility Audit** (Backlogged for future phase)
+  - [-] Review current components for accessibility issues
+  - [-] Document accessibility improvements needed
+  - [-] Create accessibility testing plan
 
 ### 2. Component Library Development
 
@@ -95,6 +95,12 @@ This interject to Phase 1 focuses on elevating our component architecture by int
   - [x] Identify all existing components to be migrated
   - [x] Prioritize components by usage frequency
   - [x] Create migration schedule
+
+- [/] **Component Migration Implementation**
+  - [/] Migrate all page components to use new UI components
+  - [/] Migrate all dialog components to use new Dialog component
+  - [/] Replace all custom UI elements with appropriate component library equivalents
+  - [ ] Verify all components in the application use the new component library
 
 - [x] **Component Documentation**
   - [x] Document each component's API, variants, and usage
@@ -183,13 +189,14 @@ export { Button, buttonVariants };
 
 ## Success Criteria
 
-- [x] All core UI components migrated to Radix UI + component library
+- [x] All core UI components created using Radix UI + component library
 - [x] App.css reduced to only theme variables and global styles
 - [x] Improved accessibility across all components
-- [x] Consistent styling and behavior across application
+- [/] Consistent styling and behavior across application (in progress during migration)
 - [x] Well-documented component API and usage patterns
 - [x] Reduced duplication of styling code
 - [x] Clear separation of concerns between global styling and component-specific styling
+- [ ] All existing components migrated to use the new component library
 
 ## Next Steps
 
@@ -200,19 +207,23 @@ export { Button, buttonVariants };
 4. ✅ Refactor App.css to remove component-specific styles
 5. ✅ Create comprehensive documentation for the component library
 
-### For Next Developer
-6. 🔄 Continue migrating existing components to use the new component library
+### Required to Complete Phase 1 Interject
+6. 🚨 Complete migration of ALL existing components to use the new component library
    - Start with pages (McpServersPage, GuardProfilesPage, etc.)
-   - Update remaining dialogs to use Dialog component
-   - Replace custom tags with Badge component
+   - Update ALL dialog components to use Dialog component
+   - Replace ALL custom tags with Badge component
+   - Replace ALL form elements with new form components
+   - Verify ALL components in the application use the new component library
+   - This phase is NOT complete until migration is finished
 
-7. 📋 Implement accessibility audit
+### Backlogged for Future Phases
+7. [-] 📋 Implement accessibility audit (Backlogged for future phase)
    - Consider using tools like Axe or Lighthouse for automated checks
    - Test with screen readers (NVDA, VoiceOver)
    - Create a checklist for developers to follow when creating new components
    - Document accessibility features of each component
 
-8. 🧪 Create unit tests for components
+8. [-] 🧪 Create unit tests for components (Backlogged for future phase)
    - Implement testing with React Testing Library
    - Focus on interaction testing (clicks, keyboard navigation)
    - Verify accessibility attributes are properly applied

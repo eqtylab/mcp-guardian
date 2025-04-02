@@ -7,8 +7,10 @@ import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2, ExternalLink } from "lucide-react";
 import ClaudeExportModal from "./ClaudeExportModal";
 import ConfirmDialog from "./ConfirmDialog";
-
 import JsonEditor from "./JsonValidEditor";
+import { Button } from "./ui/Button";
+import { Card, CardHeader, CardContent } from "./ui/Card";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/Collapsible";
 
 interface ServerCollectionComponentProps {
   namedServerCollection: NamedServerCollection;
@@ -36,77 +38,86 @@ const ServerCollectionComponent = ({
     setConfigText(JSON.stringify(server_collection, null, 2));
   }, [server_collection]);
 
+  const handleSave = async () => {
+    try {
+      const serverCollection: ServerCollection = JSON.parse(configText);
+      await invoke("set_server_collection", {
+        namespace,
+        name,
+        serverCollection,
+      });
+      onUpdateSuccess();
+      notifySuccess(`Collection "${namespace}.${name}" updated`);
+    } catch (e: any) {
+      notifyError(e);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await invoke("delete_server_collection", { namespace, name });
+      onDeleteSuccess();
+      notifySuccess(`Collection "${namespace}.${name}" deleted`);
+    } catch (e: any) {
+      notifyError(e);
+    }
+  };
+
   return (
-    <div className="bg-bg-surface rounded-md border border-border-subtle overflow-hidden mb-4">
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 hover:bg-bg-elevated transition-colors duration-fast"
-        title={`${namespace}.${name} server collection configuration`}
-      >
-        <span className="font-medium text-text-primary">{`${namespace}.${name}`}</span>
-        {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
-      </button>
+    <Card className="mb-4">
+      <Collapsible open={isExpanded} onOpenChange={onToggle}>
+        <CardHeader className="cursor-pointer p-3">
+          <CollapsibleTrigger className="flex justify-between items-center w-full bg-transparent hover:bg-transparent border-0">
+            <span className="font-medium">{`${namespace}.${name}`}</span>
+            {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+          </CollapsibleTrigger>
+        </CardHeader>
 
-      {isExpanded && (
-        <div className="p-4 space-y-4">
-          <JsonEditor
-            value={configText}
-            onChange={setConfigText}
-            disabled={!enableEdit}
-            placeholder="Enter server collection configuration in JSON format"
-          />
+        <CollapsibleContent>
+          <CardContent className="p-4 space-y-4">
+            <JsonEditor
+              value={configText}
+              onChange={setConfigText}
+              disabled={!enableEdit}
+              placeholder="Enter server collection configuration in JSON format"
+            />
 
-          {enableEdit && (
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={async () => {
-                  try {
-                    const serverCollection: ServerCollection = JSON.parse(configText);
-                    await invoke("set_server_collection", {
-                      namespace,
-                      name,
-                      serverCollection,
-                    });
-                    onUpdateSuccess();
-                    notifySuccess(`Collection "${namespace}.${name}" updated`);
-                  } catch (e: any) {
-                    notifyError(e);
-                  }
-                }}
-                className="bg-status-success text-bg-base hover:bg-status-success/90 
-                           rounded-sm py-2 px-3 font-medium text-sm border-0
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Save collection changes"
-              >
-                <Save size={16} />
-                Save Changes
-              </button>
+            {enableEdit && (
+              <div className="flex justify-end gap-4">
+                <Button
+                  onClick={handleSave}
+                  variant="success"
+                  title="Save collection changes"
+                  className="shadow-sm"
+                >
+                  <Save size={16} className="mr-2" />
+                  Save Changes
+                </Button>
 
-              <button
-                onClick={() => setShowExportModal(true)}
-                className="bg-accent-primary/10 text-accent-primary hover:bg-accent-primary/20
-                           border border-accent-primary rounded-sm py-2 px-3 font-medium text-sm
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Export this collection to Claude"
-              >
-                <ExternalLink size={16} />
-                Export to Claude
-              </button>
+                <Button
+                  onClick={() => setShowExportModal(true)}
+                  variant="secondary"
+                  title="Export this collection to Claude"
+                  className="shadow-sm"
+                >
+                  <ExternalLink size={16} className="mr-2" />
+                  Export to Claude
+                </Button>
 
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="bg-status-danger text-white hover:bg-status-danger/90 
-                           rounded-sm py-2 px-3 font-medium text-sm border-0
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Delete this collection"
-              >
-                <Trash2 size={16} />
-                Delete Collection
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+                <Button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  variant="danger"
+                  title="Delete this collection"
+                  className="shadow-sm"
+                >
+                  <Trash2 size={16} className="mr-2" />
+                  Delete Collection
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </CollapsibleContent>
+      </Collapsible>
 
       <ClaudeExportModal
         isOpen={showExportModal}
@@ -118,19 +129,11 @@ const ServerCollectionComponent = ({
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
-        onConfirm={async () => {
-          try {
-            await invoke("delete_server_collection", { namespace, name });
-            onDeleteSuccess();
-            notifySuccess(`Collection "${namespace}.${name}" deleted`);
-          } catch (e: any) {
-            notifyError(e);
-          }
-        }}
+        onConfirm={handleDelete}
         title="Delete Collection"
         message={`Are you sure you want to delete the collection "${namespace}.${name}"?`}
       />
-    </div>
+    </Card>
   );
 };
 

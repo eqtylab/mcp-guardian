@@ -7,8 +7,8 @@ const Collapsible = CollapsiblePrimitive.Root;
 
 const CollapsibleTrigger = React.forwardRef<
   React.ElementRef<typeof CollapsiblePrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger> & { showChevron?: boolean }
+>(({ className, children, showChevron = false, ...props }, ref) => (
   <CollapsiblePrimitive.Trigger
     ref={ref}
     className={cn(
@@ -22,9 +22,11 @@ const CollapsibleTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <ChevronDown
-      className="h-4 w-4 shrink-0 transition-transform duration-200 data-[state=open]:rotate-180"
-    />
+    {showChevron && (
+      <ChevronDown
+        className="h-4 w-4 shrink-0 transition-transform duration-200 data-[state=open]:rotate-180"
+      />
+    )}
   </CollapsiblePrimitive.Trigger>
 ));
 CollapsibleTrigger.displayName = CollapsiblePrimitive.Trigger.displayName;

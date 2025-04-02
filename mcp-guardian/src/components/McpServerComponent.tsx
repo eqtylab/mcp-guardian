@@ -5,6 +5,9 @@ import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2 } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
 import JsonEditor from "./JsonValidEditor";
+import { Button } from "./ui/Button";
+import { Card, CardHeader, CardContent } from "./ui/Card";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/Collapsible";
 
 interface McpServerComponentProps {
   namedMcpServer: NamedMcpServer;
@@ -53,52 +56,48 @@ const McpServerComponent = ({
   };
 
   return (
-    <div className="bg-bg-surface rounded-md border border-border-subtle overflow-hidden mb-4">
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 hover:bg-bg-elevated transition-colors duration-fast"
-        title={`${namespace}.${name} server configuration`}
-      >
-        <span className="font-medium text-text-primary">{`${namespace}.${name}`}</span>
-        {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
-      </button>
+    <Card className="mb-4">
+      <Collapsible open={isExpanded} onOpenChange={onToggle}>
+        <CardHeader className="cursor-pointer p-3">
+          <CollapsibleTrigger className="flex justify-between items-center w-full bg-transparent hover:bg-transparent border-0">
+            <span className="font-medium">{`${namespace}.${name}`}</span>
+            {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+          </CollapsibleTrigger>
+        </CardHeader>
 
-      {isExpanded && (
-        <div className="p-4 space-y-4">
-          <JsonEditor
-            value={configText}
-            onChange={setConfigText}
-            disabled={!enableEdit}
-            placeholder="Enter MCP server configuration"
-          />
+        <CollapsibleContent>
+          <CardContent className="p-4 space-y-4">
+            <JsonEditor
+              value={configText}
+              onChange={setConfigText}
+              disabled={!enableEdit}
+              placeholder="Enter MCP server configuration"
+            />
 
-          {enableEdit && (
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={updateMcpServer}
-                className="bg-status-success text-bg-base hover:bg-status-success/90 
-                           rounded-sm py-2 px-3 font-medium text-sm border-0
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Save server changes"
-              >
-                <Save size={16} />
-                Save Changes
-              </button>
+            {enableEdit && (
+              <div className="flex justify-end gap-4">
+                <Button
+                  onClick={updateMcpServer}
+                  variant="success"
+                  title="Save server changes"
+                >
+                  <Save size={16} className="mr-2" />
+                  Save Changes
+                </Button>
 
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="bg-status-danger text-white hover:bg-status-danger/90 
-                           rounded-sm py-2 px-3 font-medium text-sm border-0
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Delete this server"
-              >
-                <Trash2 size={16} />
-                Delete Server
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+                <Button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  variant="danger"
+                  title="Delete this server"
+                >
+                  <Trash2 size={16} className="mr-2" />
+                  Delete Server
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </CollapsibleContent>
+      </Collapsible>
 
       <ConfirmDialog
         isOpen={showDeleteConfirm}
@@ -107,7 +106,7 @@ const McpServerComponent = ({
         title="Delete MCP Server"
         message={`Are you sure you want to delete the server "${namespace}.${name}"? This action cannot be undone.`}
       />
-    </div>
+    </Card>
   );
 };
 

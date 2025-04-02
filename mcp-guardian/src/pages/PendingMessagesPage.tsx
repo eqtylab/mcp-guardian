@@ -4,6 +4,10 @@ import { invoke } from "@tauri-apps/api/core";
 import { CheckCircle, XCircle } from "lucide-react";
 import ToolCall from "../components/messages/ToolCall";
 import ToolCallResponse from "../components/messages/ToolCallResponse";
+import { Button } from "../components/ui/Button";
+import { Badge } from "../components/ui/Badge";
+import { Card, CardHeader, CardContent } from "../components/ui/Card";
+import { JSONViewer } from "../components/ui/JSONViewer";
 
 interface PendingMessagesPageProps {
   pendingMessages: any;
@@ -21,26 +25,28 @@ const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: Pending
     updatePendingMessages();
   };
 
+  const pendingCount = Object.entries(pendingMessages).length;
+
   return (
     <div className="p-0">
-      <div className="flex-row space-between mb-md">
+      <div className="flex justify-between items-center mb-4">
         <h1>Pending Messages</h1>
 
-        {Object.entries(pendingMessages).length > 0 && (
-          <div className="tag tag-warning">
-            {Object.entries(pendingMessages).length} pending
-          </div>
+        {pendingCount > 0 && (
+          <Badge variant="warning">
+            {pendingCount} pending
+          </Badge>
         )}
       </div>
 
-      {Object.entries(pendingMessages).length === 0 ? (
-        <div className="card">
-          <div className="card-content text-center">
+      {pendingCount === 0 ? (
+        <Card>
+          <CardContent className="text-center py-4">
             <p className="text-sm mb-0">
               No pending messages to review. Messages requiring approval will appear here.
             </p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       ) : (
         Object.entries(pendingMessages).map(([id, value]: [string, any], i) => {
           const direction = id.split("_")[0] === "inbound" ? "Inbound" : "Outbound";
@@ -49,50 +55,52 @@ const PendingMessagesPage = ({ pendingMessages, updatePendingMessages }: Pending
               if (value.method === "tools/call") {
                 return () => <ToolCall name={value.params.name} args={value.params.arguments} />;
               } else {
-                return () => <div className="json-editor">{JSON.stringify(value, null, 2)}</div>;
+                return () => <JSONViewer data={value} />;
               }
             } else {
               if (value.result?.content) {
                 return () => <ToolCallResponse content={value.result.content} />;
               }
-              return () => <div className="json-editor">{JSON.stringify(value, null, 2)}</div>;
+              return () => <JSONViewer data={value} />;
             }
           })() as any;
 
           return (
-            <div key={`message-${i}`} className="card mb-md">
-              <div className="card-header">
-                <div className="flex-row gap-sm">
-                  <div className={`tag ${direction === "Inbound" ? "" : "tag-primary"}`}>
+            <Card key={`message-${i}`} className="mb-4">
+              <CardHeader className="flex justify-between items-center px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <Badge variant={direction === "Inbound" ? "secondary" : "primary"}>
                     {direction}
-                  </div>
-                  <div className="text-xs text-text-tertiary">ID: {id}</div>
+                  </Badge>
+                  <span className="text-xs text-colors-text-tertiary">ID: {id}</span>
                 </div>
 
-                <div className="btn-group">
-                  <button
+                <div className="flex gap-2">
+                  <Button
                     onClick={() => handleApprove(id)}
-                    className="btn-success btn-sm"
+                    variant="success"
+                    size="sm"
                     title="Approve this message"
                   >
-                    <CheckCircle size={14} strokeWidth={2.5} />
+                    <CheckCircle size={14} strokeWidth={2.5} className="mr-1" />
                     Approve
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => handleDeny(id)}
-                    className="btn-danger btn-sm"
+                    variant="danger"
+                    size="sm"
                     title="Deny this message"
                   >
-                    <XCircle size={14} strokeWidth={2.5} />
+                    <XCircle size={14} strokeWidth={2.5} className="mr-1" />
                     Deny
-                  </button>
+                  </Button>
                 </div>
-              </div>
+              </CardHeader>
 
-              <div className="card-content">
+              <CardContent>
                 {React.createElement(messageComponent)}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           );
         })
       )}

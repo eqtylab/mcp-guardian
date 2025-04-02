@@ -6,6 +6,9 @@ import { notifyError, notifySuccess } from "./toast";
 import { ChevronDown, ChevronRight, Save, Trash2, Shield } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
 import JsonEditor from "./JsonValidEditor";
+import { Button } from "./ui/Button";
+import { Card, CardHeader, CardContent } from "./ui/Card";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/Collapsible";
 
 interface GuardProfileComponentProps {
   namedGuardProfile: NamedGuardProfile;
@@ -42,71 +45,70 @@ const GuardProfileComponent = ({
     }
   };
 
+  const handleSave = async () => {
+    try {
+      const guardProfile: GuardProfile = JSON.parse(configText);
+      await invoke("set_guard_profile", {
+        namespace,
+        name: profile_name,
+        guardProfile,
+      });
+      onUpdateSuccess();
+      notifySuccess(`Profile "${namespace}.${profile_name}" updated`);
+    } catch (e: any) {
+      notifyError(e);
+    }
+  };
+
   return (
-    <div className="bg-bg-surface rounded-md border border-border-subtle overflow-hidden mb-2">
-      <div 
-        className="p-3 bg-bg-elevated border-b border-border-subtle flex justify-between items-center cursor-pointer"
-        onClick={onToggle}
-        title={`${namespace}.${profile_name} guard profile configuration`}
-      >
-        <div className="flex items-center gap-2">
-          <Shield size={14} strokeWidth={2.5} className="text-accent-primary" />
-          <span className="text-text-primary">{`${namespace}.${profile_name}`}</span>
-        </div>
-        {isExpanded ? <ChevronDown size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
-      </div>
-
-      {isExpanded && (
-        <div className="p-4 bg-bg-surface">
-          <div className="mb-4">
-            <JsonEditor
-              value={configText}
-              onChange={setConfigText}
-              disabled={!enableEdit}
-              placeholder="Enter guard profile configuration"
-            />
-          </div>
-
-          {enableEdit && (
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={async () => {
-                  try {
-                    const guardProfile: GuardProfile = JSON.parse(configText);
-                    await invoke("set_guard_profile", {
-                      namespace,
-                      name: profile_name,
-                      guardProfile,
-                    });
-                    onUpdateSuccess();
-                    notifySuccess(`Profile "${namespace}.${profile_name}" updated`);
-                  } catch (e: any) {
-                    notifyError(e);
-                  }
-                }}
-                className="bg-status-success text-bg-base hover:bg-status-success/90 
-                           rounded-sm py-1 px-2 text-xs font-medium border-0
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Save profile changes"
-              >
-                <Save size={14} strokeWidth={2.5} />
-                Save
-              </button>
-
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="bg-status-danger text-white hover:bg-status-danger/90 
-                           rounded-sm py-1 px-2 text-xs font-medium border-0
-                           flex items-center gap-2 transition-colors duration-fast"
-                title="Delete this profile"
-              >
-                <Trash2 size={14} strokeWidth={2.5} />
-                Delete
-              </button>
+    <Card className="mb-2">
+      <Collapsible open={isExpanded} onOpenChange={onToggle}>
+        <CardHeader className="cursor-pointer p-3">
+          <CollapsibleTrigger className="flex justify-between items-center w-full bg-transparent hover:bg-transparent border-0">
+            <div className="flex items-center gap-2">
+              <Shield size={14} strokeWidth={2.5} className="text-colors-accent-primary" />
+              <span>{`${namespace}.${profile_name}`}</span>
             </div>
-          )}
-        </div>
-      )}
+            {isExpanded ? <ChevronDown size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
+          </CollapsibleTrigger>
+        </CardHeader>
+        <CollapsibleContent>
+          <CardContent className="p-4">
+            <div className="mb-4">
+              <JsonEditor
+                value={configText}
+                onChange={setConfigText}
+                disabled={!enableEdit}
+                placeholder="Enter guard profile configuration"
+              />
+            </div>
+
+            {enableEdit && (
+              <div className="flex justify-end gap-4">
+                <Button
+                  onClick={handleSave}
+                  variant="success"
+                  size="sm"
+                  title="Save profile changes"
+                >
+                  <Save size={14} strokeWidth={2.5} className="mr-1" />
+                  Save
+                </Button>
+
+                <Button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  variant="danger"
+                  size="sm"
+                  title="Delete this profile"
+                >
+                  <Trash2 size={14} strokeWidth={2.5} className="mr-1" />
+                  Delete
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </CollapsibleContent>
+      </Collapsible>
 
       <ConfirmDialog
         isOpen={showDeleteConfirm}
@@ -115,7 +117,7 @@ const GuardProfileComponent = ({
         title="Delete Guard Profile"
         message={`Are you sure you want to delete the profile "${namespace}.${profile_name}"? This action cannot be undone.`}
       />
-    </div>
+    </Card>
   );
 };
 

@@ -3,6 +3,9 @@ import { Plus } from "lucide-react";
 import GuardProfileComponent from "../components/GuardProfileComponent";
 import CreateGuardProfileDialog from "../components/CreateGuardProfileDialog";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
+import { Button } from "../components/ui/Button";
+import { Badge } from "../components/ui/Badge";
+import { Card, CardContent } from "../components/ui/Card";
 
 interface GuardProfilesPageProps {
   guardProfiles: NamedGuardProfile[];
@@ -18,24 +21,26 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
 
   return (
     <div className="p-0">
-      <div className="flex-row space-between mb-md">
+      <div className="flex justify-between items-center mb-4">
         <h1>Guard Profiles</h1>
 
-        <button
+        <Button
           onClick={() => setIsCreateDialogOpen(true)}
-          className="btn-primary btn-sm"
+          variant="success"
+          size="sm"
           title="Create a new guard profile configuration"
+          className="font-medium shadow-sm border-[1px] border-[rgba(0,0,0,0.1)]"
         >
-          <Plus size={14} strokeWidth={2.5} />
+          <Plus size={14} strokeWidth={2.5} className="mr-1" />
           New Profile
-        </button>
+        </Button>
       </div>
 
       {/* Core Profiles Section */}
-      <div className="mb-lg">
-        <div className="flex-row space-between mb-sm">
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-2">
           <h2 className="text-sm">Core Profiles</h2>
-          <div className="tag">{coreProfiles.length}</div>
+          <Badge variant="primary">{coreProfiles.length}</Badge>
         </div>
         
         {coreProfiles.length > 0 ? (
@@ -54,17 +59,19 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
             />
           ))
         ) : (
-          <div className="card card-content text-center">
-            <p className="text-sm mb-0">No core profiles available</p>
-          </div>
+          <Card>
+            <CardContent className="text-center py-4">
+              <p className="text-sm mb-0">No core profiles available</p>
+            </CardContent>
+          </Card>
         )}
       </div>
 
       {/* Custom Profiles Section */}
-      <div className="mb-lg">
-        <div className="flex-row space-between mb-sm">
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-2">
           <h2 className="text-sm">Custom Profiles</h2>
-          <div className="tag">{customProfiles.length}</div>
+          <Badge variant="primary">{customProfiles.length}</Badge>
         </div>
         
         {customProfiles.length > 0 ? (
@@ -85,11 +92,11 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
             />
           ))
         ) : (
-          <div className="card">
-            <div className="card-content text-center">
+          <Card>
+            <CardContent className="text-center py-4">
               <p className="text-sm mb-0">No custom profiles created</p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         )}
       </div>
 

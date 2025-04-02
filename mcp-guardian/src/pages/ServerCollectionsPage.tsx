@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import ServerCollectionComponent from "../components/ServerCollectionComponent";
 import CreateServerCollectionDialog from "../components/CreateServerCollectionDialog";
 import { NamedServerCollection } from "../bindings/NamedServerCollection";
+import { Button } from "../components/ui/Button";
 
 interface ServerCollectionsPageProps {
   serverCollections: NamedServerCollection[];
@@ -18,14 +19,15 @@ const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: S
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Server Collections</h1>
 
-        <button
+        <Button
           onClick={() => setIsCreateDialogOpen(true)}
-          className="btn-success flex items-center gap-2"
+          variant="success"
           title="Create a new server collection"
+          className="font-medium shadow-sm border-[1px] border-[rgba(0,0,0,0.1)]"
         >
-          <Plus size={18} />
+          <Plus size={18} className="mr-2" />
           New Collection
-        </button>
+        </Button>
       </div>
 
       {/* Custom Collections Section */}
@@ -40,12 +42,8 @@ const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: S
                 setOpenCollectionId(null);
                 updateServerCollections();
               }}
-              isExpanded={openCollectionId === i + serverCollections.length}
-              onToggle={() =>
-                setOpenCollectionId(
-                  openCollectionId === i + serverCollections.length ? null : i + serverCollections.length,
-                )
-              }
+              isExpanded={openCollectionId === i}
+              onToggle={() => setOpenCollectionId(openCollectionId === i ? null : i)}
               enableEdit={true}
             />
           ))}

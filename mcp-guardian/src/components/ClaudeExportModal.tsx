@@ -3,7 +3,20 @@ import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { deterministicStringify } from "../utils";
 import { notifyError, notifySuccess } from "./toast";
-import { X } from "lucide-react";
+
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogClose,
+  DialogBody,
+  DialogFooter
+} from "./ui/Dialog";
+import { Button } from "./ui/Button";
+import { FormField, FormLabel } from "./ui/FormField";
+import { Input } from "./ui/Input";
+import { Textarea } from "./ui/Textarea";
 
 interface ClaudeExportModalProps {
   isOpen: boolean;
@@ -63,65 +76,44 @@ const ClaudeExportModal = ({
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <>
-      <div className="fixed inset-0 bg-black/50 z-50" onClick={onClose} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
-                   w-full max-w-2xl max-h-[85vh] overflow-y-auto z-50 
-                   bg-bg-surface
-                   border border-border-subtle
-                   rounded-md shadow-lg
-                   card"
-        role="dialog"
-      >
-        <div className="card-header">
-          <h2 className="text-sm m-0">Export Server Collection</h2>
-          <button
-            onClick={onClose}
-            className="p-1 bg-transparent border-0"
-            aria-label="Close dialog"
-          >
-            <X size={14} strokeWidth={2.5} />
-          </button>
-        </div>
-
-        <div className="card-content">
-          <div className="flex-col gap-md">
-            <div>
-              <label className="block mb-sm">Claude Desktop Config:</label>
-              <textarea
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Export Server Collection</DialogTitle>
+          <DialogClose />
+        </DialogHeader>
+        <DialogBody>
+          <div className="flex flex-col gap-4">
+            <FormField>
+              <FormLabel>Claude Desktop Config:</FormLabel>
+              <Textarea
                 value={claudeConfig}
-                className="json-editor w-full h-80"
+                className="font-mono h-80"
                 readOnly
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block mb-sm">Proxy Path:</label>
-              <input
-                type="text"
-                className="w-full"
+            <FormField>
+              <FormLabel>Proxy Path:</FormLabel>
+              <Input
                 placeholder="Specify path for `mcp-guardian-proxy` if it's not in PATH"
                 value={proxyPath}
                 onChange={(e) => setProxyPath(e.target.value)}
               />
-            </div>
-
-            <div className="btn-group justify-end mt-md">
-              <button onClick={onClose} className="btn-sm">
-                Cancel
-              </button>
-              <button onClick={applyClaudeConfig} className="btn-success btn-sm">
-                Apply to Claude Desktop
-              </button>
-            </div>
+            </FormField>
           </div>
-        </div>
-      </div>
-    </>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="success" onClick={applyClaudeConfig}>
+            Apply to Claude Desktop
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

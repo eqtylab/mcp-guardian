@@ -4,6 +4,8 @@ import McpServerComponent from "../components/McpServerComponent";
 import CreateMcpServerDialog from "../components/CreateMcpServerDialog";
 import { NamedMcpServer } from "../bindings/NamedMcpServer";
 import { notifyError, notifySuccess } from "../components/toast";
+import { Plus } from "lucide-react";
+import { Button } from "../components/ui/Button";
 
 interface McpServersPageProps {
   mcpServers: NamedMcpServer[];
@@ -33,24 +35,31 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">MCP Servers</h1>
 
-        <div className="space-x-4">
-          <button
+        <div className="flex gap-4">
+          <Button
             onClick={() => setIsCreateDialogOpen(true)}
-            className="btn-success"
+            variant="success"
             title="Create a new MCP server configuration"
+            className="font-medium shadow-sm border-[1px] border-[rgba(0,0,0,0.1)]"
           >
+            <Plus size={16} className="mr-2" />
             New Server
-          </button>
+          </Button>
 
-          <button onClick={importClaudeConfig} className="bg-shield-200" title="Import Claude's default configuration">
+          <Button 
+            onClick={importClaudeConfig} 
+            variant="secondary" 
+            title="Import Claude's default configuration"
+            className="font-medium shadow-sm border-[1px] border-[rgba(0,0,0,0.1)]"
+          >
             Import Claude Config
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Core Servers Section */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-primary-700 dark:text-cream-200">Core Servers</h2>
+        <h2 className="text-xl font-semibold">Core Servers</h2>
         <div className="space-y-2">
           {coreServers.map((server, i) => (
             <McpServerComponent
@@ -71,7 +80,7 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
 
       {/* Custom Servers Section */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-primary-700 dark:text-cream-200">Custom Servers</h2>
+        <h2 className="text-xl font-semibold">Custom Servers</h2>
         <div className="space-y-2">
           {customServers.map((server, i) => (
             <McpServerComponent
@@ -82,8 +91,8 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
                 setOpenServerId(null);
                 updateMcpServers();
               }}
-              isExpanded={openServerId === i}
-              onToggle={() => setOpenServerId(openServerId === i ? null : i)}
+              isExpanded={openServerId === i + coreServers.length}
+              onToggle={() => setOpenServerId(openServerId === i + coreServers.length ? null : i + coreServers.length)}
               enableEdit={true}
             />
           ))}
