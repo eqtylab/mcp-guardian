@@ -4,7 +4,7 @@ This document outlines potential libraries to help implement the visual UI compo
 
 ## Flow/Diagram Libraries
 
-### 1. **React Flow** 
+### 1. **React Flow (xyflow)** 
 **Website**: https://reactflow.dev/
 
 **Benefits**:
@@ -22,59 +22,73 @@ This document outlines potential libraries to help implement the visual UI compo
 
 **Example Implementation**:
 ```tsx
-import ReactFlow, { 
+import { 
+  ReactFlow,
   Controls, 
   Background,
-  Node,
-  Edge,
-  Connection 
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+  MiniMap,
+  useNodesState,
+  useEdgesState,
+  addEdge
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 
 const GuardProfileBuilder = ({ value, onChange }) => {
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
+  // Initial nodes based on guard profile
+  const initialNodes = convertProfileToNodes(value);
+  // Initial edges to connect the nodes
+  const initialEdges = createEdgesFromNodes(initialNodes);
   
+  // Using the recommended state management hooks
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  
+  // Update when value changes externally
   useEffect(() => {
-    // Convert guard profile to nodes and edges
-    const { nodes, edges } = convertProfileToFlowElements(value);
-    setNodes(nodes);
-    setEdges(edges);
-  }, [value]);
+    const newNodes = convertProfileToNodes(value);
+    const newEdges = createEdgesFromNodes(newNodes);
+    setNodes(newNodes);
+    setEdges(newEdges);
+  }, [value, setNodes, setEdges]);
 
-  const onNodesChange = useCallback((changes) => {
-    setNodes((nds) => applyNodeChanges(changes, nds));
-  }, []);
+  // Handle creating new connections between nodes
+  const onConnect = useCallback((params) => {
+    setEdges((eds) => addEdge(params, eds));
+    
+    // Convert the visual representation back to guard profile JSON
+    const updatedProfile = convertToGuardProfile(nodes, [...edges, params]);
+    onChange(updatedProfile);
+  }, [nodes, edges, onChange, setEdges]);
 
-  const onEdgesChange = useCallback((changes) => {
-    setEdges((eds) => applyEdgeChanges(changes, eds));
-  }, []);
-
-  const onConnect = useCallback((connection) => {
-    // Handle connecting nodes
-    setEdges((eds) => addEdge(connection, eds));
-    onChange(convertFlowElementsToProfile(nodes, [...edges, connection]));
-  }, [nodes, edges, onChange]);
+  // Handle when a node is dropped after dragging
+  const onNodeDragStop = useCallback((event, node) => {
+    // Update node positions
+    setNodes((nds) => 
+      nds.map((n) => (n.id === node.id ? { ...n, position: node.position } : n))
+    );
+  }, [setNodes]);
 
   return (
-    <div style={{ height: 500 }}>
+    <div style={{ width: '100%', height: '500px' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onNodeDragStop={onNodeDragStop}
         fitView
       >
-        <Background />
+        <Background variant="dots" gap={12} size={1} />
         <Controls />
+        <MiniMap />
       </ReactFlow>
     </div>
   );
 };
 ```
 
-### 2. **XState + React Flow**
+### 2. **XState + React Flow (xyflow)**
 **Websites**: https://xstate.js.org/ + https://reactflow.dev/
 
 **Benefits**:
