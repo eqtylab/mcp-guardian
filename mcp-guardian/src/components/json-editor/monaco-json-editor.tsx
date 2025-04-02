@@ -106,8 +106,12 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
 
     // Set schema for validation if provided
     if (schema && monaco) {
+      // Configure JSON language features with schema
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
+        allowComments: false, // Disallow comments in JSON for strict validation
+        schemaValidation: "error", // Show schema validation issues as errors
+        enableSchemaRequest: false, // Don't fetch schemas from outside
         schemas: [
           {
             uri: schemaUri,
@@ -115,6 +119,23 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
             schema,
           },
         ],
+      });
+      
+      // Configure hover settings to make documentation more visible
+      const jsonEditorOptions = editor.getOptions();
+      editor.updateOptions({
+        hover: {
+          enabled: true,
+          delay: 300, // Show hover a bit faster than default
+          sticky: true, // Keep hover visible when mouse moves over it
+        },
+        // Enhance tooltips/documentation experience
+        inlayHints: {
+          enabled: "on",
+        },
+        lightbulb: {
+          enabled: true,
+        },
       });
     }
 

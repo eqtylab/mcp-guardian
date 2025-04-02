@@ -1,20 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$version": "1.0.0",
+  "description": "Configuration for an MCP server",
   "properties": {
     "args": {
+      "description": "Command-line arguments to pass to the MCP server",
       "items": {
         "type": "string"
       },
       "type": "array"
     },
     "cmd": {
+      "description": "The command to execute to start the MCP server",
       "type": "string"
     },
     "env": {
       "additionalProperties": {
         "type": "string"
       },
+      "description": "Environment variables to set when running the MCP server",
       "type": "object"
     }
   },

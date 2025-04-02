@@ -108,8 +108,10 @@
       ]
     },
     "MessageInterceptorGuardConfig": {
+      "description": "Different types of message interceptors that can be configured",
       "oneOf": [
         {
+          "description": "Chain multiple interceptors together in sequence",
           "properties": {
             "chain": {
               "items": {
@@ -131,6 +133,7 @@
           "type": "object"
         },
         {
+          "description": "Filter messages based on pattern matching and conditions",
           "properties": {
             "filter_logic": {
               "$ref": "#/definitions/FilterLogicGuardConfig"
@@ -157,6 +160,7 @@
           "type": "object"
         },
         {
+          "description": "Log messages to a file for auditing and debugging",
           "properties": {
             "log_level": {
               "type": "string"
@@ -175,6 +179,7 @@
           "type": "object"
         },
         {
+          "description": "Require manual user approval for messages before they are processed",
           "properties": {
             "type": {
               "enum": [
@@ -191,9 +196,15 @@
       ]
     }
   },
+  "description": "Configuration for a Guardian profile that controls message interception",
   "properties": {
     "primary_message_interceptor": {
-      "$ref": "#/definitions/MessageInterceptorGuardConfig"
+      "allOf": [
+        {
+          "$ref": "#/definitions/MessageInterceptorGuardConfig"
+        }
+      ],
+      "description": "The primary message interceptor configuration that handles the interception logic"
     }
   },
   "required": [

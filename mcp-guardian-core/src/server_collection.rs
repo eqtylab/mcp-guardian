@@ -11,22 +11,40 @@ use crate::dirs::AppSubDir::ServerCollections;
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Collection of servers with their associated guard profiles")]
 pub struct ServerCollection {
+    /// List of servers in this collection
+    #[schemars(description = "List of servers in this collection")]
     pub servers: Vec<Server>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Configuration for a server with MCP server and guard profile references")]
 pub struct Server {
+    /// Reference to an MCP server by name
+    #[schemars(description = "Reference to an MCP server by name")]
     pub mcp_server: String,
+    
+    /// Reference to a guard profile by name
+    #[schemars(description = "Reference to a guard profile by name")]
     pub guard_profile: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Named instance of a server collection with namespace information")]
 pub struct NamedServerCollection {
+    /// Namespace for organizing server collections
+    #[schemars(description = "Namespace for organizing server collections")]
     pub namespace: String,
+    
+    /// Unique name of the server collection within its namespace
+    #[schemars(description = "Unique name of the server collection within its namespace")]
     pub name: String,
+    
+    /// The actual server collection configuration
+    #[schemars(description = "The actual server collection configuration")]
     pub server_collection: ServerCollection,
 }
 

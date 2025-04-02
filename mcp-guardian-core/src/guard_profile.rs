@@ -19,17 +19,32 @@ use crate::{
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Configuration for a Guardian profile that controls message interception")]
 pub struct GuardProfile {
+    /// The primary message interceptor configuration that handles the interception logic
+    #[schemars(description = "The primary message interceptor configuration that handles the interception logic")]
     pub primary_message_interceptor: MessageInterceptorGuardConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[serde(tag = "type")]
 #[ts(export)]
+#[schemars(description = "Different types of message interceptors that can be configured")]
 pub enum MessageInterceptorGuardConfig {
+    /// Chain multiple interceptors together
+    #[schemars(description = "Chain multiple interceptors together in sequence")]
     Chain(chain::ChainGuardConfig),
+    
+    /// Filter messages based on conditions
+    #[schemars(description = "Filter messages based on pattern matching and conditions")]
     Filter(filter::FilterGuardConfig),
+    
+    /// Log messages to a file or console
+    #[schemars(description = "Log messages to a file for auditing and debugging")]
     MessageLog(message_log::MessageLogGuardConfig),
+    
+    /// Require manual approval for messages
+    #[schemars(description = "Require manual user approval for messages before they are processed")]
     ManualApproval(manual_approval::ManualApprovalGuardConfig),
 }
 
@@ -59,9 +74,18 @@ impl MessageInterceptorGuardConfig {
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Named instance of a guard profile with namespace information")]
 pub struct NamedGuardProfile {
+    /// Namespace for organizing guard profiles (e.g., 'core', 'custom')
+    #[schemars(description = "Namespace for organizing guard profiles (e.g., 'core', 'custom')")]
     pub namespace: String,
+    
+    /// Unique name of the guard profile within its namespace
+    #[schemars(description = "Unique name of the guard profile within its namespace")]
     pub profile_name: String,
+    
+    /// The actual guard profile configuration
+    #[schemars(description = "The actual guard profile configuration")]
     pub guard_profile: GuardProfile,
 }
 

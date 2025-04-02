@@ -1,6 +1,39 @@
 /* Custom styling for Monaco Editor */
 
 /* Enhanced container styling */
+
+/* Monaco hover widget styling - enhance the documentation tooltips */
+.monaco-hover {
+  border-radius: 6px !important;
+  border-color: rgba(var(--primary-rgb), 0.3) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  transition: opacity 0.2s ease-in-out !important;
+}
+
+.dark .monaco-hover {
+  background-color: rgba(30, 30, 45, 0.95) !important;
+  border-color: rgba(var(--neon-purple-rgb), 0.4) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 10px rgba(var(--neon-purple-rgb), 0.15) !important;
+}
+
+/* Make hover content more readable */
+.monaco-hover .hover-contents {
+  padding: 8px !important;
+  font-size: 13px !important;
+}
+
+/* Documentation text styling */
+.monaco-hover .hover-contents .markdown-hover p {
+  margin-bottom: 8px !important;
+}
+
+.monaco-hover .hover-contents .markdown-hover .codicon {
+  color: rgba(var(--primary-rgb), 0.8) !important;
+}
+
+.dark .monaco-hover .hover-contents .markdown-hover .codicon {
+  color: rgba(var(--neon-blue-rgb), 0.8) !important;
+}
 .monaco-editor-container {
   transition: all 0.2s ease-in-out;
 }

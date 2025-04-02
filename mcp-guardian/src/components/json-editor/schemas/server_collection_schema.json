@@ -3,11 +3,14 @@
   "$version": "1.0.0",
   "definitions": {
     "Server": {
+      "description": "Configuration for a server with MCP server and guard profile references",
       "properties": {
         "guard_profile": {
+          "description": "Reference to a guard profile by name",
           "type": "string"
         },
         "mcp_server": {
+          "description": "Reference to an MCP server by name",
           "type": "string"
         }
       },
@@ -18,8 +21,10 @@
       "type": "object"
     }
   },
+  "description": "Collection of servers with their associated guard profiles",
   "properties": {
     "servers": {
+      "description": "List of servers in this collection",
       "items": {
         "$ref": "#/definitions/Server"
       },

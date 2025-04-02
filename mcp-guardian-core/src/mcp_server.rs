@@ -15,9 +15,18 @@ use crate::{
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Configuration for an MCP server")]
 pub struct McpServer {
+    /// The command to execute to start the MCP server
+    #[schemars(description = "The command to execute to start the MCP server")]
     pub cmd: String,
+    
+    /// Command-line arguments to pass to the MCP server
+    #[schemars(description = "Command-line arguments to pass to the MCP server")]
     pub args: Vec<String>,
+    
+    /// Environment variables to set when running the MCP server
+    #[schemars(description = "Environment variables to set when running the MCP server")]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     #[ts(skip)]
     pub env: HashMap<String, String>,
@@ -35,9 +44,18 @@ impl From<&ClaudeMcpServer> for McpServer {
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
+#[schemars(description = "Named instance of an MCP server with namespace")]
 pub struct NamedMcpServer {
+    /// Namespace for organizing MCP servers (e.g., 'core', 'custom')
+    #[schemars(description = "Namespace for organizing MCP servers (e.g., 'core', 'custom')")]
     pub namespace: String,
+    
+    /// Unique name of the MCP server within its namespace
+    #[schemars(description = "Unique name of the MCP server within its namespace")]
     pub name: String,
+    
+    /// Configuration for the MCP server
+    #[schemars(description = "Configuration for the MCP server")]
     pub mcp_server: McpServer,
 }
 
