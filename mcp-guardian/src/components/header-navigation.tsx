@@ -29,7 +29,7 @@ export default function HeaderNavigation({
   modifierKey
 }: HeaderNavProps) {
   return (
-    <header className="flex h-14 items-center justify-between bg-zinc-900 dark:bg-zinc-900 bg-zinc-200 border-b border-border px-6 z-0">
+    <header className="flex h-14 items-center justify-between bg-zinc-900 dark:bg-zinc-900 bg-zinc-200 px-6 z-0">
       {/* Left section - Logo */}
       <div className="flex items-center gap-2">
         <Shield size={20} className="text-primary" />
