@@ -29,11 +29,11 @@ export default function HeaderNavigation({
   modifierKey
 }: HeaderNavProps) {
   return (
-    <header className="flex h-14 items-center justify-between bg-zinc-900 border-b border-border px-6 z-0">
+    <header className="flex h-14 items-center justify-between bg-zinc-900 dark:bg-zinc-900 bg-zinc-200 border-b border-border px-6 z-0">
       {/* Left section - Logo */}
       <div className="flex items-center gap-2">
         <Shield size={20} className="text-primary" />
-        <span className="text-white font-medium">MCP Guardian</span>
+        <span className="dark:text-white text-zinc-800 font-medium">MCP Guardian</span>
       </div>
       
       {/* Center section - Primary Navigation */}
@@ -56,7 +56,7 @@ export default function HeaderNavigation({
                       // Base styles
                       "flex flex-col items-center py-2 px-4 relative rounded-t-md",
                       // Default state
-                      "text-gray-300 hover:text-white hover:bg-muted",
+                      "dark:text-gray-300 text-gray-800 hover:text-primary dark:hover:text-white hover:bg-muted transition-all duration-200",
                       // Active state - blend with content area background matching exactly
                       isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
                     )}
@@ -82,7 +82,7 @@ export default function HeaderNavigation({
       
       {/* Right section - Actions/Settings */}
       <div className="flex items-center gap-4">
-        <div className="text-xs text-gray-400" title="Keyboard Shortcuts">
+        <div className="text-xs dark:text-gray-400 text-gray-700" title="Keyboard Shortcuts">
           {modifierKey} + (1-5): Navigate
         </div>
         <ThemeToggle />

@@ -40,7 +40,7 @@ export function ThemeToggle() {
         size="sm"
         onClick={() => setOpen(!open)}
         title="Change theme"
-        className="w-9 p-0"
+        className="w-9 p-0 text-gray-800 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-all duration-200 bg-opacity-10 hover:bg-opacity-20"
       >
         <CurrentIcon size={18} />
       </Button>
@@ -54,10 +54,10 @@ export function ThemeToggle() {
                 <button
                   key={option.value}
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm",
+                    "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-all duration-200",
                     theme === option.value 
                       ? "bg-primary text-primary-foreground" 
-                      : "hover:bg-muted"
+                      : "hover:bg-muted hover:text-primary dark:hover:text-white"
                   )}
                   onClick={() => {
                     setTheme(option.value as any);
