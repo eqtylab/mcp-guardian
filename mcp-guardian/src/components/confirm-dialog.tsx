@@ -1,12 +1,12 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-  DialogBody,
-  DialogFooter,
-} from "./ui/dialog";
+  CyberDialog as Dialog,
+  CyberDialogContent as DialogContent,
+  CyberDialogHeader as DialogHeader,
+  CyberDialogTitle as DialogTitle,
+  CyberDialogClose as DialogClose,
+  CyberDialogBody as DialogBody,
+  CyberDialogFooter as DialogFooter,
+} from "./ui/cyber-dialog";
 import { Button } from "./ui/button";
 
 interface ConfirmDialogProps {
@@ -27,15 +27,15 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message }: ConfirmDi
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
+      <DialogContent variant="cyber" glow="subtle" className="max-w-md">
+        <DialogHeader variant="cyber">
           <DialogTitle>{title}</DialogTitle>
-          <DialogClose />
+          <DialogClose variant="cyber" />
         </DialogHeader>
-        <DialogBody>
-          <p className="mb-4 text-colors-text-secondary">{message}</p>
+        <DialogBody variant="cyber">
+          <p className="mb-4 text-muted-foreground">{message}</p>
         </DialogBody>
-        <DialogFooter>
+        <DialogFooter variant="cyber">
           <Button size="sm" variant="secondary" onClick={onClose}>
             Cancel
           </Button>

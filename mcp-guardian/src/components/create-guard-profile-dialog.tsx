@@ -3,14 +3,14 @@ import { invoke } from "@tauri-apps/api/core";
 import { notifyError, notifySuccess } from "./toast";
 
 import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogClose,
-  DialogBody,
-  DialogFooter
-} from "./ui/dialog";
+  CyberDialog as Dialog, 
+  CyberDialogContent as DialogContent, 
+  CyberDialogHeader as DialogHeader, 
+  CyberDialogTitle as DialogTitle, 
+  CyberDialogClose as DialogClose,
+  CyberDialogBody as DialogBody,
+  CyberDialogFooter as DialogFooter
+} from "./ui/cyber-dialog";
 import { Button } from "./ui/button";
 import { FormField, FormLabel } from "./ui/form-field";
 import { Input } from "./ui/input";
@@ -76,17 +76,19 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent variant="cyber" glow="subtle" className="max-w-2xl">
+        <DialogHeader variant="cyber">
           <DialogTitle>Create New Guard Profile</DialogTitle>
-          <DialogClose />
+          <DialogClose variant="cyber" />
         </DialogHeader>
-        <DialogBody>
+        <DialogBody variant="cyber">
           <div className="flex flex-col gap-4">
             <FormField>
               <FormLabel htmlFor="namespace">Namespace</FormLabel>
               <Input
                 id="namespace"
+                variant="cyber"
+                glow="focus"
                 value={namespace}
                 onChange={(e) => setNamespace(e.target.value)}
                 placeholder="e.g., custom"
@@ -97,6 +99,8 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
               <FormLabel htmlFor="name">Name</FormLabel>
               <Input
                 id="name"
+                variant="cyber"
+                glow="focus"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., my-profile"
@@ -107,6 +111,8 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
               <FormLabel htmlFor="config">Configuration</FormLabel>
               <Textarea
                 id="config"
+                variant="cyber"
+                glow="focus"
                 value={config}
                 onChange={(e) => {
                   setConfig(e.target.value);
@@ -120,7 +126,7 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
             </FormField>
           </div>
         </DialogBody>
-        <DialogFooter>
+        <DialogFooter variant="cyber">
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>

@@ -23,21 +23,9 @@ const CyberDialogStyles = () => (
       to { opacity: 1; }
     }
     
+    /* Remove animation for now to ensure proper centering */
     .cyber-dialog-content {
-      position: relative;
-      overflow: hidden;
-      animation: cyber-dialog-content-in 0.2s ease-out forwards;
-    }
-    
-    @keyframes cyber-dialog-content-in {
-      from { 
-        opacity: 0; 
-        transform: translate(-50%, -49%) scale(0.99);
-      }
-      to { 
-        opacity: 1; 
-        transform: translate(-50%, -50%) scale(1);
-      }
+      opacity: 1;
     }
     
     .cyber-dialog-content::before {
@@ -121,7 +109,7 @@ const CyberDialogStyles = () => (
 
 // Overlay variants
 const overlayVariants = cva(
-  "fixed inset-0 z-50",
+  "fixed inset-0 z-[999]",
   {
     variants: {
       variant: {
@@ -148,9 +136,9 @@ const CyberDialogOverlay = React.forwardRef<
 ));
 CyberDialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-// Content variants
+// Content variants - simplified for better positioning
 const contentVariants = cva(
-  "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg max-h-[85vh] overflow-y-auto z-50 border shadow-md",
+  "w-full max-w-lg max-h-[85vh] overflow-y-auto border shadow-md",
   {
     variants: {
       variant: {
@@ -182,7 +170,11 @@ const CyberDialogContent = React.forwardRef<
       <CyberDialogOverlay variant={variant === "default" ? "default" : "cyber"} />
       <DialogPrimitive.Content
         ref={ref}
-        className={cn(contentVariants({ variant, glow }), className)}
+        className={cn(
+          "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000]",
+          contentVariants({ variant, glow }),
+          className
+        )}
         {...props}
       >
         {children}
@@ -288,7 +280,7 @@ const bodyVariants = cva(
     variants: {
       variant: {
         default: "bg-card",
-        cyber: "bg-card/80 backdrop-blur-sm",
+        cyber: "bg-card/90 backdrop-blur-sm",
       },
     },
     defaultVariants: {
@@ -319,7 +311,7 @@ const footerVariants = cva(
     variants: {
       variant: {
         default: "bg-muted border-border",
-        cyber: "bg-muted/80 border-border/50 backdrop-blur-sm",
+        cyber: "bg-muted/90 border-border/50 backdrop-blur-sm",
       },
       glow: {
         none: "",
