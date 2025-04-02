@@ -305,7 +305,18 @@ text-[var(--dynamic-size)]
 grid-cols-[repeat(auto-fill,minmax(10rem,1fr))]
 ```
 
-## Best Practices with Tailwind CSS v4
+## Implementation Status & Best Practices
+
+### Current Implementation (2023-05-18)
+
+We have successfully implemented Tailwind CSS v4 with the following:
+
+1. **@config Directive**: All theme tokens defined in App.css using Tailwind v4's @config
+2. **Theme Functions**: CSS variables replaced with theme() functions throughout CSS
+3. **Utility First Components**: Starting to refactor components to use utility classes
+4. **Component Examples**: McpServerComponent refactored as an example for other components
+
+### Best Practices with Tailwind CSS v4
 
 1. **Use Tailwind Utilities**: Prefer Tailwind utility classes over custom CSS classes
 2. **Theme Extension**: Use the @config directive in App.css rather than custom variables
@@ -316,6 +327,16 @@ grid-cols-[repeat(auto-fill,minmax(10rem,1fr))]
 7. **Dark Mode**: Design with dark mode as the primary experience
 8. **Dynamic Values**: Take advantage of Tailwind v4's dynamic utility values for responsive design
 9. **Performance**: Leverage Tailwind v4's performance optimizations by keeping CSS minimal
+
+### Component Refactoring Approach
+
+When converting existing components to use Tailwind utility classes:
+
+1. **Preserve Visual Design**: Maintain the exact same visual appearance
+2. **Use Theme Tokens**: Access colors, fonts, spacing via utility classes (e.g., bg-bg-surface)
+3. **Remove Custom Classes**: Replace custom classes with utility compositions
+4. **Refactor One Component at a Time**: Test each refactored component before moving to the next
+5. **Maintain Semantics**: Keep semantic HTML structure while changing class names
 
 ## JSON Editor Styling
 
