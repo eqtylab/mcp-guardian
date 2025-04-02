@@ -50,6 +50,9 @@ The following resources provide detailed information about Phase 4 implementatio
 - [PHASE4_COMPONENTS.md](./PHASE4_COMPONENTS.md) - Component-specific analysis and proposals
 - [PHASE4_VISUAL_CONCEPTS.md](./PHASE4_VISUAL_CONCEPTS.md) - Descriptive mockups of proposed UI improvements
 - [PHASE4_ROADMAP.md](./PHASE4_ROADMAP.md) - Detailed implementation plan and timeline
+- [PHASE4_GUARD_PROFILE_BUILDER.md](./PHASE4_GUARD_PROFILE_BUILDER.md) - Implementation guide for the Guard Profile Visual Builder
+- [PHASE4_LIBRARIES.md](./PHASE4_LIBRARIES.md) - Analysis of libraries for visual UI components
+- [PHASE4_REACT_FLOW_NOTES.md](./PHASE4_REACT_FLOW_NOTES.md) - Exploration notes on React Flow for node-based editing
 
 ## Implementation Plan
 
