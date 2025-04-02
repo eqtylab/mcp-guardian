@@ -81,7 +81,6 @@ const GuardProfileBuilder = ({ value, onChange }) => {
       >
         <Background variant="dots" gap={12} size={1} />
         <Controls />
-        <MiniMap />
       </ReactFlow>
     </div>
   );
