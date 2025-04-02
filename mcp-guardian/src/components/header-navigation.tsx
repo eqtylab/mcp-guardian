@@ -58,8 +58,9 @@ export default function HeaderNavigation({
                       // Default state
                       "text-gray-300 hover:text-white hover:bg-muted",
                       // Active state - blend with content area background matching exactly
-                      isActive && "bg-background text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
+                      isActive && "text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
                     )}
+                    style={isActive ? { backgroundColor: 'var(--background)' } : undefined}
                   >
                     <div className="relative">
                       <Icon size={18} />
