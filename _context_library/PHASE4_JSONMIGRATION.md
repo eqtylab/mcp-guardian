@@ -7,10 +7,12 @@ This document outlines the plan for migrating from the current JSON editing solu
 ### Components and Usage
 
 1. **Current JSON Editor Components:**
+
    - `JsonEditor` (in `json-valid-editor.tsx`) - Custom editor built on `Textarea`
    - `JSONViewer` (in `jsonviewer.tsx`) - Uses `CopyBlock` from react-code-blocks
 
 2. **Core Functionality:**
+
    - Basic syntax validation
    - JSON formatting
    - Read-only mode support
@@ -18,6 +20,7 @@ This document outlines the plan for migrating from the current JSON editing solu
    - Copy functionality (for JSONViewer)
 
 3. **Current Limitations:**
+
    - No schema validation
    - Basic text area for editing
    - Limited syntax highlighting in editor (vs viewer)
@@ -36,6 +39,7 @@ This document outlines the plan for migrating from the current JSON editing solu
 ### Why Monaco Editor
 
 1. **Advanced Editing Features:**
+
    - First-class JSON support with syntax highlighting
    - Intelligent autocompletion
    - Code folding
@@ -44,12 +48,14 @@ This document outlines the plan for migrating from the current JSON editing solu
    - Multiple cursors
 
 2. **Schema Validation:**
+
    - Built-in JSON schema validation
    - Error highlighting
    - Property suggestions based on schema
    - Documentation tooltips
 
 3. **Developer Experience:**
+
    - Familiar VS Code-like experience
    - Keyboard shortcuts
    - Customizable themes
@@ -63,11 +69,13 @@ This document outlines the plan for migrating from the current JSON editing solu
 ### Technical Implementation
 
 1. **Package Dependencies:**
+
    ```bash
    npm install @monaco-editor/react monaco-editor
    ```
 
 2. **Bundle Size Considerations:**
+
    - Monaco Editor is ~1MB in size
    - Desktop-only application makes this less critical
    - Can use webpack/vite code-splitting to load on demand
@@ -83,7 +91,7 @@ This document outlines the plan for migrating from the current JSON editing solu
 ```
 /components/json-editor/
   index.tsx                 # Main exports
-  monaco-json-editor.tsx    # Core editor component 
+  monaco-json-editor.tsx    # Core editor component
   json-viewer.tsx           # Read-only viewer
   schemas/                  # JSON schemas for entity types
   utils/                    # Helper utilities
@@ -94,15 +102,17 @@ This dedicated folder structure provides proper organization for the component e
 
 ## Implementation Plan
 
-### Phase 1: Setup and Basic Implementation
+### STEP 1: Setup and Basic Implementation
 
 1. **Monaco Editor Setup:**
+
    - Add dependencies
    - Configure Vite/Webpack for proper bundling
    - Create basic Monaco Editor wrapper component
    - Set up component folder structure in `/components/json-editor/`
 
 2. **Basic JSON Editor Component:**
+
    - Implement core editing functionality
    - Match existing JsonEditor API for seamless replacement
    - Add syntax highlighting and formatting
@@ -113,15 +123,17 @@ This dedicated folder structure provides proper organization for the component e
    - Ensure compatibility with existing usage patterns
    - Verify performance impact
 
-### Phase 2: Schema Integration
+### STEP 2: Schema Integration
 
 1. **Schema Generation:**
+
    - Convert TypeScript types (from ts-rs) to JSON Schema
    - Create schemas for all entity types
    - Focus on frontend validation only (not requiring backend changes)
    - Store schemas in `/components/json-editor/schemas/`
 
 2. **Enhanced Features:**
+
    - Add autocompletion based on schemas
    - Implement documentation tooltips
    - Add property suggestions
@@ -131,14 +143,16 @@ This dedicated folder structure provides proper organization for the component e
    - Test with various configuration examples
    - Ensure good performance with complex schemas
 
-### Phase 3: Component Replacement
+### STEP 3: Component Replacement
 
 1. **Drop-in Replacement:**
+
    - Replace current JsonEditor in all components
    - Update styling to match application theme
    - Ensure consistent behavior
 
 2. **Enhanced JSONViewer:**
+
    - Create Monaco-based read-only viewer
    - Add improved formatting and highlighting
    - Maintain copy functionality
@@ -148,14 +162,16 @@ This dedicated folder structure provides proper organization for the component e
    - Verify that all current functionality works as expected
    - Check for edge cases and regression issues
 
-### Phase 4: Advanced Features
+### STEP 4: Advanced Features
 
 1. **Custom Actions:**
+
    - Add schema-specific actions
    - Implement custom commands and keybindings
    - Add contextual helpers
 
 2. **Theme Integration:**
+
    - Create dark/light theme variants
    - Ensure accessibility standards
    - Match application style guide
@@ -170,9 +186,9 @@ This dedicated folder structure provides proper organization for the component e
 ### Basic MonacoJsonEditor Component
 
 ```tsx
-import React, { useRef } from 'react';
-import Editor, { Monaco } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import React, { useRef } from "react";
+import Editor, { Monaco } from "@monaco-editor/react";
+import { editor } from "monaco-editor";
 
 interface MonacoJsonEditorProps {
   value: string;
@@ -187,14 +203,14 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
   value,
   onChange,
   disabled = false,
-  maxHeight = '500px',
+  maxHeight = "500px",
   schema,
 }) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
 
   const handleEditorDidMount = (
-    editor: editor.IStandaloneCodeEditor, 
+    editor: editor.IStandaloneCodeEditor,
     monaco: Monaco
   ) => {
     editorRef.current = editor;
@@ -204,11 +220,13 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
     if (schema && monaco) {
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
-        schemas: [{
-          uri: 'http://mcp-guardian/schemas/config.json',
-          fileMatch: ['*'],
-          schema,
-        }],
+        schemas: [
+          {
+            uri: "http://mcp-guardian/schemas/config.json",
+            fileMatch: ["*"],
+            schema,
+          },
+        ],
       });
     }
   };
@@ -219,10 +237,10 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
         height={maxHeight}
         defaultLanguage="json"
         value={value}
-        onChange={(v) => onChange(v || '')}
+        onChange={(v) => onChange(v || "")}
         options={{
           minimap: { enabled: false },
-          lineNumbers: 'on',
+          lineNumbers: "on",
           scrollBeyondLastLine: false,
           readOnly: disabled,
           automaticLayout: true,
@@ -244,33 +262,33 @@ export default MonacoJsonEditor;
 ```tsx
 // schemas/mcpServerSchema.ts
 export const mcpServerSchema = {
-  type: 'object',
-  required: ['url', 'auth'],
+  type: "object",
+  required: ["url", "auth"],
   properties: {
     url: {
-      type: 'string',
-      format: 'uri',
-      description: 'The URL of the MCP server',
+      type: "string",
+      format: "uri",
+      description: "The URL of the MCP server",
     },
     auth: {
-      type: 'object',
-      required: ['type'],
+      type: "object",
+      required: ["type"],
       properties: {
         type: {
-          type: 'string',
-          enum: ['none', 'bearer', 'basic'],
-          description: 'Authentication type',
+          type: "string",
+          enum: ["none", "bearer", "basic"],
+          description: "Authentication type",
         },
         token: {
-          type: 'string',
-          description: 'Bearer token for authentication',
+          type: "string",
+          description: "Bearer token for authentication",
         },
       },
     },
     timeout: {
-      type: 'integer',
+      type: "integer",
       minimum: 1000,
-      description: 'Request timeout in milliseconds',
+      description: "Request timeout in milliseconds",
     },
   },
 };
@@ -304,26 +322,31 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 ## Implementation Challenges
 
 1. **Bundle Size**
+
    - Challenge: Monaco is a large dependency (~1MB)
    - Mitigation: Code splitting and lazy loading
    - Impact: Minimal for desktop application
 
 2. **Schema Management**
+
    - Challenge: Creating and maintaining accurate schemas
    - Mitigation: Generate schemas from TypeScript definitions (already generated from Rust)
    - Impact: Initial investment in schema creation
 
 3. **Performance**
+
    - Challenge: Monaco can be resource-intensive for large files
    - Mitigation: Optimize editor settings, limit features for large files
    - Impact: Monitor and optimize as needed
 
 4. **Theming and Styling**
+
    - Challenge: Matching application theme with Monaco
    - Mitigation: Create custom themes and override default styles
    - Impact: Additional styling work required
 
 5. **Learning Curve**
+
    - Challenge: Monaco API is extensive and complex
    - Mitigation: Create abstracted components with simpler API
    - Impact: Initial learning investment for developers
@@ -336,15 +359,18 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 ## Testing Strategy
 
 1. **Component Testing:**
+
    - Unit tests for MonacoJsonEditor component
    - Testing with various JSON structures
    - Edge case testing (large files, malformed JSON)
 
 2. **Integration Testing:**
+
    - Test in all components that use JSON editing
    - Verify behavior in different contexts
 
 3. **Schema Validation Testing:**
+
    - Test with valid and invalid JSON against schemas
    - Verify error messages and suggestions
 
@@ -355,16 +381,19 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 ## Timeline and Milestones
 
 1. **Week 1: Setup and Basic Implementation**
+
    - Add dependencies
    - Create basic MonacoJsonEditor component
    - Set up testing environment
 
 2. **Week 2: Schema Integration**
+
    - Create JSON schemas for all entity types
    - Implement schema validation
    - Add intellisense features
 
 3. **Week 3: Component Replacement**
+
    - Replace JsonEditor in all components
    - Update styling and theming
    - Fix any integration issues
@@ -377,12 +406,14 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 ## Future Enhancements (Backlogged)
 
 1. **Rust Core Validation**
+
    - Add schema validation capabilities to Rust core libraries
    - Synchronize schema definitions between frontend and backend
    - Implement advanced validation rules (cross-entity references, etc.)
    - Enable server-side schema validation before persistence
 
 2. **Schema Generation Pipeline**
+
    - Create tooling to generate schemas from Rust structs
    - Maintain a single source of truth for all schema definitions
    - Automatically generate TypeScript types and JSON Schema
