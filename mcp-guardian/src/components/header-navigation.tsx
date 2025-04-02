@@ -29,7 +29,7 @@ export default function HeaderNavigation({
   modifierKey
 }: HeaderNavProps) {
   return (
-    <header className="flex h-14 items-center justify-between bg-zinc-900 border-b border-zinc-700 px-6">
+    <header className="flex h-14 items-center justify-between bg-zinc-900 border-b border-border px-6 z-0">
       {/* Left section - Logo */}
       <div className="flex items-center gap-2">
         <Shield size={20} className="text-primary" />
@@ -56,9 +56,9 @@ export default function HeaderNavigation({
                       // Base styles
                       "flex flex-col items-center py-2 px-4 relative rounded-t-md",
                       // Default state
-                      "text-gray-300 hover:text-white hover:bg-zinc-800",
+                      "text-gray-300 hover:text-white hover:bg-muted",
                       // Active state - blend with content area background matching exactly
-                      isActive && "bg-background text-foreground border-t border-l border-r border-zinc-700 border-b-0 z-10 relative"
+                      isActive && "bg-background text-foreground border-t border-l border-r border-border border-b-0 z-10 relative"
                     )}
                   >
                     <div className="relative">
