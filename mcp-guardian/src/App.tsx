@@ -12,6 +12,7 @@ import { NamedMcpServer } from "./bindings/NamedMcpServer";
 import { NamedGuardProfile } from "./bindings/NamedGuardProfile";
 import { NamedServerCollection } from "./bindings/NamedServerCollection";
 import HeaderNavigation from "./components/header-navigation";
+import { PageTransition } from "./components/ui/page-transition";
 import "./App.css";
 
 enum Page {
@@ -115,20 +116,32 @@ const App = () => {
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 overflow-y-auto p-6">
           {currentPage === Page.SPLASH ? (
-            <SplashPage />
+            <PageTransition>
+              <SplashPage />
+            </PageTransition>
           ) : currentPage === Page.SERVERS ? (
-            <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
+            <PageTransition>
+              <McpServersPage mcpServers={mcpServers} updateMcpServers={updateMcpServers} />
+            </PageTransition>
           ) : currentPage === Page.GUARD_PROFILES ? (
-            <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
+            <PageTransition>
+              <GuardProfilesPage guardProfiles={guardProfiles} updateGuardProfiles={updateGuardProfiles} />
+            </PageTransition>
           ) : currentPage === Page.SERVER_COLLECTIONS ? (
-            <ServerCollectionsPage
-              serverCollections={serverCollections}
-              updateServerCollections={updateServerCollections}
-            />
+            <PageTransition>
+              <ServerCollectionsPage
+                serverCollections={serverCollections}
+                updateServerCollections={updateServerCollections}
+              />
+            </PageTransition>
           ) : currentPage === Page.PENDING_MESSAGES ? (
-            <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
+            <PageTransition>
+              <PendingMessagesPage pendingMessages={pendingMessages} updatePendingMessages={updatePendingMessages} />
+            </PageTransition>
           ) : (
-            <div>Page not found</div>
+            <PageTransition>
+              <div>Page not found</div>
+            </PageTransition>
           )}
         </div>
       </div>

@@ -117,3 +117,14 @@ This document tracks features and improvements that have been deprioritized from
   - Optimize animations and transitions for lower-end devices
   - Reduce unnecessary re-renders in complex components
   - Implement performance monitoring metrics
+
+### Enhanced Page Transitions
+- **Original Phase:** Phase 3
+- **Tentative New Phase:** Future enhancement phase
+- **Rationale:** Multiple approaches to page transitions were attempted but ultimately removed in favor of direct page switching for a clean, native desktop application feel. The more complex transitions resulted in visual inconsistencies that detracted from the professional experience.
+- **Details:**
+  - Research hardware-accelerated animation techniques
+  - Explore canvas-based transitions that avoid DOM reflow issues
+  - Consider simpler cross-fades with better performance characteristics
+  - Investigate native desktop application transition patterns
+  - Test extensively across different performance profiles

@@ -100,6 +100,7 @@ code {
     --neon-green: hsl(140, 90%, 40%);
 
     /* RGB values for shadows and effects */
+    --primary-rgb: 129, 91, 220;  /* RGB for primary color based on hsl(254 72% 52%) */
     --neon-blue-rgb: 38, 102, 178;
     --neon-purple-rgb: 117, 38, 178;
     --neon-cyan-rgb: 38, 178, 178;
@@ -205,6 +206,7 @@ code {
     --neon-green: hsl(140, 100%, 60%);
 
     /* RGB values for shadows and effects */
+    --primary-rgb: 129, 91, 220;  /* RGB for primary color based on hsl(254 72% 52%) */
     --neon-blue-rgb: 51, 153, 255;
     --neon-purple-rgb: 191, 64, 255;
     --neon-cyan-rgb: 64, 224, 228;
