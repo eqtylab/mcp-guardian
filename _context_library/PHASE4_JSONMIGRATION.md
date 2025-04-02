@@ -442,16 +442,16 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
 
 ### Component Architecture
 
-The Monaco Editor implementation has been structured with the following components:
+The Monaco Editor implementation has been structured within the `mcp-guardian/src/components/json-editor` directory, with the following components implemented:
 
 1. **Core Editor Components**:
 
-   - `monaco-json-editor.tsx` - Schema-aware editor with validation and hover documentation
-   - `json-viewer.tsx` - Read-only viewer with consistent styling
-   - `monaco-themes.ts` - Custom theme definitions for dark and light modes
-   - `theme-utils.ts` - Robust theme detection and synchronization
-   - `monaco-editor.css` - Custom styling for the editor and hover tooltips
-   - `README.md` - Comprehensive documentation of the component system and its usage
+- `monaco-json-editor.tsx` - Schema-aware editor with validation and hover documentation
+- `json-viewer.tsx` - Read-only viewer with consistent styling
+- `monaco-themes.ts` - Custom theme definitions for dark and light modes
+- `theme-utils.ts` - Robust theme detection and synchronization
+- `monaco-editor.css` - Custom styling for the editor and hover tooltips
+- `README.md` - Comprehensive documentation of this json-editor component system and its usage
 
 2. **Integration with JSON Schema System**:
    - Schema-aware Monaco configuration
