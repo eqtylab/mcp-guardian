@@ -10,6 +10,7 @@ A customized Monaco Editor implementation for JSON editing with schema validatio
 - **Cyberpunk Styling**: Custom themes with neon effects for both light and dark modes
 - **Theme Detection**: Robust theme synchronization with the application
 - **Error Handling**: Improved handling of empty or invalid JSON
+- **Widget Overflow**: Fixed positioning for tooltips and widgets to prevent clipping
 
 ## Components
 
@@ -56,3 +57,5 @@ that power the editor's validation and IntelliSense features.
 - Theme detection checks multiple sources (localStorage, DOM classes, system preferences)
 - Customized hover tooltips for better documentation visibility
 - Optimized for both editing and viewing JSON in MCP Guardian's cyberpunk aesthetic
+- Uses fixed widget containers to ensure tooltips and suggestion widgets are never clipped
+- Properly manages DOM resources with React lifecycle hooks for cleanup

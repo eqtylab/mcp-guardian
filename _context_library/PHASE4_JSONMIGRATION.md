@@ -451,6 +451,7 @@ The Monaco Editor implementation has been structured with the following componen
    - `monaco-themes.ts` - Custom theme definitions for dark and light modes
    - `theme-utils.ts` - Robust theme detection and synchronization
    - `monaco-editor.css` - Custom styling for the editor and hover tooltips
+   - `README.md` - Comprehensive documentation of the component system and its usage
 
 2. **Integration with JSON Schema System**:
    - Schema-aware Monaco configuration
@@ -473,6 +474,21 @@ Solution:
 - Implemented multiple checks for theme sources with clear priority
 - Added comprehensive DOM observers and event listeners
 - Enhanced debug logging for theme-related issues
+
+### Widget Overflow Challenges
+
+A significant challenge was ensuring editor tooltips and widgets weren't clipped by container overflow settings:
+
+- Tooltips and suggestion widgets would be cut off by container boundaries
+- Custom CSS approaches were incompatible with Monaco's widget rendering system
+- Z-index and positioning were inconsistent across different contexts
+
+Solution:
+
+- Created a dedicated DOM node attached to the document body for widgets
+- Used Monaco's built-in `fixedOverflowWidgets` option to position widgets in this container
+- Properly managed the widget container's lifecycle with React hooks
+- Simplified CSS to avoid conflicts with the fixed positioning approach
 
 ### Validation and Documentation Features
 
@@ -506,6 +522,7 @@ To complete the migration, minimal work remains:
    - Optimize performance for large JSON documents
    - Add comprehensive tests for the new components
    - Remove react-code-blocks dependency once migration is complete
+   - Apply widget overflow fix to any remaining editor instances
 
 4. **Estimated Work Remaining:**
    - Approximately 10% of the JSON editing components still need migration

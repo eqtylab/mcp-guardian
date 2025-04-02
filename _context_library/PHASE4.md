@@ -399,6 +399,31 @@ These improvements have significantly enhanced the JSON editing experience, maki
 
 *Next steps will focus on migrating the remaining JSON viewing components to use the Monaco Editor, with emphasis on the tool call response viewers for maximum impact.*
 
+#### 2025-04-02: Fixed Monaco Editor Widget Overflow
+
+Fixed critical issue with Monaco Editor tooltips and widgets being clipped by container overflow:
+
+- **Implementation Details**:
+  - Created a dedicated DOM node attached to the document body for overflow widgets
+  - Set fixedOverflowWidgets option to true for all editor instances
+  - Properly managed the widget container lifecycle with React's useRef and useEffect
+  - Added DOM cleanup on component unmount to prevent memory leaks
+  - Simplified CSS to avoid conflicts with the fixed positioning approach
+
+- **Enhanced Functionality**:
+  - Tooltips and documentation popups now display properly without being cut off
+  - Hover information and error messages are fully visible regardless of container constraints
+  - Suggestion widgets appear properly when typing in constrained containers
+  - Consistent behavior across different screen sizes and container layouts
+
+- **Technical Approach**:
+  - Used Monaco Editor's built-in widget overflow mechanisms instead of CSS hacks
+  - Followed best practices for React integration with Monaco Editor
+  - Ensured proper DOM resource management through the component lifecycle
+  - Created minimal implementation that will scale to all editor instances
+
+This fix significantly enhances usability by ensuring that all tooltips, documentation, and validation messages are fully visible to users, regardless of container constraints or position on the page.
+
 #### 2025-04-02: Create MCP Server Dialog Migration to Monaco Editor
 
 Completed the migration of the Create MCP Server dialog to use Monaco Editor with JSON Schema validation:
