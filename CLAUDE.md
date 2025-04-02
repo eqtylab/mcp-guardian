@@ -23,9 +23,11 @@ All reference for current work is located in `./_context_library`. Use this to d
 - Create detailed phase plans in `./_context_library/PHASE{N}.md` files
 
 - For planning component development (React):
-- always use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling.
-- ensure component files do not grow too large, use modular design
-- use strongly typed TypeScript/TSX
+- ALWAYS use `./_context_library/STYLING_GUIDE.md` as your source of truth for styling
+- Use Tailwind CSS v4 utility classes directly in components instead of custom CSS classes
+- NEVER add custom component styles to App.css - keep it minimal with only global styles and theme variables
+- Keep component files small and modular - use composition for reusability
+- Use strongly typed TypeScript/TSX throughout
 
 ---
 

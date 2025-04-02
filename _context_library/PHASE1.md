@@ -94,12 +94,18 @@ This phase focuses on refining the existing MCP Guardian Tauri application prima
   - [/] Implement consistent Tailwind patterns across components
   - [x] Take advantage of Tailwind v4's automatic CSS optimization
 
-- [ ] **CSS Optimization and Component Styling Refactor**
-  - [ ] Reduce App.css file size by moving component-specific styles to inline Tailwind
-  - [ ] Refactor components to use Tailwind utility classes directly instead of custom CSS classes
-  - [ ] Keep App.css focused only on reusable patterns and global styles
-  - [ ] Create examples of fully Tailwind-styled components for future reference
-  - [ ] Document best practices for component-level styling vs. global stylesheet
+- [/] **CSS Optimization and Component Styling Refactor**
+  - [/] Reduce App.css file size by moving component-specific styles to inline Tailwind
+  - [/] Refactor components to use Tailwind utility classes directly instead of custom CSS classes
+  - [/] Keep App.css focused only on reusable patterns and global styles
+  - [/] Create examples of fully Tailwind-styled components for future reference
+  - [x] Document best practices for component-level styling vs. global stylesheet
+  
+  **CRITICAL**: App.css should ONLY contain:
+  - Theme variables (@theme directive)
+  - Reset styles and base element styling
+  - Truly global styles that affect the entire application
+  - Everything else MUST use inline Tailwind utility classes in components
 
 For styling, always use `./STYLING_GUIDE.md` as your source of truth.
 
