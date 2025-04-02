@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "1.0.0",
+  "definitions": {
+    "FilterActionGuardConfig": {
+      "oneOf": [
+        {
+          "enum": [
+            "send",
+            "drop"
+          ],
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "intercept": {
+              "$ref": "#/definitions/MessageInterceptorGuardConfig"
+            }
+          },
+          "required": [
+            "intercept"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "FilterLogicGuardConfig": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "direction": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "direction"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "message_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "message_type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "request_method": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "request_method"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "and": {
+              "items": {
+                "$ref": "#/definitions/FilterLogicGuardConfig"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "and"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "or": {
+              "items": {
+                "$ref": "#/definitions/FilterLogicGuardConfig"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "or"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "not": {
+              "$ref": "#/definitions/FilterLogicGuardConfig"
+            }
+          },
+          "required": [
+            "not"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "MessageInterceptorGuardConfig": {
+      "oneOf": [
+        {
+          "properties": {
+            "chain": {
+              "items": {
+                "$ref": "#/definitions/MessageInterceptorGuardConfig"
+              },
+              "type": "array"
+            },
+            "type": {
+              "enum": [
+                "Chain"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "chain",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "filter_logic": {
+              "$ref": "#/definitions/FilterLogicGuardConfig"
+            },
+            "match_action": {
+              "$ref": "#/definitions/FilterActionGuardConfig"
+            },
+            "non_match_action": {
+              "$ref": "#/definitions/FilterActionGuardConfig"
+            },
+            "type": {
+              "enum": [
+                "Filter"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "filter_logic",
+            "match_action",
+            "non_match_action",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "log_level": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "MessageLog"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "log_level",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "ManualApproval"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "primary_message_interceptor": {
+      "$ref": "#/definitions/MessageInterceptorGuardConfig"
+    }
+  },
+  "required": [
+    "primary_message_interceptor"
+  ],
+  "title": "GuardProfile",
+  "type": "object"
+}

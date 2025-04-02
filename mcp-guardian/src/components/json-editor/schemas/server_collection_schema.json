@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "1.0.0",
+  "definitions": {
+    "Server": {
+      "properties": {
+        "guard_profile": {
+          "type": "string"
+        },
+        "mcp_server": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "guard_profile",
+        "mcp_server"
+      ],
+      "type": "object"
+    }
+  },
+  "properties": {
+    "servers": {
+      "items": {
+        "$ref": "#/definitions/Server"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "servers"
+  ],
+  "title": "ServerCollection",
+  "type": "object"
+}

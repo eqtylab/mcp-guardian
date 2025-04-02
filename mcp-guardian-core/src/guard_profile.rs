@@ -7,6 +7,7 @@ pub mod profiles;
 use std::{fs, sync::Arc};
 
 use anyhow::{anyhow, bail, Result};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
@@ -16,13 +17,13 @@ use crate::{
     message_interceptor::MessageInterceptor,
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct GuardProfile {
     pub primary_message_interceptor: MessageInterceptorGuardConfig,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[serde(tag = "type")]
 #[ts(export)]
 pub enum MessageInterceptorGuardConfig {
@@ -56,7 +57,7 @@ impl MessageInterceptorGuardConfig {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct NamedGuardProfile {
     pub namespace: String,

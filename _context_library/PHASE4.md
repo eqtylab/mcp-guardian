@@ -52,6 +52,11 @@ The following resources provide detailed information about Phase 4 implementatio
 - [PHASE4_GUARD_PROFILE_BUILDER.md](./PHASE4_GUARD_PROFILE_BUILDER.md) - Implementation guide for the Guard Profile Visual Builder
 - [PHASE4_LIBRARIES.md](./PHASE4_LIBRARIES.md) - Analysis of libraries for visual UI components
 - [PHASE4_REACT_FLOW_NOTES.md](./PHASE4_REACT_FLOW_NOTES.md) - Exploration notes on React Flow for node-based editing
+- [PHASE4_JSONMIGRATION.md](./PHASE4_JSONMIGRATION.md) - Plan for migrating to Monaco Editor for JSON editing
+- [PHASE4_JSONSCHEMARUST.md](./PHASE4_JSONSCHEMARUST.md) - Implementation plan for Rust-based JSON Schema generation
+- [PHASE4_SCHEMA_VALIDATION.md](./PHASE4_SCHEMA_VALIDATION.md) - Validation of schema system alignment with core types
+
+For comprehensive documentation of the schema system, see `docs/src/schema_system.md`.
 
 ## Implementation Plan & Progress Tracking
 
@@ -86,7 +91,11 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
 
 4. **JSON Editor Enhancement**
    - [ ] Migrate from react-code-blocks to Monaco Editor
-   - [ ] Implement schema validation for JSON configurations
+   - [x] Create `mcp-guardian-schema` package for Rust-based schema generation (see `docs/src/schema_system.md`)
+   - [x] Add JsonSchema derives to core Rust types
+   - [x] Implement schema generation for all entity types
+   - [x] Create comprehensive schema system documentation
+   - [ ] Implement schema validation for JSON configurations in frontend
    - [ ] Add intellisense features for property autocompletion
    - [ ] Create schema-based documentation tooltips
 
@@ -244,10 +253,57 @@ The Guard Profile Visual Builder is our highest priority despite its complexity.
 - Improved visual clarity and organization of entity lists
 - Added documentation for Message System
 
-#### 2025-04-02: JSON Editor Migration Plan
+#### 2025-04-02: JSON Editor Migration and Schema Generation Plan
 - Identified react-code-blocks as a security vulnerability
 - Created plan to migrate to Monaco Editor (see PHASE4_JSONMIGRATION.md)
 - Mapped usage patterns of current JSON editor components
 - Outlined Monaco Editor integration strategy
+- Created plan for dedicated `mcp-guardian-schema` package for Rust-based schema generation (see PHASE4_JSONSCHEMARUST.md)
+- Validated schema system alignment with core Rust types (see PHASE4_SCHEMA_VALIDATION.md)
+- Added comprehensive schema system documentation to `/docs/src/schema_system.md`
+
+#### 2025-04-02: JSON Schema System Implementation
+- Created new `mcp-guardian-schema` package for Rust-based JSON Schema generation
+- Added `schemars` dependency to workspace and core library
+- Added JsonSchema derive macros to all core entity types in mcp-guardian-core
+- Implemented schema generation for McpServer, GuardProfile, and ServerCollection entities
+- Created schema export functionality to generate JSON Schema files
+- Added tests to validate schema correctness
+- Created CLI tool for generating, exporting, and validating schemas
+- Added Justfile with commands for common schema operations
+- Integrated schemas with frontend JSON editor directory structure
+- Enhanced schema system documentation with setup, usage, and examples
+- Created directory structure for Monaco Editor integration
+
+#### 2025-04-02: JSON Schema System Implementation Completed
+
+The JSON Schema System for MCP Guardian has been successfully implemented, providing a solid foundation for enhanced JSON editing with validation and autocompletion:
+
+- **Creation of mcp-guardian-schema Package**:
+  - Implemented a dedicated Rust package for JSON Schema generation
+  - Added workspace integration for seamless development workflow
+  - Created JSON Schema generation for all core entity types
+  - Implemented CLI tool with commands for generating and exporting schemas
+  - Added tests to verify schema correctness
+
+- **Core Integration**:
+  - Added JsonSchema derives to all core types in mcp-guardian-core
+  - Maintained backward compatibility with existing code
+  - Ensured non-invasive changes that don't affect runtime behavior
+  - Added schema versioning for better compatibility tracking
+
+- **Frontend Integration Preparation**:
+  - Created directory structure for Monaco Editor integration
+  - Exported generated schemas to frontend location
+  - Prepared example integration code for Monaco Editor
+  - Added comprehensive documentation for frontend developers
+
+- **Documentation**:
+  - Created comprehensive schema system documentation in `/docs/src/schema_system.md`
+  - Enhanced existing PHASE4 documentation with updated implementation status
+  - Documented CLI usage with examples
+  - Created guidelines for maintaining schema compatibility
+
+This implementation lays the groundwork for the Monaco Editor integration, which will be the next step in enhancing the JSON editing experience. The schema system ensures that changes to Rust data models automatically flow through to the frontend validation, maintaining a single source of truth throughout the application.
 
 *Additional notes will be added as implementation progresses with decisions and lessons learned.*

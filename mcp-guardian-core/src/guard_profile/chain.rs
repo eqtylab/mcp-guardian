@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use schemars::JsonSchema;
 use ts_rs::TS;
 
 use crate::{
@@ -9,7 +10,7 @@ use crate::{
     message_interceptor::{chain::ChainInterceptor, MessageInterceptor},
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct ChainGuardConfig {
     pub chain: Vec<MessageInterceptorGuardConfig>,

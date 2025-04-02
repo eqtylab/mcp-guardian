@@ -1,0 +1,12 @@
+[package]
+name = "mcp-guardian-schema"
+version = "0.1.0"
+edition = "2021"
+description = "JSON Schema generation for MCP Guardian"
+
+[dependencies]
+mcp-guardian-core = { workspace = true }
+schemars = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }

@@ -20,9 +20,10 @@ MCP Guardian follows a layered architecture:
 1. **Frontend Layer**: React/TypeScript Tauri application with UI components
 2. **Backend Layer**: Tauri-integrated Rust commands exposing core functionality
 3. **Core Library Layer**: Rust implementation of key business logic in `mcp-guardian-core`
-4. **Proxy Layer**: Rust implementation for proxying to MCP servers in `mcp-guardian-proxy`
+4. **Schema Layer**: JSON Schema generation from Rust types in `mcp-guardian-schema`
+5. **Proxy Layer**: Rust implementation for proxying to MCP servers in `mcp-guardian-proxy`
 
-The application is designed to provide a UI for managing MCP (Model Control Protocol) servers, guard profiles, and server collections, while enabling message interception, filtering, logging, and approval.
+The application is designed to provide a UI for managing MCP (Model Control Protocol) servers, guard profiles, and server collections, while enabling message interception, filtering, logging, and approval. The schema layer provides validation, documentation, and enhanced editing capabilities for JSON configurations.
 
 ## Tauri Frontend
 
@@ -81,23 +82,38 @@ The Rust backend is divided into several key components:
    - Message interception
    - Message approval
    - Server collection management
+   - Core data models with Serialize/Deserialize/JsonSchema
 
-2. **mcp-guardian-proxy**: Proxy implementation for:
+2. **mcp-guardian-schema**: Schema generation package for:
+   - Generating JSON Schema from core Rust types
+   - Providing validation rules for frontend components
+   - Exporting schemas for Monaco Editor integration
+   - Maintaining type consistency across the application
+
+3. **mcp-guardian-proxy**: Proxy implementation for:
    - Intercepting messages to/from MCP servers
    - Applying guard profiles
    - Handling message routing
 
-3. **src-tauri/src**: Tauri command implementations:
+4. **src-tauri/src**: Tauri command implementations:
    - Bridging frontend to core libraries
    - Exposing APIs via Tauri commands
    - Managing application-specific state
 
 ### Key Rust Modules
 
+#### Core Library
 - `guard_profile.rs`: Defines guard profile data structures and operations
 - `message_interceptor/`: Implements different interceptor types
 - `message_approval.rs`: Handles manual approval flow
 - `server_collection.rs`: Manages collections of servers with profiles
+
+#### Schema Package
+- `lib.rs`: Main entry point and schema export functions
+- `guard_profile_schema.rs`: Schema generation for guard profiles
+- `mcp_server_schema.rs`: Schema generation for MCP servers
+- `server_collection_schema.rs`: Schema generation for server collections
+- `utils.rs`: Utility functions for schema generation and validation
 
 ## Communication Flow
 
@@ -200,6 +216,28 @@ The current UI provides basic JSON editing:
 
 This approach is functional but requires technical knowledge and is error-prone, which is why Phase 4 UX improvements are needed.
 
+### Schema-enhanced JSON Editing (In Progress)
+
+As part of Phase 4, we're implementing schema-enhanced JSON editing:
+
+1. **Monaco Editor Integration**:
+   - Full-featured code editor with syntax highlighting
+   - Schema-based validation with error indicators
+   - Intellisense and autocompletion for properties
+
+2. **JSON Schema System**:
+   - Generated directly from Rust types using `schemars`
+   - Provides validation rules matching the backend data model
+   - Includes property descriptions and constraints
+
+3. **Improved Developer Experience**:
+   - Real-time validation feedback
+   - Property suggestions while typing
+   - Documentation tooltips
+   - Error highlighting with specific messages
+
+This approach maintains the flexibility of JSON editing while providing much better guidance and error prevention.
+
 ## Message Handling
 
 ### Message Flow
@@ -239,11 +277,31 @@ guard-profiles/
     profile3.json
 ```
 
+### Schema System
+
+As of Phase 4, a dedicated JSON Schema system has been implemented:
+
+1. **mcp-guardian-schema Package**:
+   - Dedicated Rust package for schema generation
+   - Generates JSON Schema from Rust types using `schemars`
+   - CLI tool for generating and exporting schemas
+
+2. **Schema Generation**:
+   - All core types have `JsonSchema` derives
+   - Schemas stored in `/components/json-editor/schemas/`
+   - Includes validation rules based on Rust type definitions
+
+3. **Frontend Integration**:
+   - Schemas used for Monaco Editor validation
+   - Enables autocompletion and documentation tooltips
+   - Maintains single source of truth from Rust to frontend
+
 ### Serialization
 
 1. **JSON Serialization**: Using `serde_json` for Rust<->JSON conversion
 2. **TypeScript Generation**: Using `ts-rs` for Rust->TypeScript type generation
-3. **Validation**: Basic validation on save/load
+3. **Schema Generation**: Using `schemars` for Rust->JSON Schema generation
+4. **Validation**: JSON Schema validation in editor, with basic validation on save/load
 
 ## Implications for Phase 4 UX Improvements
 
@@ -284,10 +342,16 @@ guard-profiles/
    - Convert React Flow nodes/edges back to `GuardProfile` JSON
    - Maintain consistency with Rust data model
 
-3. **User Experience Enhancement**:
+3. **Schema Integration**:
+   - Use generated JSON Schema for validation
+   - Implement Monaco Editor with schema validation
+   - Provide intellisense and autocompletion based on schema
+   - Enable documentation tooltips from schema metadata
+
+4. **User Experience Enhancement**:
    - Interactive drag-and-drop interface
    - Visual feedback for validation issues
    - Contextual help for different interceptor types
    - Templates for common configurations
 
-By building on the existing architecture while introducing visual editing capabilities, the Guard Profile Visual Builder will significantly improve the user experience while maintaining compatibility with the robust Rust backend implementation.
+By building on the existing architecture while introducing visual editing capabilities and schema-based validation, the Phase 4 UX improvements will significantly enhance the user experience while maintaining compatibility with the robust Rust backend implementation. The JSON Schema system provides a critical foundation for ensuring data integrity and improving developer experience.

@@ -18,6 +18,16 @@ MCP Guardian manages your LLM assistant's access to MCP servers, handing you rea
 
 MCP Guardian also makes it a breeze to manage multiple MCP server configurations. Quickly switch between server collections without having to manually manage configuration files for your MCP host applications.
 
+## Project Components
+
+MCP Guardian consists of the following components:
+
+- `mcp-guardian-core` - Core library with data models and business logic
+- `mcp-guardian-proxy` - MCP server proxy for intercepting and managing messages
+- `mcp-guardian-cli` - Command-line interface for managing MCP Guardian
+- `mcp-guardian-schema` - JSON Schema generation from core data models
+- `mcp-guardian` - Desktop application (Tauri/React)
+
 ## Development
 
 This project uses [nix](https://nixos.org/) to manage a development environment that can be used on Linux and macOS.

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "1.0.0",
+  "properties": {
+    "args": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "cmd": {
+      "type": "string"
+    },
+    "env": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "args",
+    "cmd"
+  ],
+  "title": "McpServer",
+  "type": "object"
+}

@@ -9,4 +9,5 @@
   - [Create an MCP Server](./tutorial/create_mcp_server.md)
   - [Create a Server Collection](./tutorial/create_server_collection.md)
 - [Message System](./message_system.md)
+- [Schema System](./schema_system.md)
 - [Rust Crates](./rust_crates/index.md)

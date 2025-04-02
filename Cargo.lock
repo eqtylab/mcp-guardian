@@ -2292,6 +2292,7 @@ dependencies = [
  "env_logger",
  "humantime",
  "log",
+ "schemars",
  "serde",
  "serde_json",
  "strum",
@@ -2309,6 +2310,17 @@ dependencies = [
  "log",
  "mcp-guardian-core",
  "tokio",
+]
+
+[[package]]
+name = "mcp-guardian-schema"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "mcp-guardian-core",
+ "schemars",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

@@ -3,6 +3,7 @@ pub mod servers;
 use std::{collections::HashMap, fs};
 
 use anyhow::{anyhow, bail, Result};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
@@ -12,7 +13,7 @@ use crate::{
     server_collection::claude_config::{ClaudeConfig, ClaudeMcpServer},
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct McpServer {
     pub cmd: String,
@@ -32,7 +33,7 @@ impl From<&ClaudeMcpServer> for McpServer {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct NamedMcpServer {
     pub namespace: String,

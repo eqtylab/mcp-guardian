@@ -3,25 +3,26 @@ pub mod claude_config;
 use std::fs;
 
 use anyhow::{anyhow, Result};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
 use crate::dirs::AppSubDir::ServerCollections;
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct ServerCollection {
     pub servers: Vec<Server>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct Server {
     pub mcp_server: String,
     pub guard_profile: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[ts(export)]
 pub struct NamedServerCollection {
     pub namespace: String,

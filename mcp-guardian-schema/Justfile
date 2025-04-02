@@ -1,0 +1,29 @@
+# mcp-guardian-schema Justfile
+
+# Generate all schemas and export them to the schemas directory
+generate:
+    cargo run -- export
+
+# Generate a specific schema
+generate-mcp-server:
+    cargo run -- generate --type mcp-server
+
+generate-guard-profile:
+    cargo run -- generate --type guard-profile
+
+generate-server-collection:
+    cargo run -- generate --type server-collection
+
+# Generate documentation from schemas
+docs:
+    cargo run -- docs
+
+# Export schemas to the frontend directory
+export-to-frontend:
+    mkdir -p ../mcp-guardian/src/components/json-editor/schemas
+    cp schemas/*.json ../mcp-guardian/src/components/json-editor/schemas/
+
+# Clean up
+clean:
+    cargo clean
+    rm -rf schemas/*.json

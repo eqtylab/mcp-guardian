@@ -110,6 +110,7 @@ This dedicated folder structure provides proper organization for the component e
    - Configure Vite/Webpack for proper bundling
    - Create basic Monaco Editor wrapper component
    - Set up component folder structure in `/components/json-editor/`
+   - Reference complete schema system documentation in `docs/src/schema_system.md`
 
 2. **Basic JSON Editor Component:**
 
@@ -125,12 +126,15 @@ This dedicated folder structure provides proper organization for the component e
 
 ### STEP 2: Schema Integration
 
-1. **Schema Generation:**
+1. **Schema Generation:** ✅
 
-   - Convert TypeScript types (from ts-rs) to JSON Schema
-   - Create schemas for all entity types
-   - Focus on frontend validation only (not requiring backend changes)
-   - Store schemas in `/components/json-editor/schemas/`
+   - ✅ ~~Convert TypeScript types (from ts-rs) to JSON Schema~~ Use Rust-generated schemas from new `mcp-guardian-schema` package (see PHASE4_JSONSCHEMARUST.md)
+   - ✅ Create `mcp-guardian-schema` package for Rust-based schema generation
+   - ✅ Add JsonSchema derives to core Rust types
+   - ✅ Implement schema generation for all entity types
+   - ✅ Create CLI tool for schema generation and export
+   - ✅ Store schemas in `/components/json-editor/schemas/`
+   - ✅ Verify schema correctness against core Rust types (see PHASE4_SCHEMA_VALIDATION.md)
 
 2. **Enhanced Features:**
 
@@ -386,11 +390,13 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - Create basic MonacoJsonEditor component
    - Set up testing environment
 
-2. **Week 2: Schema Integration**
+2. **Week 2: Schema Integration** 🔄
 
-   - Create JSON schemas for all entity types
-   - Implement schema validation
-   - Add intellisense features
+   - ✅ Create `mcp-guardian-schema` package for schema generation
+   - ✅ Generate JSON schemas for all entity types
+   - ✅ Create directory structure and export schemas
+   - ❌ Implement schema validation in Monaco Editor
+   - ❌ Add intellisense features
 
 3. **Week 3: Component Replacement**
 
@@ -412,11 +418,12 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - Implement advanced validation rules (cross-entity references, etc.)
    - Enable server-side schema validation before persistence
 
-2. **Schema Generation Pipeline**
+2. **Enhanced Schema Generation Pipeline**
 
-   - Create tooling to generate schemas from Rust structs
-   - Maintain a single source of truth for all schema definitions
-   - Automatically generate TypeScript types and JSON Schema
+   - Expand the new `mcp-guardian-schema` package with advanced features
+   - Add support for custom documentation and UI hints in schemas
+   - Implement schema versioning and migration capabilities
+   - Add cross-field validation rules
 
 3. **Advanced Error Handling**
    - Implement detailed error messaging between frontend and backend
