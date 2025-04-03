@@ -121,11 +121,14 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
 **Tasks:**
 
 1. **Guard Profile Visual Builder**
-   - [/] Create basic chain visualization component (in progress)
-   - [/] Implement node editing UI for different interceptor types (in progress)
-   - [/] Add drag-and-drop capability for chain organization (partially implemented - using click-based addition instead of true drag-and-drop)
-   - [/] Implement two-way sync with JSON representation (basic implementation completed, needs refinement)
-   - [ ] Implement mental model improvements per README.md in guard-profile-builder
+   - [x] Create basic chain visualization component
+   - [x] Implement node editing UI for different interceptor types
+   - [x] Add drag-and-drop capability for chain organization (implemented as click-based node addition)
+   - [x] Implement two-way sync with JSON representation
+   - [x] Implement mental model improvements per README.md in guard-profile-builder
+   - [x] Fix dark mode compatibility and styling issues
+   - [/] Add validation and error handling for connections (in progress)
+   - [/] Enhance the user experience with hover states and tooltips (in progress)
 
 2. **Server Collection Relationship Diagram**
    - [ ] Create visual graph representation of collections
@@ -484,8 +487,39 @@ Fixed critical issues with node replacement in the Guard Profile Visual Builder:
   - Ensured proper selection state for the newly created node
   - Fixed issues where node type could get "stuck" after multiple changes
 
+#### 2025-04-02: Enhanced Guard Profile Visual Builder Styling and UX
+
+Implemented significant improvements to the Guard Profile Visual Builder's visual presentation and usability:
+
+- **Professional Styling**:
+  - Refined input/output node styling for a cleaner, more professional appearance
+  - Replaced gradient backgrounds with simpler, more elegant designs
+  - Enhanced edge styling with refined colors and proportions
+  - Created subtle grid background for better spatial orientation
+  - Implemented a polished header with improved color legend
+
+- **Layout Improvements**:
+  - Set maximum width on all node types to prevent overlap
+  - Changed connection points from top/bottom to left/right for consistent horizontal flow
+  - Standardized layout patterns across all node types
+  - Added text truncation to prevent overflow issues
+  - Created compact layouts to improve readability
+
+- **Visual Coherence**:
+  - Implemented consistent color coding between toolbox and nodes
+  - Added helpful tips panel to guide users through the workflow
+  - Used distinctive colors for different interceptor types
+  - Ensured dark mode compatibility for all components
+  - Applied consistent visual language across all elements
+
+- **React Flow Integration Fixes**:
+  - Fixed control button styling for proper dark mode appearance
+  - Fixed node backgrounds to properly respect theme settings
+  - Enhanced control button visibility and interaction
+  - Fixed background color consistency issues
+  - Ensured proper contrast in all display modes
+
 - **Next Steps**:
-  - Improve node styling and connection semantics
   - Add validation and error handling for connections
   - Enhance automatic layout algorithms
   - Add hover states with additional information
