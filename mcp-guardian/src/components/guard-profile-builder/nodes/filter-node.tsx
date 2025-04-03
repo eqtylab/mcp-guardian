@@ -133,10 +133,10 @@ const FilterNode = ({ data, selected, id }: NodeProps) => {
   
   return (
     <div 
-      className={`node filter-node rounded-lg border p-3 bg-background shadow-sm ${
+      className={`node filter-node rounded-lg border p-3 shadow-md ${
         expanded ? 'w-[280px]' : 'max-w-[200px]'
       } ${
-        selected ? 'border-primary ring-2 ring-primary/20' : 'border-muted'
+        selected ? 'border-primary ring-2 ring-primary/20 bg-amber-950/5 dark:bg-amber-800/10' : 'border-muted bg-card dark:bg-amber-950/5'
       }`}
       style={{ zIndex: 5, visibility: 'visible', pointerEvents: 'all' }}
     >
