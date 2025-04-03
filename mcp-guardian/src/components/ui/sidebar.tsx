@@ -12,11 +12,11 @@ export function Sidebar({ className, children }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   
   return (
-    <div className="flex h-full">
+    <div className="h-full relative">
       {/* Main sidebar content */}
       <div 
         className={cn(
-          'border-r border-border h-full bg-card flex flex-col transition-all duration-300 ease-in-out overflow-hidden', 
+          'border-r border-border h-full bg-card flex flex-col transition-all duration-300 ease-in-out overflow-hidden absolute left-0 top-0', 
           collapsed ? 'w-12' : 'w-64',
           className
         )}
@@ -35,10 +35,13 @@ export function Sidebar({ className, children }: SidebarProps) {
         )}
       </div>
       
-      {/* Toggle button */}
+      {/* Toggle button - positioned outside the sidebar */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="h-10 w-6 -ml-3 mt-2 z-10 bg-primary text-primary-foreground rounded-r-md flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className={cn(
+          "absolute top-2 h-10 w-6 z-20 bg-primary text-primary-foreground rounded-r-md flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30",
+          collapsed ? "left-12" : "left-64"
+        )}
         title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? (
@@ -47,6 +50,12 @@ export function Sidebar({ className, children }: SidebarProps) {
           <ChevronLeft size={14} />
         )}
       </button>
+      
+      {/* Spacer div to create room for content based on sidebar width */}
+      <div className={cn(
+        "transition-all duration-300 ease-in-out inline-block h-full",
+        collapsed ? "w-12" : "w-64"
+      )}></div>
     </div>
   );
 }
