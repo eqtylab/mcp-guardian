@@ -16,20 +16,20 @@ const FilterNode = ({ data, selected }: NodeProps) => {
     
     // Handle the different filter logic types
     if ('direction' in filterLogic) {
-      return `Direction: ${filterLogic.direction}`;
+      return `${filterLogic.direction}`;
     } else if ('message_type' in filterLogic) {
-      return `Type: ${filterLogic.message_type}`;
+      return `${filterLogic.message_type}`;
     } else if ('request_method' in filterLogic) {
-      return `Method: ${filterLogic.request_method}`;
+      return `${filterLogic.request_method}`;
     } else if ('and' in filterLogic) {
-      return 'Multiple conditions (AND)';
+      return 'AND condition';
     } else if ('or' in filterLogic) {
-      return 'Multiple conditions (OR)';
+      return 'OR condition';
     } else if ('not' in filterLogic) {
-      return 'Negated condition';
+      return 'NOT condition';
     }
     
-    return 'Complex filter';
+    return 'Complex';
   };
   
   // Get action description
@@ -41,31 +41,40 @@ const FilterNode = ({ data, selected }: NodeProps) => {
   };
   
   return (
-    <div className={`node filter-node rounded-md border p-3 bg-card shadow-sm ${
-      selected ? 'border-primary ring-2 ring-primary/20' : 'border-border'
+    <div className={`node filter-node rounded-lg border p-3 bg-background shadow-sm max-w-[180px] ${
+      selected ? 'border-primary ring-2 ring-primary/20' : 'border-muted'
     }`}>
-      <Handle type="target" position={Position.Top} className="w-3 h-3" />
+      <Handle 
+        type="target" 
+        position={Position.Left} 
+        className="w-3 h-3 border border-amber-400 dark:border-amber-600 bg-amber-500"
+      />
       
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2 font-medium text-sm">
-          <Filter size={16} className="text-primary/80" />
-          <span>Filter</span>
+      <div className="flex items-center gap-2">
+        <div className="flex-shrink-0 w-7 h-7 bg-amber-100 dark:bg-amber-900/30 rounded-md flex items-center justify-center">
+          <Filter size={14} className="text-amber-600 dark:text-amber-400" />
         </div>
         
-        <div className="text-xs">
-          <div>{getFilterDescription()}</div>
-          <div className="mt-1 flex justify-between">
-            <span className="text-muted-foreground">Match:</span>
-            <span className="font-medium">{getActionDescription(matchAction)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Non-match:</span>
-            <span className="font-medium">{getActionDescription(nonMatchAction)}</span>
+        <div className="flex-1 min-w-0">
+          <div className="font-medium text-sm truncate">Filter</div>
+          <div className="text-xs text-muted-foreground truncate">
+            {getFilterDescription()}
           </div>
         </div>
       </div>
       
-      <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+      <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+        <span className="text-muted-foreground">Match:</span>
+        <span className="font-medium truncate">{getActionDescription(matchAction)}</span>
+        <span className="text-muted-foreground">Non-match:</span>
+        <span className="font-medium truncate">{getActionDescription(nonMatchAction)}</span>
+      </div>
+      
+      <Handle 
+        type="source" 
+        position={Position.Right} 
+        className="w-3 h-3 border border-amber-400 dark:border-amber-600 bg-amber-500"
+      />
     </div>
   );
 };
