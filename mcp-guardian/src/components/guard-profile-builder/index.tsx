@@ -59,6 +59,8 @@ import FilterNode from './nodes/filter-node';
 import ChainNode from './nodes/chain-node';
 import MessageLogNode from './nodes/messagelog-node';
 import ManualApprovalNode from './nodes/manualapproval-node';
+import InputNode from './nodes/input-node';
+import OutputNode from './nodes/output-node';
 import InterceptorToolbox from './interceptor-toolbox';
 import PropertyPanel from './property-panel';
 
@@ -68,6 +70,8 @@ const nodeTypes: NodeTypes = {
   chain: ChainNode,
   messagelog: MessageLogNode,
   manualapproval: ManualApprovalNode,
+  input: InputNode,
+  output: OutputNode,
 };
 
 interface GuardProfileVisualBuilderProps {
@@ -79,19 +83,70 @@ interface GuardProfileVisualBuilderProps {
 /**
  * Transform a GuardProfile into ReactFlow nodes and edges
  */
+// Define types for static input/output nodes
+export interface InputNodeData extends Record<string, unknown> {
+  type: 'Input';
+}
+
+export interface OutputNodeData extends Record<string, unknown> {
+  type: 'Output';
+}
+
 export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], edges: Edge[] } => {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
   
+  // Add input node (static)
+  nodes.push({
+    id: 'node-input',
+    type: 'input', // Custom node type for input
+    position: { x: 100, y: 100 },
+    data: { type: 'Input' } as InputNodeData,
+    draggable: false, // Static node
+  });
+  
   // Start with a single node for simple interceptor
   if (profile.primary_message_interceptor.type !== 'Chain') {
     // Single node for primary interceptor
+    const nodeId = 'node-primary';
     nodes.push({
-      id: 'node-primary',
+      id: nodeId,
       type: profile.primary_message_interceptor.type.toLowerCase(),
-      position: { x: 100, y: 100 },
+      position: { x: 300, y: 100 },
       data: { ...profile.primary_message_interceptor } as FilterNodeData | MessageLogNodeData | ManualApprovalNodeData,
     });
+    
+    // Connect input to the primary interceptor
+    edges.push({
+      id: `edge-input-${nodeId}`,
+      source: 'node-input',
+      target: nodeId,
+      animated: true,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    });
+    
+    // Add output node (static)
+    nodes.push({
+      id: 'node-output',
+      type: 'output', // Custom node type for output
+      position: { x: 500, y: 100 },
+      data: { type: 'Output' } as OutputNodeData,
+      draggable: false, // Static node
+    });
+    
+    // Connect primary interceptor to output
+    edges.push({
+      id: `edge-${nodeId}-output`,
+      source: nodeId,
+      target: 'node-output',
+      animated: true,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    });
+    
     return { nodes, edges };
   }
   
@@ -100,18 +155,30 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
     const chainInterceptor = profile.primary_message_interceptor;
     
     // Create the chain container node
+    const chainNodeId = 'node-chain';
     nodes.push({
-      id: 'node-chain',
+      id: chainNodeId,
       type: 'chain',
-      position: { x: 100, y: 100 },
+      position: { x: 300, y: 100 },
       data: { 
         type: 'Chain',
         chain: chainInterceptor.chain 
       } as ChainNodeData,
     });
     
+    // Connect input to the chain
+    edges.push({
+      id: `edge-input-${chainNodeId}`,
+      source: 'node-input',
+      target: chainNodeId,
+      animated: true,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    });
+    
     // Add child nodes for each interceptor in the chain
-    let prevNodeId = 'node-chain';
+    let prevNodeId = chainNodeId;
     chainInterceptor.chain.forEach((interceptor, index) => {
       const nodeId = `node-${index}`;
       
@@ -119,7 +186,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
       nodes.push({
         id: nodeId,
         type: interceptor.type.toLowerCase(),
-        position: { x: 100, y: 200 + index * 150 },
+        position: { x: 300, y: 250 + index * 150 },
         data: { ...interceptor } as FilterNodeData | MessageLogNodeData | ManualApprovalNodeData,
       });
       
@@ -136,6 +203,40 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
       
       prevNodeId = nodeId;
     });
+    
+    // Add output node (static)
+    nodes.push({
+      id: 'node-output',
+      type: 'output', // Custom node type for output
+      position: { x: 500, y: 100 },
+      data: { type: 'Output' } as OutputNodeData,
+      draggable: false, // Static node
+    });
+    
+    // Connect last chain node to output if there are chain nodes
+    if (chainInterceptor.chain.length > 0) {
+      const lastNodeId = `node-${chainInterceptor.chain.length - 1}`;
+      edges.push({
+        id: `edge-${lastNodeId}-output`,
+        source: lastNodeId,
+        target: 'node-output',
+        animated: true,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
+      });
+    } else {
+      // If chain is empty, connect chain node directly to output
+      edges.push({
+        id: `edge-${chainNodeId}-output`,
+        source: chainNodeId,
+        target: 'node-output',
+        animated: true,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
+      });
+    }
   }
   
   return { nodes, edges };
@@ -145,54 +246,69 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
  * Transform ReactFlow nodes and edges back into a GuardProfile
  */
 export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile => {
-  // Handle case with only a single node (non-chain interceptor)
-  if (nodes.length === 1) {
-    const node = nodes[0];
-    
-    // Use our node types to extract valid MessageInterceptorGuardConfig from node data
-    const getInterceptorFromNode = (node: Node): MessageInterceptorGuardConfig => {
-      if (node.type === 'filter') {
-        const data = node.data as FilterNodeData;
-        return {
-          type: 'Filter',
-          filter_logic: data.filter_logic,
-          match_action: data.match_action,
-          non_match_action: data.non_match_action,
-        };
-      } else if (node.type === 'messagelog') {
-        const data = node.data as MessageLogNodeData;
-        return {
-          type: 'MessageLog',
-          log_level: data.log_level,
-        };
-      } else if (node.type === 'manualapproval') {
-        // ManualApprovalGuardConfig is Record<string, never>
-        return {
-          type: 'ManualApproval'
-        } as MessageInterceptorGuardConfig;
-      } else {
-        // Default fallback - should never happen with proper validation
-        return {
-          type: 'MessageLog',
-          log_level: 'Info',
-        };
-      }
-    };
-    
-    return {
-      primary_message_interceptor: getInterceptorFromNode(node),
-    };
-  }
+  // Helper function to extract valid MessageInterceptorGuardConfig from node data
+  const getInterceptorFromNode = (node: Node): MessageInterceptorGuardConfig => {
+    if (node.type === 'filter') {
+      const data = node.data as FilterNodeData;
+      return {
+        type: 'Filter',
+        filter_logic: data.filter_logic,
+        match_action: data.match_action,
+        non_match_action: data.non_match_action,
+      };
+    } else if (node.type === 'messagelog') {
+      const data = node.data as MessageLogNodeData;
+      return {
+        type: 'MessageLog',
+        log_level: data.log_level,
+      };
+    } else if (node.type === 'manualapproval') {
+      // ManualApprovalGuardConfig is Record<string, never>
+      return {
+        type: 'ManualApproval'
+      } as MessageInterceptorGuardConfig;
+    } else {
+      // Default fallback - should never happen with proper validation
+      return {
+        type: 'MessageLog',
+        log_level: 'Info',
+      };
+    }
+  };
+
+  // Filter out static input/output nodes
+  const interceptorNodes = nodes.filter(node => 
+    node.type !== 'input' && node.type !== 'output'
+  );
   
-  // Find the chain node
-  const chainNode = nodes.find(node => node.type === 'chain');
-  if (!chainNode) {
-    // Fallback if no chain node found (shouldn't happen)
+  // Find non-static nodes (actual interceptors)
+  if (interceptorNodes.length === 0) {
+    // No interceptors defined, return default
     return {
       primary_message_interceptor: {
         type: 'MessageLog',
         log_level: 'Info',
       },
+    };
+  }
+  
+  // Handle case with only a single interceptor node (non-chain)
+  if (interceptorNodes.length === 1) {
+    const node = interceptorNodes[0];
+    if (node.type !== 'chain') {
+      return {
+        primary_message_interceptor: getInterceptorFromNode(node),
+      };
+    }
+  }
+  
+  // Find the chain node
+  const chainNode = interceptorNodes.find(node => node.type === 'chain');
+  if (!chainNode) {
+    // If no chain node but we have multiple interceptors, use the first one as primary
+    const firstNode = interceptorNodes[0];
+    return {
+      primary_message_interceptor: getInterceptorFromNode(firstNode),
     };
   }
   
@@ -209,7 +325,7 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
   const chainInterceptors: MessageInterceptorGuardConfig[] = [];
   let currentNodeId = chainNode.id;
   
-  // Follow the chain until we reach a node with no outgoing edges
+  // Follow the chain until we reach a node with no outgoing edges or the output node
   while (edgeMap.has(currentNodeId)) {
     const nextNodeIds = edgeMap.get(currentNodeId) || [];
     if (nextNodeIds.length === 0) break;
@@ -217,41 +333,12 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
     const nextNodeId = nextNodeIds[0]; // Follow first connection
     const nextNode = nodes.find(node => node.id === nextNodeId);
     
-    if (nextNode && nextNode.type !== 'chain') {
+    // Skip if next node is the output node
+    if (nextNode && nextNode.type === 'output') break;
+    
+    if (nextNode && nextNode.type !== 'chain' && nextNode.type !== 'input' && nextNode.type !== 'output') {
       // Extract the interceptor data based on node type
-      let interceptor: MessageInterceptorGuardConfig;
-      
-      switch (nextNode.type) {
-        case 'filter':
-          const filterData = nextNode.data as FilterNodeData;
-          interceptor = {
-            type: 'Filter',
-            filter_logic: filterData.filter_logic,
-            match_action: filterData.match_action,
-            non_match_action: filterData.non_match_action,
-          };
-          break;
-        case 'messagelog':
-          const logData = nextNode.data as MessageLogNodeData;
-          interceptor = {
-            type: 'MessageLog',
-            log_level: logData.log_level,
-          };
-          break;
-        case 'manualapproval':
-          // ManualApprovalGuardConfig is Record<string, never>
-          interceptor = {
-            type: 'ManualApproval'
-          } as MessageInterceptorGuardConfig;
-          break;
-        default:
-          // Shouldn't happen with proper validation
-          interceptor = {
-            type: 'MessageLog',
-            log_level: 'Info',
-          };
-      }
-      
+      const interceptor = getInterceptorFromNode(nextNode);
       chainInterceptors.push(interceptor);
     }
     
@@ -289,10 +376,28 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   // Handle node changes
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      const updatedNodes = applyNodeChanges(changes, nodes);
+      // Filter out changes to static nodes (input/output)
+      const filteredChanges = changes.filter(change => {
+        // Always allow selection changes
+        if (change.type === 'select') return true;
+        
+        // For position changes and removals, check if it's a static node
+        if ('id' in change) {
+          const nodeId = change.id;
+          const node = nodes.find(n => n.id === nodeId);
+          // Don't allow changes to input/output nodes except selection
+          if (node && (node.type === 'input' || node.type === 'output')) {
+            return false;
+          }
+        }
+        return true;
+      });
+      
+      const updatedNodes = applyNodeChanges(filteredChanges, nodes);
       setNodes(updatedNodes);
+      
       // Don't trigger onChange for selection changes
-      const nonSelectionChanges = changes.filter(change => change.type !== 'select');
+      const nonSelectionChanges = filteredChanges.filter(change => change.type !== 'select');
       if (nonSelectionChanges.length > 0) {
         setTimeout(updateProfile, 0);
       }
@@ -434,62 +539,134 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   return (
     <ReactFlowProvider>
       <div className="guard-profile-visual-builder h-[600px] w-full flex flex-col">
+        <div className="text-center py-2 bg-card border-b border-border">
+          <h3 className="font-medium">Guard Profile: Message Processing Layer</h3>
+          <p className="text-xs text-muted-foreground">
+            Configure how messages flow between MCP Servers and your application
+          </p>
+        </div>
+        
         <div className="flex flex-1 overflow-hidden">
           <div className="w-64 bg-card border-r border-border p-4 overflow-y-auto">
+            <h3 className="font-medium mb-3">Add Interceptors</h3>
+            <div className="text-xs text-muted-foreground mb-4">
+              Drag interceptors into the flow between input and output nodes
+            </div>
+            
             <InterceptorToolbox onAddNode={(type) => {
-              // Create a new node directly instead of simulating a drop event
-              const position = { x: 250, y: 150 };
-              
-              // Generate a default config based on type
-              let nodeData: FilterNodeData | MessageLogNodeData | ManualApprovalNodeData | ChainNodeData;
-              
-              switch (type) {
-                case 'filter':
-                  nodeData = {
-                    type: 'Filter',
-                    filter_logic: { 
-                      direction: 'inbound'
+              try {
+                console.log(`Adding new node of type: ${type}`);
+                
+                // Create a completely fresh state with just input and output
+                const inputNode = {
+                  id: 'node-input',
+                  type: 'input',
+                  position: { x: 100, y: 100 },
+                  data: { type: 'Input' },
+                  draggable: false,
+                };
+                
+                const outputNode = {
+                  id: 'node-output',
+                  type: 'output',
+                  position: { x: 500, y: 100 },
+                  data: { type: 'Output' },
+                  draggable: false,
+                };
+                
+                // Generate a default config based on type
+                let nodeData: FilterNodeData | MessageLogNodeData | ManualApprovalNodeData | ChainNodeData;
+                
+                switch (type) {
+                  case 'filter':
+                    nodeData = {
+                      type: 'Filter',
+                      filter_logic: { 
+                        direction: 'inbound'
+                      },
+                      match_action: 'send',
+                      non_match_action: 'drop'
+                    } as FilterNodeData;
+                    break;
+                  case 'messagelog':
+                    nodeData = {
+                      type: 'MessageLog',
+                      log_level: 'Info'
+                    };
+                    break;
+                  case 'manualapproval':
+                    nodeData = {
+                      type: 'ManualApproval'
+                    };
+                    break;
+                  case 'chain':
+                    nodeData = {
+                      type: 'Chain',
+                      chain: []
+                    };
+                    break;
+                  default:
+                    nodeData = {
+                      type: 'MessageLog',
+                      log_level: 'Info'
+                    };
+                }
+                
+                // Create a new interceptor node
+                const newNodeId = `node-${Date.now()}`;
+                const interceptorNode: GuardProfileNode = {
+                  id: newNodeId,
+                  type,
+                  position: { x: 300, y: 100 },
+                  data: nodeData,
+                };
+                
+                // Create completely fresh node array
+                const newNodes = [inputNode, outputNode, interceptorNode];
+                
+                // Create completely fresh edge array
+                const newEdges = [
+                  {
+                    id: `edge-input-interceptor`,
+                    source: 'node-input',
+                    target: newNodeId,
+                    animated: true,
+                    markerEnd: {
+                      type: MarkerType.ArrowClosed,
                     },
-                    match_action: 'send',
-                    non_match_action: 'drop'
-                  } as FilterNodeData;
-                  break;
-                case 'messagelog':
-                  nodeData = {
-                    type: 'MessageLog',
-                    log_level: 'Info'
+                  },
+                  {
+                    id: `edge-interceptor-output`,
+                    source: newNodeId,
+                    target: 'node-output',
+                    animated: true,
+                    markerEnd: {
+                      type: MarkerType.ArrowClosed,
+                    },
+                  }
+                ];
+                
+                // First update the nodes
+                setNodes(newNodes);
+                
+                // Then update the edges
+                setEdges(newEdges);
+                
+                // Set the selected node to the new interceptor
+                setSelectedNode(interceptorNode);
+                
+                // Finally update the profile
+                setTimeout(() => {
+                  const newProfile: GuardProfile = {
+                    primary_message_interceptor: nodeData as MessageInterceptorGuardConfig
                   };
-                  break;
-                case 'manualapproval':
-                  nodeData = {
-                    type: 'ManualApproval'
-                  };
-                  break;
-                case 'chain':
-                  nodeData = {
-                    type: 'Chain',
-                    chain: []
-                  };
-                  break;
-                default:
-                  // Default fallback - should never happen with proper validation
-                  nodeData = {
-                    type: 'MessageLog',
-                    log_level: 'Info'
-                  };
+                  onChange(newProfile);
+                }, 50);
+                
+                console.log(`Added node successfully: ${JSON.stringify(interceptorNode)}`);
+              } catch (error) {
+                console.error("Error creating node:", error);
               }
-              
-              // Create the new node with proper typing
-              const newNode: GuardProfileNode = {
-                id: `node-${Date.now()}`,
-                type,
-                position,
-                data: nodeData,
-              };
-              
-              setNodes(nds => [...nds, newNode]);
-              setSelectedNode(newNode);
-              setTimeout(updateProfile, 0);
             }} disabled={readOnly} />
           </div>
           

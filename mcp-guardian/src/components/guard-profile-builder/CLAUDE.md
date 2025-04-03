@@ -1,24 +1,79 @@
+Guidance for the Guard Profile Builder component can be found in this component directory's README: `mcp-guardian/src/components/guard-profile-builder/README.md`.
+
 Do not use hacky type casting. Use the correct types.
 Think carefully and considerately, no need to rush solutions.
 
-# Guard Profile Builder UX Improvements
+# Guard Profile Builder Documentation
+
+## Middleware Mental Model
+
+The Guard Profile Builder visualizes Guard Profiles as middleware components that sit between inputs (incoming messages from MCP Servers) and outputs (messages sent to applications). This mental model is implemented through:
+
+1. Static input and output nodes that visually anchor the flow
+2. Interceptor nodes in the middle that process messages as they flow through
+3. Directional connections showing the path of messages
+
+## Implementation Details
+
+### Component Architecture
+- Uses React Flow (@xyflow/react) as the foundation for node-based editing
+- Custom node components for different interceptor types (Filter, Chain, MessageLog, ManualApproval)
+- Static Input/Output nodes representing the sources and destinations of messages
+- Property panel for configuring node properties
+- Interceptor toolbox for adding new interceptor types
+
+### Two-Way Data Binding
+- `convertProfileToFlow`: Transforms GuardProfile JSON to React Flow nodes and edges
+- `convertFlowToProfile`: Transforms React Flow nodes and edges back to GuardProfile JSON
+- Changes to the visual representation automatically update the JSON and vice versa
+
+## Known Issues and Solutions
+
+### State Management for Node Type Switching
+
+**Issue**: When clicking different interceptor types in the toolbox, nodes would initially change but then get "stuck" on one type, no longer responding to clicks.
+
+**Root Cause**: Complex interaction between React Flow's node state management, memoization, and React's update scheduling. Attempts to modify existing nodes would sometimes result in stale references being used.
+
+**Solution**:
+1. Implemented a complete state reset approach that creates fresh nodes and edges on each selection
+2. Bypassed potential stale references by building the entire node structure from scratch each time
+3. Used direct profile updating instead of relying solely on the flow conversion logic
+4. Added sequenced state updates with slight delays to ensure proper rendering
+
+### Property Panel Synchronization 
+
+**Issue**: Changes in the property panel sometimes didn't reflect in the visual node representation.
+
+**Solution**:
+1. Added node.type to the dependency array in useEffect for proper change detection
+2. Implemented automatic change application without requiring a separate apply button
+3. Used type-safe state update functions with proper data typing
 
 ## Integration with Entity Sidebar Navigation
 
-The Guard Profile Builder now integrates with the new sidebar-based navigation pattern for entity management. This integration offers several key advantages:
+The Guard Profile Builder integrates with the sidebar-based navigation pattern for entity management, offering:
 
 ### Benefits
+
 1. **Increased Workspace** - Full width content area provides more space for the visual flow editor
 2. **Better Context** - Direct correlation between selected profile in sidebar and visualization
 3. **Reduced Cognitive Load** - Clear separation between entity selection and configuration
 
 ### Implementation Notes
+
 - The visual builder maintains all functionality while working in the sidebar navigation context
 - Editor components load with the full available width when a profile is selected
 - Tab-based navigation between visual and JSON representation remains intact
 - Empty state UI guides users to select or create profiles
 
 ## Future Enhancements
+
+- Improve node styling and connection semantics
+- Add validation and error handling for connections
+- Enhance automatic layout algorithms
+- Add hover states with additional information
+- Implement visual feedback for interceptor functionality
 - Consider adding a fullscreen mode for complex flows
 - Add ability to save custom node layouts and templates
 - Implement flow snapshots for profile version history

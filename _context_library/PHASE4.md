@@ -121,10 +121,11 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
 **Tasks:**
 
 1. **Guard Profile Visual Builder**
-   - [ ] Create basic chain visualization component
-   - [ ] Implement node editing UI for different interceptor types
-   - [ ] Add drag-and-drop capability for chain organization
-   - [ ] Implement two-way sync with JSON representation
+   - [/] Create basic chain visualization component (in progress)
+   - [/] Implement node editing UI for different interceptor types (in progress)
+   - [/] Add drag-and-drop capability for chain organization (partially implemented - using click-based addition instead of true drag-and-drop)
+   - [/] Implement two-way sync with JSON representation (basic implementation completed, needs refinement)
+   - [ ] Implement mental model improvements per README.md in guard-profile-builder
 
 2. **Server Collection Relationship Diagram**
    - [ ] Create visual graph representation of collections
@@ -418,6 +419,77 @@ Fixed critical issue with Monaco Editor tooltips and widgets being clipped by co
   - Properly managed the widget container lifecycle with React's useRef and useEffect
   - Added DOM cleanup on component unmount to prevent memory leaks
   - Simplified CSS to avoid conflicts with the fixed positioning approach
+
+#### 2025-04-02: Started Guard Profile Visual Builder Implementation
+
+Began implementation of the Guard Profile Visual Builder component:
+
+- **Initial Implementation**:
+  - Set up React Flow integration for node-based editing
+  - Created basic interceptor node types (Filter, Chain, MessageLog, ManualApproval)
+  - Implemented node and edge state management
+  - Created initial implementation of two-way data binding with JSON
+  - Added basic property panel for editing node configuration
+  - Implemented click-based node addition instead of true drag-and-drop
+
+- **Current Status and Known Issues**:
+  - Basic visualization of guard profile chain structures is working
+  - Node editing through property panel is partially implemented
+  - Two-way synchronization with JSON representation has basic functionality
+  - State management issues when switching between interceptor types - nodes in the canvas don't properly update
+  - Added README.md with conceptual model improvements for better representation of Guard Profiles as middleware
+
+#### 2025-04-02: Enhanced Guard Profile Visual Builder with Middleware Model
+
+Improved the Guard Profile Visual Builder to better represent the middleware concept:
+
+- **State Management Improvements**:
+  - Fixed node type switching issues in the property panel
+  - Added automatic change application without requiring button clicks
+  - Improved type handling across node components
+
+- **Middleware Conceptual Model Implementation**:
+  - Added static input node representing "MCP Server Input"
+  - Added static output node representing "Application Output"
+  - Implemented connections between input → interceptors → output
+  - Added explanatory UI text and headers
+  - Protected static nodes from being moved or deleted
+  - Updated data conversion to handle input/output nodes properly
+
+- **User Experience Enhancements**:
+  - Added clearer labels and header explaining the component's purpose
+  - Improved layout with input/output nodes visually anchoring the flow
+  - Enhanced visual cues for data flow direction
+  - Added instructions for adding interceptors
+
+#### 2025-04-02: Fixed Node Replacement Issues in Guard Profile Builder
+
+Fixed critical issues with node replacement in the Guard Profile Visual Builder:
+
+- **Fixed Node Switching**:
+  - Completely rewrote the interceptor toolbox handler to ensure reliable node type switching
+  - Implemented state reset approach that creates fresh nodes and edges on each selection
+  - Bypassed potential stale reference issues by building new state from scratch
+  - Added debug logging to track node creation process
+
+- **Improved Reliability**:
+  - Added try-catch block to handle any errors during node creation
+  - Implemented direct profile update instead of relying solely on flow conversion
+  - Used consistent node IDs for input and output to ensure stable connections
+  - Added delay between state updates to ensure proper sequencing
+
+- **Simplified User Experience**:
+  - Clicking on an interceptor type now consistently changes the node type
+  - Maintained the input → interceptor → output flow when switching node types
+  - Ensured proper selection state for the newly created node
+  - Fixed issues where node type could get "stuck" after multiple changes
+
+- **Next Steps**:
+  - Improve node styling and connection semantics
+  - Add validation and error handling for connections
+  - Enhance automatic layout algorithms
+  - Add hover states with additional information
+  - Implement visual feedback for interceptor functionality
 
 - **Enhanced Functionality**:
   - Tooltips and documentation popups now display properly without being cut off

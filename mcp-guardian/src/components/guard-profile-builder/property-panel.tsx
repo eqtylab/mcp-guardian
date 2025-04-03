@@ -32,39 +32,52 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
   // We start with unknown type because the node data can be of different types
   const [localData, setLocalData] = useState<any>(node.data);
   
-  // Reset local data when the selected node changes
+  // Reset local data when the selected node changes (including type changes)
   useEffect(() => {
     setLocalData(node.data);
-  }, [node.id, node.data]);
+  }, [node.id, node.type, node.data]);
   
   // Apply changes to the node
   const handleApplyChanges = () => {
     onChange(node.id, localData);
   };
   
-  // Update local state when a field changes - type-safe version
+  // Update local state when a field changes - type-safe version with auto-apply
   const handleFieldChange = <K extends string, V>(field: K, value: V) => {
-    setLocalData((prevData: any) => ({
-      ...prevData,
+    const newData = {
+      ...localData,
       [field]: value,
-    }));
+    };
+    setLocalData(newData);
+    
+    // Automatically apply changes after a short delay
+    setTimeout(() => {
+      onChange(node.id, newData);
+    }, 0);
   };
   
-  // Handle nested object field changes - type-safe version
+  // Handle nested object field changes - type-safe version with auto-apply
   const handleNestedFieldChange = <P extends string, K extends string, V>(parentField: P, field: K, value: V) => {
-    setLocalData((prevData: any) => {
-      const parent = prevData[parentField];
-      if (typeof parent === 'object' && parent !== null) {
-        return {
-          ...prevData,
-          [parentField]: {
-            ...parent,
-            [field]: value,
-          },
-        };
-      }
-      return prevData;
-    });
+    let newData: any = localData;
+    
+    // Make sure parent exists and is an object
+    const parent = localData[parentField];
+    if (typeof parent === 'object' && parent !== null) {
+      newData = {
+        ...localData,
+        [parentField]: {
+          ...parent,
+          [field]: value,
+        },
+      };
+      
+      setLocalData(newData);
+      
+      // Automatically apply changes after a short delay
+      setTimeout(() => {
+        onChange(node.id, newData);
+      }, 0);
+    }
   };
   
   // Render form based on node type
@@ -286,18 +299,6 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
   return (
     <div className="property-panel">
       {renderForm()}
-      
-      {!disabled && (
-        <div className="mt-4">
-          <Button
-            variant="primary"
-            className="w-full"
-            onClick={handleApplyChanges}
-          >
-            Apply Changes
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
