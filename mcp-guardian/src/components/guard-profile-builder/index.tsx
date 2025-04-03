@@ -103,7 +103,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
     type: 'input', // Custom node type for input
     position: { x: 100, y: 100 },
     data: { type: 'Input' } as InputNodeData,
-    draggable: false, // Static node
+    draggable: true // Make input node draggable
   });
   
   // Start with a single node for simple interceptor
@@ -135,7 +135,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
       type: 'output', // Custom node type for output
       position: { x: 500, y: 100 },
       data: { type: 'Output' } as OutputNodeData,
-      draggable: false, // Static node
+      draggable: true // Make output node draggable
     });
     
     // Connect primary interceptor to output
@@ -214,7 +214,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
       type: 'output', // Custom node type for output
       position: { x: 500, y: 100 },
       data: { type: 'Output' } as OutputNodeData,
-      draggable: false, // Static node
+      draggable: true // Make output node draggable
     });
     
     // Connect last chain node to output if there are chain nodes
@@ -418,16 +418,16 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   // Handle node changes
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      // Filter out changes to static nodes (input/output)
+      // Allow all changes including position changes for input/output nodes
       const filteredChanges = changes.filter(change => {
         // Always allow selection changes
         if (change.type === 'select') return true;
         
-        // For position changes and removals, check if it's a static node
-        if ('id' in change) {
+        // For removals, check if it's a static node
+        if (change.type === 'remove' && 'id' in change) {
           const nodeId = change.id;
           const node = nodes.find(n => n.id === nodeId);
-          // Don't allow changes to input/output nodes except selection
+          // Don't allow removal of input/output nodes
           if (node && (node.type === 'input' || node.type === 'output')) {
             return false;
           }
