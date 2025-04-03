@@ -86,6 +86,20 @@ The interceptor toolbox is a **critical element** for successful UX:
 - Include usage tips and best practices for each interceptor
 - Explain the in-node configuration model and how to use it
 
+### 7. Draggable Nodes & Node Management
+
+- Enable dragging for input, output, and interceptor nodes
+- Maintain node positions when changing interceptor types
+- Create a custom position tracking system to preserve layout
+- Use consistent draggable settings across all node types
+
+### 8. UI Space Management
+
+- Implement collapsible sidebar for entity navigation
+- Allow more screen space for the flow diagram when needed
+- Preserve sidebar state across interactions
+- Maintain balance between information visibility and canvas space
+
 ## Future Enhancements
 
 - Add animated flow indicators to visualize message movement

@@ -129,6 +129,8 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
    - [x] Fix dark mode compatibility and styling issues
    - [x] Implement in-node configuration with expandable UI
    - [x] Convert property panel to documentation-only
+   - [x] Enable draggable nodes with position preservation
+   - [x] Implement collapsible sidebar navigation for improved space utilization
    - [/] Add validation and error handling for connections (in progress)
    - [/] Enhance the user experience with hover states and tooltips (in progress)
 

@@ -71,14 +71,22 @@ The Guard Profile Builder integrates with the sidebar-based navigation pattern f
 - Tab-based navigation between visual and JSON representation remains intact
 - Empty state UI guides users to select or create profiles
 
+## Completed Enhancements
+
+- In-node configuration with expandable UI
+- Comprehensive documentation panel for learning
+- Fully draggable nodes with position preservation
+- Collapsible sidebar for improved space utilization
+- Node positioning that persists across interceptor changes
+
 ## Future Enhancements
 
-- Improve node styling and connection semantics
 - Add validation and error handling for connections
 - Enhance automatic layout algorithms
-- Add hover states with additional information
+- Add hover states with additional information 
 - Implement visual feedback for interceptor functionality
 - Consider adding a fullscreen mode for complex flows
 - Add ability to save custom node layouts and templates
 - Implement flow snapshots for profile version history
 - Add more advanced routing and conditional logic visualization
+- Add animated flow visualization to show message paths
