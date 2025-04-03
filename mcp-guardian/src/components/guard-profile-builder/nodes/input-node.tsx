@@ -5,7 +5,7 @@ import type { InputNodeData } from '../index';
 // Input node represents incoming messages from MCP servers
 const InputNode = ({ selected }: NodeProps) => {
   return (
-    <div className={`node input-node rounded-lg border p-3 bg-card shadow-sm ${
+    <div className={`node input-node rounded-lg border p-3 bg-background shadow-sm ${
       selected ? 'border-primary ring-2 ring-primary/20' : 'border-muted'
     }`}>
       <div className="flex items-center gap-3">

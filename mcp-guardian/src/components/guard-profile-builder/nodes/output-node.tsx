@@ -5,7 +5,7 @@ import type { OutputNodeData } from '../index';
 // Output node represents processed messages being delivered to the application
 const OutputNode = ({ selected }: NodeProps) => {
   return (
-    <div className={`node output-node rounded-lg border p-3 bg-card shadow-sm ${
+    <div className={`node output-node rounded-lg border p-3 bg-background shadow-sm ${
       selected ? 'border-primary ring-2 ring-primary/20' : 'border-muted'
     }`}>
       {/* Flow direction indicator line */}
