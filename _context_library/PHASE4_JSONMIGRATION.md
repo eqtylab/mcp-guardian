@@ -418,26 +418,67 @@ import { mcpServerSchema } from '../schemas/mcpServerSchema';
    - 🔄 Performance optimization (in progress)
    - 🔄 Documentation and final adjustments (in progress)
 
-## Future Enhancements (Backlogged)
+## Future Enhancements and Planned Work
 
-1. **Rust Core Validation**
+### Planned for Next Implementation Phase
 
+1. **Schema Documentation Improvements**
+   - Add more detailed explanations and examples for complex properties
+   - Enhance documentation with links to relevant portions of app documentation
+   - Create richer contextual help that explains the purpose of different options
+
+2. **Validation Enhancement**
+   - Implement more descriptive validation error messages
+   - Add visual indicators for required fields
+   - Enhance the template system with more examples and guidance for complex types
+
+3. **Advanced Features**
+   - Implement cross-reference validation between different entities
+   - Add custom actions and shortcuts for common operations
+   - Create direct integration with visual builders for seamless switching
+
+4. **Documentation Tooltips Enhancement**
+   - Create more richly formatted tooltips with syntax highlighting
+   - Add examples in tooltips to demonstrate expected values
+   - Show validation rules visually to help with understanding constraints
+
+5. **Integration with Visual Builder**
+   - Improve two-way sync between visual builder and JSON editor
+   - Highlight changes made in visual builder within JSON editor
+   - Provide navigation between corresponding elements in both views
+
+### Backlogged Items (Lower Priority)
+
+1. **Performance Optimization**
+   - *Backlogged: Current performance adequate for expected JSON sizes*
+   - Optimize editor for very large JSON documents
+   - Improve Monaco Editor initialization time
+   - Implement better virtualization and lazy loading of editor features
+
+2. **Testing & Edge Cases**
+   - *Backlogged: Will be managed through manual testing*
+   - Comprehensive testing across different browsers and platforms
+   - Edge case testing with extremely large documents
+   - Rigorous validation of schema correctness against all configurations
+
+3. **Form-Based Configuration Editors**
+   - *Backlogged: Lower priority than JSON editor improvements*
+   - Create form-based alternatives to JSON editing
+   - Implement toggle between form view and JSON editor
+   - Develop form generators based on JSON schema
+
+4. **Accessibility Improvements**
+   - *Backlogged: Lower priority for initial implementation*
+   - Ensure Monaco Editor components are accessible with screen readers
+   - Improve keyboard navigation and shortcuts
+   - Add alternative text for complex visualizations
+
+5. **Rust Core Validation**
+   - *Backlogged: Frontend validation sufficient for initial phase*
    - Add schema validation capabilities to Rust core libraries
    - Synchronize schema definitions between frontend and backend
    - Implement advanced validation rules (cross-entity references, etc.)
    - Enable server-side schema validation before persistence
-
-2. **Enhanced Schema Generation Pipeline**
-
-   - Expand the new `mcp-guardian-schema` package with advanced features
-   - Add support for custom documentation and UI hints in schemas
-   - Implement schema versioning and migration capabilities
-   - Add cross-field validation rules
-
-3. **Advanced Error Handling**
-   - Implement detailed error messaging between frontend and backend
-   - Provide context-aware error recovery suggestions
-   - Create user-friendly error presentation
 
 ## Implementation Details and Lessons Learned
 

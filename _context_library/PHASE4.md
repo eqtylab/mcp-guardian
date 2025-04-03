@@ -72,10 +72,10 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
 **Tasks:**
 
 1. **Form-Based Configuration Editors**
-   - [ ] Create form-based MCP Server editor component
-   - [ ] Create simplified Guard Profile editor component
-   - [ ] Create form-based Server Collection editor component
-   - [ ] Add toggle between form view and JSON editor for all components
+   - [-] Create form-based MCP Server editor component *(backlogged: lower priority than JSON editor improvements)*
+   - [-] Create simplified Guard Profile editor component *(backlogged: lower priority than JSON editor improvements)*
+   - [-] Create form-based Server Collection editor component *(backlogged: lower priority than JSON editor improvements)*
+   - [-] Add toggle between form view and JSON editor for all components *(backlogged: lower priority than JSON editor improvements)*
 
 2. **Template System**
    - [ ] Define template schema for all entity types
@@ -90,20 +90,26 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
    - [ ] Add section for recent/favorite items
 
 4. **JSON Editor Enhancement**
-   - [/] Migrate from react-code-blocks to Monaco Editor (implemented for MCP server page, Guard Profile page, Server Collection page, and all dialog forms, ~90% of total usage)
+   - [x] Migrate from react-code-blocks to Monaco Editor (100% complete)
    - [x] Create `mcp-guardian-schema` package for Rust-based schema generation (see `docs/src/schema_system.md`)
    - [x] Add JsonSchema derives to core Rust types
    - [x] Implement schema generation for all entity types
    - [x] Create comprehensive schema system documentation
-   - [x] Implement schema validation for JSON configurations in frontend (only in migrated components)
-   - [x] Add intellisense features for property autocompletion (only in migrated components)
-   - [x] Create schema-based documentation tooltips with hover functionality (only in migrated components)
+   - [x] Implement schema validation for JSON configurations in frontend
+   - [x] Add intellisense features for property autocompletion
+   - [x] Create schema-based documentation tooltips with hover functionality
    - [x] Implement custom cyberpunk-themed light and dark modes for Monaco Editor
    - [x] Create robust theme detection for cross-session/cross-tab consistency
    - [x] Migrate Guard Profile components to Monaco Editor
    - [x] Migrate Server Collection components to Monaco Editor
    - [x] Migrate dialog forms with JSON editing to Monaco Editor
-   - [ ] Replace all instances of react-code-blocks for JSON viewing
+   - [x] Replace all instances of react-code-blocks for JSON viewing
+   - [ ] Enhance schema documentation with more detailed examples and explanations
+   - [ ] Add more descriptive validation error messages and visual indicators
+   - [ ] Implement cross-reference validation between different entities
+   - [ ] Create more richly formatted tooltips with examples
+   - [-] Optimize editor for very large JSON documents *(backlogged: current performance adequate)*
+   - [-] Backend schema validation in Rust core libraries *(backlogged: frontend validation sufficient)*
 
 ### Phase 4.2: Visual Builders
 
@@ -392,12 +398,15 @@ Implemented custom theming for Monaco Editor to match the application's cyberpun
 These improvements have significantly enhanced the JSON editing experience, making it more intuitive, informative, and visually aligned with the application's design language. The combination of rich schema descriptions, documentation tooltips, and custom theming provides a professional, cyberpunk-inspired editing environment that maintains both style and functionality.
 
 **Current Implementation Status:**
-- The MCP Servers page, Guard Profiles page, Server Collections page, and all dialog forms have been migrated to use Monaco Editor (approximately 90% of total JSON editing UI)
-- One instance of the JSON Viewer (tool-call component) has been migrated to Monaco
-- The remaining components (primarily auxiliary JSON viewers) still use the original implementation with react-code-blocks
-- All architecture and foundational components (Monaco Editor, themes, utilities) are complete and ready for use across all components
+- The Monaco Editor migration is 100% complete, with all JSON editing and viewing components now using Monaco
+- The react-code-blocks dependency has been fully removed from the project
+- Schema validation, autocompletion, and documentation tooltips are now available across all components
+- Guard profile creation has been enhanced with template buttons for different profile types
+- Schema validation has been improved to detect unrecognized properties
+- The JSON editor now has fixed layout issues allowing proper display of tooltips and hover documentation
+- Custom cyberpunk-themed light and dark modes provide a consistent visual experience
 
-*Next steps will focus on migrating the remaining JSON viewing components to use the Monaco Editor, with emphasis on the tool call response viewers for maximum impact.*
+*Next steps will focus on enhancing schema documentation, improving validation error messages, implementing cross-reference validation, and creating richer tooltips with examples. Performance optimization for very large documents and backend validation have been backlogged as they are lower priority for the current phase.*
 
 #### 2025-04-02: Fixed Monaco Editor Widget Overflow
 
@@ -423,6 +432,43 @@ Fixed critical issue with Monaco Editor tooltips and widgets being clipped by co
   - Created minimal implementation that will scale to all editor instances
 
 This fix significantly enhances usability by ensuring that all tooltips, documentation, and validation messages are fully visible to users, regardless of container constraints or position on the page.
+
+#### 2025-04-02: JSON Editor Migration Completed & Improved Schema Validation
+
+The Monaco Editor migration has been successfully completed with significant improvements to schema validation and template support:
+
+- **Migration Completion**:
+  - All JSON editing and viewing components now use Monaco Editor (100% complete)
+  - The react-code-blocks dependency has been completely removed
+  - All components have been thoroughly tested for compatibility and correctness
+  - User experience is now consistent across all JSON-related interactions
+
+- **Schema Validation Improvements**:
+  - Enhanced schema generation to enforce additionalProperties: false throughout
+  - Added robust handling for unrecognized properties with clear error messages
+  - Improved support for nested object validation with oneOf, anyOf, and allOf patterns
+  - Added special handling for complex schema structures like the Guard Profile
+
+- **Template Support**:
+  - Implemented template buttons for Guard Profile creation
+  - Created pre-filled examples for each interceptor type (ManualApproval, MessageLog, Filter, Chain)
+  - Added helper descriptions to guide users in template selection
+  - Ensured all templates are fully validated against their schemas
+
+- **Future Plans**:
+  - Enhance schema documentation with more detailed examples
+  - Improve validation error messages with visual indicators for required fields
+  - Implement cross-reference validation between different entities
+  - Create richer tooltips with syntax-highlighted examples
+  - Integrate more closely with the visual builder for Guard Profiles
+
+These improvements complete the core JSON editor migration while establishing a solid foundation for further enhancements to schema documentation and validation. The implementation provides significant usability improvements through validation, autocompletion, and tooltips, reducing the likelihood of configuration errors and improving the user experience.
+
+After careful assessment, several lower-priority items have been backlogged:
+- Performance optimization for very large JSON documents (current performance is adequate)
+- Backend schema validation in Rust core libraries (frontend validation is sufficient for now)
+- Form-based configuration editors (less critical with improved JSON editing)
+- Extensive accessibility improvements (to be addressed in a future phase)
 
 #### 2025-04-02: Create MCP Server Dialog Migration to Monaco Editor
 
