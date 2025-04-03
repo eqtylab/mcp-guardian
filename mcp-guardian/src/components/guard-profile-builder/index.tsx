@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { 
   ReactFlow, 
   Background,
@@ -363,38 +363,91 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   onChange,
   readOnly = false,
 }) => {
-  // Initialize nodes and edges from the profile
-  const initialFlow = useMemo(() => convertProfileToFlow(profile), [profile]);
+  // Use a reference to track the current profile ID for change detection
+  const profileRef = useRef<string>("");
+  const currentProfileId = `${profile.primary_message_interceptor.type}_${JSON.stringify(profile)}`;
   
-  // State for nodes and edges
-  const [nodes, setNodes] = useNodesState(initialFlow.nodes);
-  const [edges, setEdges] = useEdgesState(initialFlow.edges);
+  // State for loading control
+  const [loading, setLoading] = useState(true);
+  
+  // Store expanded state for each node
+  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({});
+  
+  // Setup the flow state
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<GuardProfileNode | null>(null);
   
+  // We'll use a more stable approach than forcing re-renders with changing keys
+  
+  // Toggle expanded state for a node
+  const toggleNodeExpanded = useCallback((nodeId: string) => {
+    // Create a composite key that includes the profile ID to scope the expanded state
+    const compositeKey = `${currentProfileId}__${nodeId}`;
+    setExpandedNodes(prev => ({
+      ...prev,
+      [compositeKey]: !prev[compositeKey]
+    }));
+  }, [currentProfileId]);
+
   // Listen for custom events from expandable nodes
   useEffect(() => {
     const handleNodeDataChanged = (event: Event) => {
       const { nodeId, data } = (event as CustomEvent).detail;
       console.log('Node data changed from in-node form:', nodeId, data);
       
-      // Update the node data
+      // Make an update to the node data that preserves UI state
       setNodes(nds =>
-        nds.map(node => (node.id === nodeId ? { ...node, data } : node))
+        nds.map(node => {
+          if (node.id === nodeId) {
+            // Preserve UI state by merging only the core data properties
+            return { 
+              ...node, 
+              data: { 
+                ...node.data, 
+                ...data,
+                // Preserve UI state properties
+                isExpanded: expandedNodes[`${currentProfileId}__${nodeId}`] || false,
+                onToggleExpand: toggleNodeExpanded
+              } 
+            };
+          }
+          return node;
+        })
       );
       
       // Also update the selected node if it's the one that changed
       if (selectedNode && selectedNode.id === nodeId) {
-        setSelectedNode({ ...selectedNode, data });
+        setSelectedNode({ 
+          ...selectedNode, 
+          data: {
+            ...selectedNode.data,
+            ...data,
+            // Preserve UI state properties
+            isExpanded: expandedNodes[`${currentProfileId}__${nodeId}`] || false,
+            onToggleExpand: toggleNodeExpanded
+          }
+        });
       }
       
       // Update the profile
-      setTimeout(() => {
-        const newProfile = convertFlowToProfile(
-          nodes.map(node => (node.id === nodeId ? { ...node, data } : node)), 
-          edges
-        );
-        onChange(newProfile);
-      }, 0);
+      const newProfile = convertFlowToProfile(
+        nodes.map(node => {
+          if (node.id === nodeId) {
+            // Use only core data for profile conversion, not UI state
+            return { 
+              ...node, 
+              data: {
+                ...node.data,
+                ...data
+              }
+            };
+          }
+          return node;
+        }), 
+        edges
+      );
+      onChange(newProfile);
     };
     
     // Add event listener
@@ -404,7 +457,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
     return () => {
       document.removeEventListener('nodeDataChanged', handleNodeDataChanged);
     };
-  }, [nodes, edges, selectedNode, onChange]);
+  }, [nodes, edges, selectedNode, onChange, expandedNodes, toggleNodeExpanded]);
 
   // Update profile when nodes or edges change
   const updateProfile = useCallback(() => {
@@ -415,19 +468,15 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
     onChange(newProfile);
   }, [nodes, edges, onChange]);
   
-  // Handle node changes
+  // Use built-in change handlers from useNodesState/useEdgesState
+  // This simplifies our code and lets React Flow handle state updates consistently
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      // Allow all changes including position changes for input/output nodes
+      // Filter out removal of static nodes
       const filteredChanges = changes.filter(change => {
-        // Always allow selection changes
-        if (change.type === 'select') return true;
-        
-        // For removals, check if it's a static node
         if (change.type === 'remove' && 'id' in change) {
           const nodeId = change.id;
           const node = nodes.find(n => n.id === nodeId);
-          // Don't allow removal of input/output nodes
           if (node && (node.type === 'input' || node.type === 'output')) {
             return false;
           }
@@ -435,25 +484,39 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
         return true;
       });
       
-      const updatedNodes = applyNodeChanges(filteredChanges, nodes);
-      setNodes(updatedNodes);
+      // Use the built-in handler
+      onNodesChange(filteredChanges);
       
-      // Don't trigger onChange for selection changes
-      const nonSelectionChanges = filteredChanges.filter(change => change.type !== 'select');
+      // Update the profile after non-selection changes, with debounce
+      const nonSelectionChanges = filteredChanges.filter(change => 
+        change.type !== 'select' && change.type !== 'position'
+      );
+      
+      // Only trigger profile updates for meaningful changes, not just position changes
       if (nonSelectionChanges.length > 0) {
-        setTimeout(updateProfile, 0);
+        setTimeout(updateProfile, 100);
+      } else if (filteredChanges.some(change => change.type === 'position')) {
+        // For position changes, update less frequently to avoid flicker
+        setTimeout(updateProfile, 500);
       }
     },
-    [nodes, setNodes, updateProfile]
+    [nodes, onNodesChange, updateProfile]
   );
   
-  // Handle edge changes
+  // Use built-in edge changes handler
   const handleEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      setEdges(prev => applyEdgeChanges(changes, prev));
-      setTimeout(updateProfile, 0);
+      // Apply changes directly
+      onEdgesChange(changes);
+      
+      // Only update profile after a small debounce to prevent excessive updates
+      // during drag operations or rapid changes
+      const nonSelectChanges = changes.filter(change => change.type !== 'select');
+      if (nonSelectChanges.length > 0) {
+        setTimeout(updateProfile, 100);
+      }
     },
-    [setEdges, updateProfile]
+    [onEdgesChange, updateProfile]
   );
   
   // Handle node selection
@@ -571,15 +634,63 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
     [setNodes, updateProfile, setSelectedNode]
   );
   
-  // Sync with external profile changes - but don't replace nodes that are already there
+  // Clear and load flow when profile changes
   useEffect(() => {
-    // Skip sync if we already have nodes (to preserve positions)
-    if (nodes.length === 0) {
-      const newFlow = convertProfileToFlow(profile);
-      setNodes(newFlow.nodes);
-      setEdges(newFlow.edges);
+    // Check if the profile has actually changed
+    if (profileRef.current === currentProfileId) {
+      return; // Skip if same profile
     }
-  }, [profile, setNodes, setEdges, nodes.length]);
+    
+    // Update the reference
+    profileRef.current = currentProfileId;
+    
+    // Two-stage loading for smoother transitions
+    const loadProfile = async () => {
+      // 1. Set loading state and clear existing graph
+      setLoading(true);
+      
+      // Save current expanded states for this profile
+      const currentExpandedState: Record<string, boolean> = {};
+      
+      // Convert from composite keys to simple node IDs for the current profile
+      Object.keys(expandedNodes).forEach(key => {
+        if (key.startsWith(`${profileRef.current}__`)) {
+          const nodeId = key.split('__')[1];
+          currentExpandedState[nodeId] = expandedNodes[key];
+        }
+      });
+      
+      // Clear graph
+      setNodes([]);
+      setEdges([]);
+      setSelectedNode(null);
+      
+      // 2. Short delay to ensure clear is complete
+      await new Promise(r => setTimeout(r, 50));
+      
+      // 3. Load new profile
+      const newFlow = convertProfileToFlow(profile);
+      
+      // Add UI state to nodes
+      const nodesWithUIState = newFlow.nodes.map(node => ({
+        ...node,
+        data: {
+          ...node.data,
+          // Use the current node's expanded state if it existed in the previous state
+          isExpanded: currentExpandedState[node.id] || false,
+          onToggleExpand: toggleNodeExpanded
+        }
+      }));
+      
+      setNodes(nodesWithUIState);
+      setEdges(newFlow.edges);
+      
+      // 4. End loading state after content is ready
+      setTimeout(() => setLoading(false), 50);
+    };
+    
+    loadProfile();
+  }, [profile, setNodes, setEdges, currentProfileId, expandedNodes, toggleNodeExpanded]);
   
   return (
     <ReactFlowProvider>
@@ -763,7 +874,14 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
           
           <div className="flex-1 relative" onDragOver={onDragOver} onDrop={onDrop}>
             <ReactFlow
-              nodes={nodes}
+              nodes={nodes.map(node => ({
+                ...node,
+                data: {
+                  ...node.data,
+                  isExpanded: expandedNodes[`${currentProfileId}__${node.id}`] || false,
+                  onToggleExpand: toggleNodeExpanded
+                }
+              }))}
               edges={edges}
               onNodesChange={handleNodesChange}
               onEdgesChange={handleEdgesChange}
@@ -787,6 +905,13 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                 <div className="w-1/3 h-full border-r border-dashed border-border/30"></div>
                 <div className="w-1/3 h-full border-r border-dashed border-border/30"></div>
               </div>
+              
+              {/* Show loading indicator during transitions */}
+              {loading && (
+                <div className="absolute inset-0 flex items-center justify-center z-10 bg-background/80">
+                  <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
               
               <Controls />
             </ReactFlow>
