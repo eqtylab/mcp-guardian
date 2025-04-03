@@ -408,7 +408,10 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
 
   // Update profile when nodes or edges change
   const updateProfile = useCallback(() => {
-    const newProfile = convertFlowToProfile(nodes, edges);
+    // Create a deep copy of nodes and edges to avoid reference issues
+    const nodesCopy = JSON.parse(JSON.stringify(nodes));
+    const edgesCopy = JSON.parse(JSON.stringify(edges));
+    const newProfile = convertFlowToProfile(nodesCopy, edgesCopy);
     onChange(newProfile);
   }, [nodes, edges, onChange]);
   
@@ -568,12 +571,15 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
     [setNodes, updateProfile, setSelectedNode]
   );
   
-  // Sync with external profile changes
+  // Sync with external profile changes - but don't replace nodes that are already there
   useEffect(() => {
-    const newFlow = convertProfileToFlow(profile);
-    setNodes(newFlow.nodes);
-    setEdges(newFlow.edges);
-  }, [profile, setNodes, setEdges]);
+    // Skip sync if we already have nodes (to preserve positions)
+    if (nodes.length === 0) {
+      const newFlow = convertProfileToFlow(profile);
+      setNodes(newFlow.nodes);
+      setEdges(newFlow.edges);
+    }
+  }, [profile, setNodes, setEdges, nodes.length]);
   
   return (
     <ReactFlowProvider>
