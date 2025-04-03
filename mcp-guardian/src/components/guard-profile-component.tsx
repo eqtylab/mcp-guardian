@@ -40,9 +40,10 @@ const GuardProfileComponent = ({
 
   // Update local state when the profile changes from props
   useEffect(() => {
+    // Reset all state completely when profile identity changes
     setCurrentGuardProfile(guard_profile);
     setConfigText(JSON.stringify(guard_profile, null, 2));
-  }, [guard_profile]);
+  }, [guard_profile, namespace, profile_name]);
 
   // Update JSON text when the visual builder changes the profile
   const handleVisualBuilderChange = (updatedProfile: GuardProfile) => {

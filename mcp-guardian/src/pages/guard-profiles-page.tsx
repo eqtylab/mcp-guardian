@@ -28,6 +28,7 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
     `${profile.namespace}.${profile.profile_name}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Find the selected profile 
   const selectedProfile = guardProfiles.find(
     profile => `${profile.namespace}.${profile.profile_name}` === selectedProfileId
   );
