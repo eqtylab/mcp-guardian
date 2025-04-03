@@ -13,23 +13,29 @@ The Guard Profile Visual Builder represents Guard Profiles as middleware/firewal
 └──────────────┘     └─────────────────────────────┘     └──────────────┘
 ```
 
-## UX Improvement Goals
+## UX Critical Components for Success
 
-1. **Clear Data Flow Representation**
-   - Add static (non-editable) input and output nodes to visually anchor the flow
-   - Make the direction of data flow immediately apparent with clear visual cues
+1. **Clear Action Buttons & Interactive Elements**
+   - Color-coded interceptor types with distinctive icons
+   - Simple, focused toolbox with clear clickable items
+   - Contextual tips panel guiding users through the workflow
+   - Visual feedback when items are selected or active
 
-2. **Middleware Context**
-   - Visually establish the Guard Profile as a processing layer between systems
-   - Help users understand their place in the overall architecture
+2. **Intuitive Visual Language**
+   - Professional, consistent styling aligned with application design
+   - Color-coded connection paths (input → processing → output)
+   - Visual consistency between related elements
+   - Clean, subtle background grid to provide spatial context
 
-3. **Intuitive Chain Building**
-   - Make it obvious how interceptors connect and in what order they process messages
-   - Provide clear visual feedback on the path messages take through the system
+3. **Guided User Experience**
+   - Tips panel explaining key actions and workflows
+   - Clear header with legend explaining the color coding
+   - Consistent use of icons and colors to establish patterns
+   - Progressive disclosure of complexity through the interface
 
 ## Implementation Approach
 
-### 1. Add Static Input/Output Nodes
+### 1. Static Input/Output Nodes
 
 Add non-draggable, non-editable nodes at the start and end of the flow:
 
@@ -38,17 +44,29 @@ Add non-draggable, non-editable nodes at the start and end of the flow:
 
 These nodes should have distinctive styling and clear labeling to indicate their special status.
 
-### 2. Enhance Visual Flow Direction
+### 2. Action Buttons & Interceptor Toolbox
 
-- Use directed arrows with stronger visual presence
-- Consider using gradients or color coding to indicate direction of flow
-- Ensure layout naturally flows from inputs to outputs (left-to-right or top-to-bottom)
+The interceptor toolbox is a **critical element** for successful UX:
 
-### 3. Improve Node Connection Semantics
+- Color-coded interceptor types help users identify node purposes
+- Clear, concise descriptions explain each interceptor's function
+- Simple click interaction makes adding nodes intuitive
+- Tips panel provides contextual guidance for new users
+- Visual styling helps establish relationships between nodes in the toolbox and canvas
 
-- Make connection points (handles) more intuitive with clearer input/output designation
-- Prevent invalid connections that would break the flow model
-- Add visual feedback when connections are being made
+### 3. Visual Flow Direction
+
+- Use directed arrows with appropriate size and styling
+- Color-code paths to indicate direction and relationship
+- Maintain consistent visual language between toolbox and canvas nodes
+- Ensure layout naturally flows from inputs to outputs (left-to-right)
+
+### 4. Connection Semantics & Feedback
+
+- Make connection points (handles) intuitive with clear input/output designation
+- Provide visual feedback when connections are made or are invalid
+- Use consistent border treatments and shadows for related elements
+- Ensure node styling reflects its role in the processing chain
 
 ## Future Enhancements
 
@@ -56,10 +74,12 @@ These nodes should have distinctive styling and clear labeling to indicate their
 - Implement a "test message" feature to simulate how a message would be processed
 - Add input/output previews showing example message formats
 - Create a "message path visualization" that highlights the active path for different message types
+- Expand tips panel with contextual help based on current actions
 
 ## Technical Guidelines
 
 - Maintain the ReactFlow foundation while extending with custom components
 - Keep the JSON <-> Visual representation synchronization intact
-- Ensure new visual elements enhance rather than complicate the UX
-- Preserve all existing functionality while improving the conceptual clarity
+- Use consistent styling patterns from the application's design system
+- Focus on professional, clean presentation that emphasizes clarity
+- Ensure visual styling helps communicate the component's purpose
