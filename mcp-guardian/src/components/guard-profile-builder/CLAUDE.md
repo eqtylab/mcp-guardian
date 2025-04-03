@@ -19,12 +19,14 @@ The Guard Profile Builder visualizes Guard Profiles as middleware components tha
 - Uses React Flow (@xyflow/react) as the foundation for node-based editing
 - Custom node components for different interceptor types (Filter, Chain, MessageLog, ManualApproval)
 - Static Input/Output nodes representing the sources and destinations of messages
-- Property panel for configuring node properties
+- In-node configuration with expandable UI for direct manipulation
+- Property panel for documentation and learning
 - Interceptor toolbox for adding new interceptor types
 
 ### Two-Way Data Binding
 - `convertProfileToFlow`: Transforms GuardProfile JSON to React Flow nodes and edges
 - `convertFlowToProfile`: Transforms React Flow nodes and edges back to GuardProfile JSON
+- Custom event system for communicating node configuration changes
 - Changes to the visual representation automatically update the JSON and vice versa
 
 ## Known Issues and Solutions
@@ -41,14 +43,16 @@ The Guard Profile Builder visualizes Guard Profiles as middleware components tha
 3. Used direct profile updating instead of relying solely on the flow conversion logic
 4. Added sequenced state updates with slight delays to ensure proper rendering
 
-### Property Panel Synchronization 
+### Node Configuration and Update Propagation
 
-**Issue**: Changes in the property panel sometimes didn't reflect in the visual node representation.
+**Issue**: Implementing in-node configuration requires proper event propagation to update the overall state.
 
 **Solution**:
-1. Added node.type to the dependency array in useEffect for proper change detection
-2. Implemented automatic change application without requiring a separate apply button
-3. Used type-safe state update functions with proper data typing
+1. Created a custom event system using CustomEvents to communicate node changes
+2. Implemented expandable UI with compact form controls directly within nodes
+3. Added state sync between local node state and parent component
+4. Used type-safe state update functions with proper data typing
+5. Ensured z-index and visibility properties are correctly set for stable node interaction
 
 ## Integration with Entity Sidebar Navigation
 

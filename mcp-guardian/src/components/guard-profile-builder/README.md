@@ -44,7 +44,18 @@ Add non-draggable, non-editable nodes at the start and end of the flow:
 
 These nodes should have distinctive styling and clear labeling to indicate their special status.
 
-### 2. Action Buttons & Interceptor Toolbox
+### 2. In-Node Configuration
+
+Provides direct manipulation interface within the nodes themselves:
+
+- **Expandable UI**: Nodes can be expanded/collapsed to show/hide configuration options
+- **Compact Controls**: Dense, technical-user-focused form controls within the node
+- **Real-time Updates**: Changes in node configuration immediately propagate to the model
+- **Event System**: Custom events communicate node changes to parent components
+
+The in-node configuration approach reduces context switching and provides a more intuitive interaction model where users configure objects directly within the flow.
+
+### 3. Action Buttons & Interceptor Toolbox
 
 The interceptor toolbox is a **critical element** for successful UX:
 
@@ -54,19 +65,26 @@ The interceptor toolbox is a **critical element** for successful UX:
 - Tips panel provides contextual guidance for new users
 - Visual styling helps establish relationships between nodes in the toolbox and canvas
 
-### 3. Visual Flow Direction
+### 4. Visual Flow Direction
 
 - Use directed arrows with appropriate size and styling
 - Color-code paths to indicate direction and relationship
 - Maintain consistent visual language between toolbox and canvas nodes
 - Ensure layout naturally flows from inputs to outputs (left-to-right)
 
-### 4. Connection Semantics & Feedback
+### 5. Connection Semantics & Feedback
 
 - Make connection points (handles) intuitive with clear input/output designation
 - Provide visual feedback when connections are made or are invalid
 - Use consistent border treatments and shadows for related elements
 - Ensure node styling reflects its role in the processing chain
+
+### 6. Documentation Panel
+
+- Convert the property panel into a documentation-focused resource
+- Provide detailed information about each interceptor type
+- Include usage tips and best practices for each interceptor
+- Explain the in-node configuration model and how to use it
 
 ## Future Enhancements
 

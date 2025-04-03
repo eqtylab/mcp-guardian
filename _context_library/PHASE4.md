@@ -127,6 +127,8 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
    - [x] Implement two-way sync with JSON representation
    - [x] Implement mental model improvements per README.md in guard-profile-builder
    - [x] Fix dark mode compatibility and styling issues
+   - [x] Implement in-node configuration with expandable UI
+   - [x] Convert property panel to documentation-only
    - [/] Add validation and error handling for connections (in progress)
    - [/] Enhance the user experience with hover states and tooltips (in progress)
 
@@ -524,6 +526,79 @@ Implemented significant improvements to the Guard Profile Visual Builder's visua
   - Enhance automatic layout algorithms
   - Add hover states with additional information
   - Implement visual feedback for interceptor functionality
+
+#### 2025-04-02: Enhanced Property Panel with Detailed Interceptor Information
+
+Significantly improved the property panel for the Guard Profile Visual Builder with comprehensive information about each interceptor type:
+
+- **Enhanced Documentation**:
+  - Added detailed descriptions for each interceptor type
+  - Included key capabilities as bullet points
+  - Added taglines for quick understanding
+  - Created placeholder links for documentation
+  - Improved visual presentation with color-coded elements
+
+- **UX Improvements**:
+  - Implemented cyberpunk-inspired styling consistent with the application theme
+  - Added grid patterns and subtle backgrounds
+  - Created color-coding that matches the node types
+  - Improved visual hierarchy and layout
+  - Added empty state for when no node is selected
+
+- **Specialized UI for Each Interceptor Type**:
+  - Added log level visualization for Message Log interceptors
+  - Enhanced chain interceptor display with execution order list
+  - Improved form field layout and organization
+  - Added visual feedback elements for different states
+
+#### 2025-04-02: Planned UX Enhancement: Expandable Nodes with In-Node Configuration
+
+Developed a concept for a significant UX improvement to the Guard Profile Visual Builder, moving configuration directly into the nodes:
+
+- **Design Concept**:
+  - Expandable nodes that show configuration when selected
+  - Direct manipulation by configuring objects in-place
+  - Right panel repurposed for pure documentation/info
+  - Smoother visual workflow with less context switching
+
+- **Implementation Plan**:
+  - Enhance node components to handle expanded state
+  - Build collapsible form areas within each node
+  - Integrate form fields directly into node components
+  - Refactor property panel to focus on documentation
+  - Add animations for smooth transitions between states
+
+- **Benefits**:
+  - More intuitive: Users configure nodes directly where they see them
+  - Better visual understanding: Configuration and flow are visually connected
+  - Reduced context switching: No need to look between canvas and sidebar
+  - Clearer mental model: The node itself represents the configuration
+
+- **Technical Approach**:
+  - Use conditional rendering based on node selection state
+  - Add auto-scrolling to ensure expanded nodes are visible
+  - Implement proper node sizing and spacing
+  - Add collapse/expand buttons on nodes
+  - Maintain two-way data binding with JSON representation
+
+- **Implementation Challenges**:
+  - Initial experiments with expandable nodes revealed React Flow integration issues
+  - Node expansion/interaction mechanisms require careful implementation to avoid breaking the flow canvas
+  - Need to ensure stable node position and connection handling during expansion
+  - Must maintain compatibility with React Flow's selection and interaction model
+
+- **Revised Approach**:
+  - Backlogged the full in-node configuration for future implementation
+  - Enhanced the property panel instead with comprehensive documentation and improved form layout
+  - Created a combined view showing both detailed documentation and configuration controls
+  - Maintained the original concept in documentation for future reference
+  - Will revisit with deeper React Flow integration research in a future phase
+
+This design concept is preserved for future implementation. After initial experimentation, we determined that the React Flow integration complexities require a more focused effort to implement properly. The current implementation enhances the property panel with both rich documentation and configuration controls in a visually separated layout.
+
+The concept of having configuration directly in the nodes remains a valuable goal that would more closely align with best practices for visual node-based editors, where configuration happens directly within the nodes themselves rather than in a separate panel. This approach is commonly found in professional node-based editors for 3D graphics, video editing, and audio production software, making it familiar to users of those tools.
+
+#### 2025-04-02: Fixed Monaco Editor Widget Overflow Issues
 
 - **Enhanced Functionality**:
   - Tooltips and documentation popups now display properly without being cut off
