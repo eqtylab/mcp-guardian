@@ -624,21 +624,27 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
               try {
                 console.log(`Adding new node of type: ${type}`);
                 
-                // Create a completely fresh state with just input and output
+                // Preserve existing node positions if available
+                const currentNodes = nodes.reduce((acc, node) => {
+                  acc[node.id] = node.position;
+                  return acc;
+                }, {} as Record<string, { x: number, y: number }>);
+                
+                // Create a completely fresh state with just input and output, preserving positions
                 const inputNode = {
                   id: 'node-input',
                   type: 'input',
-                  position: { x: 100, y: 100 },
+                  position: currentNodes['node-input'] || { x: 100, y: 100 },
                   data: { type: 'Input' },
-                  draggable: false,
+                  draggable: true,
                 };
                 
                 const outputNode = {
                   id: 'node-output',
                   type: 'output',
-                  position: { x: 500, y: 100 },
+                  position: currentNodes['node-output'] || { x: 500, y: 100 },
                   data: { type: 'Output' },
-                  draggable: false,
+                  draggable: true,
                 };
                 
                 // Generate a default config based on type
