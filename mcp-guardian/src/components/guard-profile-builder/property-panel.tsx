@@ -30,7 +30,7 @@ interface PropertyPanelProps {
 const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled = false }) => {
   // We start with unknown type because the node data can be of different types
   const [localData, setLocalData] = useState<any>(node.data);
-  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
   
   // Reset local data when the selected node changes (including type changes)
   useEffect(() => {
@@ -691,7 +691,7 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
       >
         {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         <div className="text-xs mt-2 font-medium tracking-wide [writing-mode:vertical-lr] rotate-180">
-          {collapsed ? 'EXPAND' : 'COLLAPSE'}
+          {collapsed ? 'SEE DOCUMENTATION' : 'HIDE DOCUMENTATION'}
         </div>
       </button>
       
