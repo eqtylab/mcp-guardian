@@ -133,12 +133,13 @@ const FilterNode = ({ data, selected, id }: NodeProps) => {
   
   return (
     <div 
-      className={`node filter-node rounded-lg border p-3 shadow-md ${
+      className={`node filter-node rounded-lg border p-3 shadow-md cursor-move ${
         expanded ? 'w-[280px]' : 'max-w-[200px]'
       } ${
         selected ? 'border-primary ring-2 ring-primary/20 bg-amber-950/5 dark:bg-amber-800/10' : 'border-muted bg-card dark:bg-amber-950/5'
       }`}
       style={{ zIndex: 5, visibility: 'visible', pointerEvents: 'all' }}
+      data-id={id} // Ensure node ID is accessible in DOM for React Flow
     >
       <Handle 
         type="target" 
@@ -147,7 +148,7 @@ const FilterNode = ({ data, selected, id }: NodeProps) => {
         style={{ zIndex: 6 }}
       />
       
-      {/* Header row */}
+      {/* Node header */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <div className="flex-shrink-0 w-7 h-7 bg-amber-100 dark:bg-amber-900/30 rounded-md flex items-center justify-center">
@@ -169,7 +170,7 @@ const FilterNode = ({ data, selected, id }: NodeProps) => {
             e.stopPropagation();
             setExpanded(!expanded);
           }}
-          className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/30 transition-colors"
+          className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/30 transition-colors cursor-pointer"
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </button>
@@ -187,7 +188,11 @@ const FilterNode = ({ data, selected, id }: NodeProps) => {
       
       {/* Configuration content when expanded */}
       {expanded && (
-        <div className="mt-3 border-t border-muted pt-3 space-y-3">
+        <div 
+          className="mt-3 border-t border-muted pt-3 space-y-3"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
           <div className="grid grid-cols-1 gap-y-3">
             {/* Filter Type */}
             <CompactSelect

@@ -115,6 +115,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
       type: profile.primary_message_interceptor.type.toLowerCase(),
       position: { x: 300, y: 100 },
       data: { ...profile.primary_message_interceptor } as FilterNodeData | MessageLogNodeData | ManualApprovalNodeData,
+      draggable: true,
     });
     
     // Connect input to the primary interceptor
@@ -165,6 +166,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
         type: 'Chain',
         chain: chainInterceptor.chain 
       } as ChainNodeData,
+      draggable: true,
     });
     
     // Connect input to the chain
@@ -189,6 +191,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[], ed
         type: interceptor.type.toLowerCase(),
         position: { x: 300, y: 250 + index * 150 },
         data: { ...interceptor } as FilterNodeData | MessageLogNodeData | ManualApprovalNodeData,
+        draggable: true,
       });
       
       // Create edge connecting to previous node
@@ -367,6 +370,41 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   const [nodes, setNodes] = useNodesState(initialFlow.nodes);
   const [edges, setEdges] = useEdgesState(initialFlow.edges);
   const [selectedNode, setSelectedNode] = useState<GuardProfileNode | null>(null);
+  
+  // Listen for custom events from expandable nodes
+  useEffect(() => {
+    const handleNodeDataChanged = (event: Event) => {
+      const { nodeId, data } = (event as CustomEvent).detail;
+      console.log('Node data changed from in-node form:', nodeId, data);
+      
+      // Update the node data
+      setNodes(nds =>
+        nds.map(node => (node.id === nodeId ? { ...node, data } : node))
+      );
+      
+      // Also update the selected node if it's the one that changed
+      if (selectedNode && selectedNode.id === nodeId) {
+        setSelectedNode({ ...selectedNode, data });
+      }
+      
+      // Update the profile
+      setTimeout(() => {
+        const newProfile = convertFlowToProfile(
+          nodes.map(node => (node.id === nodeId ? { ...node, data } : node)), 
+          edges
+        );
+        onChange(newProfile);
+      }, 0);
+    };
+    
+    // Add event listener
+    document.addEventListener('nodeDataChanged', handleNodeDataChanged);
+    
+    // Cleanup
+    return () => {
+      document.removeEventListener('nodeDataChanged', handleNodeDataChanged);
+    };
+  }, [nodes, edges, selectedNode, onChange]);
 
   // Update profile when nodes or edges change
   const updateProfile = useCallback(() => {
@@ -642,6 +680,8 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                   type,
                   position: { x: 300, y: 100 },
                   data: nodeData,
+                  // Make sure the node is draggable and properly initialized
+                  draggable: true,
                 };
                 
                 // Create completely fresh node array
@@ -721,9 +761,9 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
               connectionMode={ConnectionMode.Loose}
               snapToGrid
               fitView
-              attributionPosition="bottom-right"
+              proOptions={{ hideAttribution: true }}
               panOnDrag={!readOnly}
-              nodesDraggable={!readOnly}
+              nodesDraggable={true}
               nodesConnectable={!readOnly}
               elementsSelectable={!readOnly}
               className="bg-background"
