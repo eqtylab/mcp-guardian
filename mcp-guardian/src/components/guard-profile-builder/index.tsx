@@ -786,7 +786,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
             </ReactFlow>
           </div>
           
-          <div className="w-80 bg-card border-l border-border p-4 overflow-y-auto">
+          <div className="flex">
             {selectedNode ? (
               <PropertyPanel
                 node={selectedNode}
@@ -794,7 +794,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                 disabled={readOnly}
               />
             ) : (
-              <div className="text-center text-muted-foreground p-4">
+              <div className="w-80 bg-card border-l border-border p-4 overflow-y-auto text-center text-muted-foreground">
                 Select a node to edit its properties
               </div>
             )}

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '../../utils';
 import { Badge } from './badge';
+import { ChevronLeft, ChevronRight, Shield } from 'lucide-react';
 
 interface SidebarProps {
   className?: string;
@@ -8,9 +9,44 @@ interface SidebarProps {
 }
 
 export function Sidebar({ className, children }: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(false);
+  
   return (
-    <div className={cn('w-64 border-r border-border h-full overflow-y-auto bg-card flex flex-col', className)}>
-      {children}
+    <div className="flex h-full">
+      {/* Main sidebar content */}
+      <div 
+        className={cn(
+          'border-r border-border h-full bg-card flex flex-col transition-all duration-300 ease-in-out overflow-hidden', 
+          collapsed ? 'w-12' : 'w-64',
+          className
+        )}
+      >
+        {collapsed ? (
+          // Collapsed view - show only minimal interface
+          <div className="flex flex-col h-full">
+            <div className="p-2 border-b border-border flex justify-center">
+              <Shield size={20} className="text-primary" />
+            </div>
+            <div className="flex-1"></div>
+          </div>
+        ) : (
+          // Expanded view - show full content
+          <>{children}</>
+        )}
+      </div>
+      
+      {/* Toggle button */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className="h-10 w-6 -ml-3 mt-2 z-10 bg-primary text-primary-foreground rounded-r-md flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30"
+        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+      >
+        {collapsed ? (
+          <ChevronRight size={14} />
+        ) : (
+          <ChevronLeft size={14} />
+        )}
+      </button>
     </div>
   );
 }

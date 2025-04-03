@@ -1,4 +1,5 @@
 import React, { useState, useEffect, SVGProps } from 'react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Input } from '../ui/input';
 import { FormField, FormLabel } from '../ui/form-field';
 import { GuardProfileNode, FilterNodeData, MessageLogNodeData, ManualApprovalNodeData, ChainNodeData } from './index';
@@ -29,6 +30,7 @@ interface PropertyPanelProps {
 const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled = false }) => {
   // We start with unknown type because the node data can be of different types
   const [localData, setLocalData] = useState<any>(node.data);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
   
   // Reset local data when the selected node changes (including type changes)
   useEffect(() => {
@@ -681,25 +683,41 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node, onChange, disabled 
   };
 
   return (
-    <div className="property-panel h-full overflow-y-auto border-l border-border">
-      {/* Header with node type indicator */}
-      <div className={`sticky top-0 z-10 px-4 py-3 border-b ${colorClasses.borderColor} ${colorClasses.bgColor} flex items-center gap-2`}>
-        <div className={`w-3 h-3 rounded-full ${colorClasses.textColor} ring-2 ring-current opacity-80`} />
-        <h3 className={`text-sm font-medium ${colorClasses.textColor}`}>
-          {node.type.charAt(0).toUpperCase() + node.type.slice(1)} Documentation
-        </h3>
-      </div>
-      
-      {/* Documentation only content */}
-      {renderDocumentation()}
-      
-      {/* Footer with optional debug info */}
-      <div className="mt-auto p-2 border-t border-border text-xs text-muted-foreground">
-        <div className="flex items-center justify-between">
-          <div>Node ID: {node.id.substring(0, 8)}</div>
-          <div>Type: {node.type}</div>
+    <div className={`property-panel h-full border-l border-border flex ${collapsed ? 'w-12' : 'w-80'} transition-all duration-200`}>
+      {/* Collapse toggle button */}
+      <button 
+        onClick={() => setCollapsed(!collapsed)}
+        className="flex-shrink-0 w-12 h-full bg-background hover:bg-muted flex flex-col items-center justify-center border-r border-border text-muted-foreground hover:text-foreground"
+      >
+        {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        <div className="text-xs mt-2 font-medium tracking-wide [writing-mode:vertical-lr] rotate-180">
+          {collapsed ? 'EXPAND' : 'COLLAPSE'}
         </div>
-      </div>
+      </button>
+      
+      {/* Content panel - only shown when expanded */}
+      {!collapsed && (
+        <div className="flex-1 h-full overflow-y-auto">
+          {/* Header with node type indicator */}
+          <div className={`sticky top-0 z-10 px-4 py-3 border-b ${colorClasses.borderColor} ${colorClasses.bgColor} flex items-center gap-2`}>
+            <div className={`w-3 h-3 rounded-full ${colorClasses.textColor} ring-2 ring-current opacity-80`} />
+            <h3 className={`text-sm font-medium ${colorClasses.textColor}`}>
+              {node.type.charAt(0).toUpperCase() + node.type.slice(1)} Documentation
+            </h3>
+          </div>
+          
+          {/* Documentation only content */}
+          {renderDocumentation()}
+          
+          {/* Footer with optional debug info */}
+          <div className="mt-auto p-2 border-t border-border text-xs text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <div>Node ID: {node.id.substring(0, 8)}</div>
+              <div>Type: {node.type}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
