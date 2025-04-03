@@ -14,6 +14,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges
 } from '@xyflow/react';
+import { GitMerge } from 'lucide-react';
 import type { 
   Node, 
   Edge,
@@ -539,11 +540,33 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
   return (
     <ReactFlowProvider>
       <div className="guard-profile-visual-builder h-[600px] w-full flex flex-col">
-        <div className="text-center py-2 bg-card border-b border-border">
-          <h3 className="font-medium">Guard Profile: Message Processing Layer</h3>
-          <p className="text-xs text-muted-foreground">
-            Configure how messages flow between MCP Servers and your application
-          </p>
+        <div className="px-4 py-3 bg-card border-b border-border flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <GitMerge size={16} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-medium leading-tight">Guard Profile: Message Processing Layer</h3>
+              <p className="text-xs text-muted-foreground">
+                Configure how messages flow between MCP Servers and your application
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500/40"></div>
+              <span>Input</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-primary/20 border border-primary/40"></div>
+              <span>Guard Profile</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-indigo-500/20 border border-indigo-500/40"></div>
+              <span>Output</span>
+            </div>
+          </div>
         </div>
         
         <div className="flex flex-1 overflow-hidden">
@@ -624,15 +647,19 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                 // Create completely fresh node array
                 const newNodes = [inputNode, outputNode, interceptorNode];
                 
-                // Create completely fresh edge array
+                // Create completely fresh edge array with enhanced styling
                 const newEdges = [
                   {
                     id: `edge-input-interceptor`,
                     source: 'node-input',
                     target: newNodeId,
                     animated: true,
+                    style: { strokeWidth: 2, stroke: '#10b981' }, // emerald-500
                     markerEnd: {
                       type: MarkerType.ArrowClosed,
+                      color: '#10b981', // emerald-500
+                      width: 20,
+                      height: 20,
                     },
                   },
                   {
@@ -640,8 +667,12 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                     source: newNodeId,
                     target: 'node-output',
                     animated: true,
+                    style: { strokeWidth: 2, stroke: '#6366f1' }, // indigo-500
                     markerEnd: {
                       type: MarkerType.ArrowClosed,
+                      color: '#6366f1', // indigo-500
+                      width: 20,
+                      height: 20,
                     },
                   }
                 ];
@@ -688,7 +719,20 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
               nodesConnectable={!readOnly}
               elementsSelectable={!readOnly}
             >
-              <Background color="#5252528f" />
+              <Background variant="dots" gap={12} size={1} color="#5252528f" />
+              
+              {/* Visual indication of flow zones */}
+              <div className="absolute inset-0 z-[-1] flex pointer-events-none">
+                {/* Input zone (left side) */}
+                <div className="w-1/4 h-full bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-emerald-950/10 dark:to-transparent" />
+                
+                {/* Middle zone (guard profile) */}
+                <div className="w-1/2 h-full bg-gradient-to-b from-transparent via-primary/5 to-transparent dark:from-transparent dark:via-primary/10 dark:to-transparent" />
+                
+                {/* Output zone (right side) */}
+                <div className="w-1/4 h-full bg-gradient-to-l from-indigo-50/30 to-transparent dark:from-indigo-950/10 dark:to-transparent" />
+              </div>
+              
               <Controls />
             </ReactFlow>
           </div>
