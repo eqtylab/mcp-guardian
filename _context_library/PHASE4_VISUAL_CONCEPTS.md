@@ -147,6 +147,86 @@ The Server Collection Relationship Diagram visualizes connections between MCP Se
 3. **Connection Management**:
    - Add connections via the table interface below
    - Dropdown selectors for available servers and profiles
+
+## Container-Based Chain Node Visualization
+
+The improved Chain node visualization uses a container metaphor to clearly show the relationship between a Chain interceptor and its children.
+
+### Visual Appearance
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ Guard Profile Visual Builder                              [JSON ⇄]  │
+├─────────────────────────────────────────────────────────────────────┤
+│ ┌────────┐                                         ┌─────────────┐  │
+│ │        │                                         │ Properties  │  │
+│ │Toolbox │    ┌─────────────── Chain Interceptor ─────────────┐ │  │
+│ │        │    │                                                │ │  │
+│ │ Filter │    │  ┌────────────┐        ┌────────────┐         │ │  │
+│ │        │    │  │ Filter     │        │ MessageLog │         │ │  │
+│ │ Log    │    │  │ Direction: │───────▶│ Level:     │───────▶ │ │  │
+│ │        │    │  │ Inbound    │        │ Info       │         │ │  │
+│ │ Manual │    │  └────────────┘        └────────────┘         │ │  │
+│ │ Approval│   │                                                │ │  │
+│ │        │    └────────────────────────────────────────────────┘ │  │
+│ │ Chain  │                                                        │  │
+│ │        │                                                        │  │
+│ └────────┘                                                        │  │
+│                                                                   │  │
+│                                                                   │  │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+### Container Visualization States
+
+#### Expanded View (above)
+- Shows all child nodes with sequence arrows
+- Full details of each interceptor
+- Visually groups nodes into a logical unit
+- Clear boundaries to show what's in/out of the chain
+
+#### Collapsed View
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ Guard Profile Visual Builder                              [JSON ⇄]  │
+├─────────────────────────────────────────────────────────────────────┤
+│ ┌────────┐                                         ┌─────────────┐  │
+│ │        │                                         │ Properties  │  │
+│ │Toolbox │    ┌─────────────── Chain Interceptor [Expand] ─────┐   │
+│ │        │    │ Contains: Filter → MessageLog                   │   │
+│ │ Filter │    └────────────────────────────────────────────────┘   │
+│ │        │                                                          │
+│ │ Log    │                                                          │
+│ │        │                                                          │
+│ │ Manual │                                                          │
+│ │ Approval│                                                         │
+│ │        │                                                          │
+│ │ Chain  │                                                          │
+│ │        │                                                          │
+│ └────────┘                                                          │
+│                                                                     │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Interaction Patterns
+
+1. **Container Management**:
+   - Drag to reposition the entire container
+   - Resize handles to adjust container boundaries
+   - Collapse/expand toggle for space management
+
+2. **Child Node Management**:
+   - Drag nodes into container to add to chain
+   - Drag nodes within container to reorder sequence
+   - Drag nodes out of container to remove from chain
+   - Connect nodes within container to establish sequence
+
+3. **Visual Feedback**:
+   - Highlight container when hovering to indicate it's a unit
+   - Show drop targets when dragging nodes
+   - Preview sequence changes during drag operations
+   - Color coding to match node types
    - Validation to prevent invalid connections
    - Visual feedback for connection status
 

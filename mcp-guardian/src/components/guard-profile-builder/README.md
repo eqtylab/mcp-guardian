@@ -100,6 +100,39 @@ The interceptor toolbox is a **critical element** for successful UX:
 - Preserve sidebar state across interactions
 - Maintain balance between information visibility and canvas space
 
+## Chain Node Container Visualization
+
+The Chain node requires special handling as a container for other interceptors. This container-based approach provides a clearer mental model than simple node connections:
+
+```
+┌─────────────────── Chain Interceptor ───────────────────┐
+│                                                          │
+│   ┌──────────────┐      ┌──────────────┐                │
+│   │              │      │              │                │
+│   │  Filter      │ ──▶  │  MessageLog  │ ──▶  [Output]  │
+│   │  Direction   │      │  Level: Info │                │
+│   │              │      │              │                │
+│   └──────────────┘      └──────────────┘                │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Key Benefits
+
+1. **Visual Containment**: Clear boundaries showing which nodes belong to the chain
+2. **Hierarchical Representation**: Proper visualization of parent-child relationships
+3. **Sequence Clarity**: Obvious execution order of interceptors in the chain
+4. **Space Management**: Collapsible containers to manage complex flows
+5. **Intuitive Interaction**: Natural drag-and-drop behavior for adding/removing nodes
+
+### Implementation Approach
+
+- Custom node renderer for container behavior
+- Group selection and dragging support
+- Container-aware layout for proper spacing
+- Collapse/expand functionality for space management
+- Special handling for nesting (chains within chains)
+
 ## Future Enhancements
 
 - Add animated flow indicators to visualize message movement

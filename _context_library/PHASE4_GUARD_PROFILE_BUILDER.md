@@ -99,6 +99,55 @@ Key responsibilities:
 - Keep visual representation and data model in sync
 - Provide JSON/visual toggle functionality
 
+### Container-Based Chain Visualization
+
+In the improved implementation, Chain nodes will be visualized as containers that wrap their child nodes, providing a clearer mental model of the relationship.
+
+```tsx
+interface ChainContainerNodeProps {
+  data: ChainNodeData;
+  selected: boolean;
+  id: string;
+  children: React.ReactNode;
+}
+
+const ChainContainerNode: React.FC<ChainContainerNodeProps> = ({
+  data,
+  selected,
+  id,
+  children
+}) => {
+  const [collapsed, setCollapsed] = useState(false);
+  
+  return (
+    <div className={`chain-container ${selected ? 'selected' : ''} ${collapsed ? 'collapsed' : ''}`}>
+      <div className="chain-header">
+        <h3>Chain Interceptor</h3>
+        <div className="chain-controls">
+          <span className="interceptor-count">{data.chain.length} interceptors</span>
+          <button onClick={() => setCollapsed(!collapsed)}>
+            {collapsed ? 'Expand' : 'Collapse'}
+          </button>
+        </div>
+      </div>
+      
+      {!collapsed && (
+        <div className="chain-content">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+Key features:
+- Visual container with distinct styling to indicate containment
+- Header with title, metadata, and controls
+- Collapsible for managing visual complexity
+- Clear sequence visualization for child nodes
+- Support for dragging nodes in/out to modify chain composition
+
 ### InterceptorNode
 
 ```tsx

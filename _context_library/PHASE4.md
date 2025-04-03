@@ -133,6 +133,7 @@ Phase 4 is structured into five main stages, with detailed tasks for each stage.
    - [x] Implement collapsible sidebar navigation for improved space utilization
    - [/] Add validation and error handling for connections (in progress)
    - [/] Enhance the user experience with hover states and tooltips (in progress)
+   - [/] Implement container-based Chain node visualization (in progress)
 
 2. **Server Collection Relationship Diagram**
    - [ ] Create visual graph representation of collections

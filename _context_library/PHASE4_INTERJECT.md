@@ -4,6 +4,107 @@
 
 This interject addresses a critical need to optimize MCP Guardian's desktop application experience, specifically focusing on responsive design patterns appropriate for a macOS desktop application. Unlike web applications that rely heavily on scrolling, desktop applications must prioritize efficient use of viewport space with minimal scrolling requirements.
 
+# INTERJECT: Container-Based Chain Node Visualization
+
+## Overview
+
+This interject outlines an important UX enhancement for the Guard Profile Builder: implementing a container-based visualization for Chain nodes that better communicates the hierarchical relationship between a Chain interceptor and its child nodes.
+
+## Current Implementation Limitations
+
+The current Chain node visualization has several UX limitations:
+- Chain nodes appear as regular nodes connected to children via edges
+- No visual containment to indicate which nodes belong to a chain
+- Sequence understanding relies solely on edge connections
+- Poor scalability for complex chains with many interceptors
+- No clear visual differentiation between chain and non-chain relationships
+
+## Proposed Container-Based Visualization
+
+We propose redesigning Chain nodes as visual containers that wrap their child interceptors:
+
+1. **Visual Container**:
+   - Chain nodes rendered as container boxes with distinct styling
+   - Child nodes visually contained within parent boundaries
+   - Clear header with title, count of nodes, and collapse/expand controls
+   - Sequence indicators (arrows, numbers) to show execution order
+
+2. **Improved Interaction Model**:
+   - Drag-and-drop nodes into/out of containers to add/remove from chain
+   - Rearranging nodes within container adjusts sequence
+   - Collapsing containers to manage visual complexity
+   - Resizing containers to accommodate varying numbers of children
+
+3. **Enhanced Visual Hierarchy**:
+   - Support for nested chains (chains containing other chains)
+   - Visual styling to reinforce parent-child relationships
+   - Clearer mental model of message flow through the system
+
+## Technical Implementation Approach
+
+1. **React Flow Customization**:
+   - Custom node renderer for container behavior
+   - Group handling for selection and dragging
+   - Custom edge rendering for sequence visualization
+   - Container-aware layout algorithms
+
+2. **Visual Design Elements**:
+   - Container border with distinctive styling (dashed/colored)
+   - Header area with controls and metadata
+   - Background shading to reinforce containment
+   - Sequence indicators between child nodes
+
+3. **State Management Considerations**:
+   - Track container expansion state
+   - Maintain child node positions relative to container
+   - Handle nested container hierarchies
+
+## Visual Example (Mockup)
+
+```
+┌─────────────────── Chain Interceptor ───────────────────┐
+│                                                          │
+│   ┌──────────────┐      ┌──────────────┐                │
+│   │              │      │              │                │
+│   │  Filter      │ ──▶  │  MessageLog  │ ──▶  [Output]  │
+│   │  Direction   │      │  Level: Info │                │
+│   │              │      │              │                │
+│   └──────────────┘      └──────────────┘                │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+```
+
+## Implementation Plan
+
+1. **Research Phase**:
+   - Investigate React Flow container capabilities
+   - Explore alternative approaches if native containment isn't supported
+   - Prototype container behavior with custom node renderers
+
+2. **Design Phase**:
+   - Define visual design for containers (borders, headers, backgrounds)
+   - Create mockups for collapsed and expanded states
+   - Design interaction patterns for adding/removing nodes from chains
+
+3. **Implementation Phase**:
+   - Develop custom container node component
+   - Implement container-aware layout algorithms
+   - Create specialized drag-and-drop handlers
+   - Update conversion functions to maintain backward compatibility
+
+4. **Testing Phase**:
+   - Validate with complex chain structures
+   - Test nested chains
+   - Verify conversion to/from JSON remains accurate
+
+## Benefits
+
+1. **Clearer Mental Model**: Users immediately understand chain relationships
+2. **Better Organization**: Complex flows remain organized and comprehensible
+3. **Enhanced Usability**: More intuitive interaction with chain structures
+4. **Improved Scalability**: Better handling of complex chains
+5. **Reduced Visual Noise**: Ability to collapse chains reduces visual complexity
+
 ## Core Principles for Desktop Responsive Design
 
 1. **Viewport Optimization**
