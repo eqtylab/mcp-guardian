@@ -511,3 +511,35 @@ code {
 .cyber-card-glow-hover:hover {
   box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4);
 }
+
+/* Fix React Flow control buttons for dark mode compatibility */
+.react-flow__controls {
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.react-flow__controls button {
+  background-color: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-flow__controls button:hover {
+  background-color: var(--color-muted);
+}
+
+.react-flow__controls button svg {
+  fill: var(--color-foreground);
+  color: var(--color-foreground);
+}
+
+.react-flow__controls button path {
+  fill: var(--color-foreground);
+  stroke: var(--color-foreground);
+}

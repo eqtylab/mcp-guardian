@@ -726,6 +726,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
               nodesDraggable={!readOnly}
               nodesConnectable={!readOnly}
               elementsSelectable={!readOnly}
+              className="bg-background"
             >
               <Background variant="dots" gap={16} size={0.5} color="#52525230" />
               
