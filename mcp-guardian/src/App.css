@@ -543,3 +543,16 @@ code {
   fill: var(--color-foreground);
   stroke: var(--color-foreground);
 }
+
+/* Fix React Flow node backgrounds for dark mode */
+.react-flow {
+  --xy-node-background-color-default: var(--color-background) !important;
+  --xy-node-color-default: var(--color-foreground) !important;
+  --xy-node-border-radius: 0.5rem;
+  --xy-node-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.dark .react-flow__node {
+  background-color: var(--color-background) !important;
+  color: var(--color-foreground) !important;
+}
