@@ -441,7 +441,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                   // Create a completely fresh state with just input and output, preserving positions
                   const inputNode = {
                     id: "node-input",
-                    type: "input",
+                    type: "Input",
                     position: currentNodes["node-input"] || { x: 100, y: 100 },
                     data: { type: "Input" },
                     draggable: true,
@@ -449,7 +449,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
 
                   const outputNode = {
                     id: "node-output",
-                    type: "output",
+                    type: "Output",
                     position: currentNodes["node-output"] || { x: 500, y: 100 },
                     data: { type: "Output" },
                     draggable: true,
@@ -463,7 +463,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                     | GuardProfileChainNodeData;
 
                   switch (type) {
-                    case "filter":
+                    case "Filter":
                       nodeData = {
                         type: "Filter",
                         filter_logic: {
@@ -473,18 +473,18 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                         non_match_action: "drop",
                       } as GuardProfileFilterNodeData;
                       break;
-                    case "messagelog":
+                    case "MessageLog":
                       nodeData = {
                         type: "MessageLog",
                         log_level: "Info",
                       } as GuardProfileMessageLogNodeData;
                       break;
-                    case "manualapproval":
+                    case "ManualApproval":
                       nodeData = {
                         type: "ManualApproval",
                       } as GuardProfileManualApprovalNodeData;
                       break;
-                    case "chain":
+                    case "Chain":
                       nodeData = {
                         type: "Chain",
                         chain: [] as Array<MessageInterceptorGuardConfig>,

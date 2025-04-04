@@ -18,7 +18,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
   // Add input node (static)
   nodes.push({
     id: "node-input",
-    type: "input", // Custom node type for input
+    type: "Input", // Custom node type for input
     position: { x: 100, y: 100 },
     data: { type: "Input" } as GuardProfileInputRepresentationNodeData,
     draggable: true, // Make input node draggable
@@ -53,7 +53,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
     // Add output node (static)
     nodes.push({
       id: "node-output",
-      type: "output", // Custom node type for output
+      type: "Output", // Custom node type for output
       position: { x: 500, y: 100 },
       data: { type: "Output" } as GuardProfileOutputRepresentationNodeData,
       draggable: true, // Make output node draggable
@@ -81,7 +81,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
     const chainNodeId = "node-chain";
     nodes.push({
       id: chainNodeId,
-      type: "chain",
+      type: "Chain",
       position: { x: 300, y: 100 },
       data: {
         type: "Chain",
@@ -135,7 +135,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
     // Add output node (static)
     nodes.push({
       id: "node-output",
-      type: "output", // Custom node type for output
+      type: "Output", // Custom node type for output
       position: { x: 500, y: 100 },
       data: { type: "Output" } as GuardProfileOutputRepresentationNodeData,
       draggable: true, // Make output node draggable
@@ -176,7 +176,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
 export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile => {
   // Helper function to extract valid MessageInterceptorGuardConfig from node data
   const getInterceptorFromNode = (node: Node): MessageInterceptorGuardConfig => {
-    if (node.type === "filter") {
+    if (node.type === "Filter") {
       const data = node.data as GuardProfileFilterNodeData;
       return {
         type: "Filter",
@@ -184,19 +184,19 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
         match_action: data.match_action,
         non_match_action: data.non_match_action,
       };
-    } else if (node.type === "messagelog") {
+    } else if (node.type === "MessageLog") {
       const data = node.data as GuardProfileMessageLogNodeData;
       return {
         type: "MessageLog",
         log_level: data.log_level,
       };
-    } else if (node.type === "manualapproval") {
-      // ManualApprovalGuardConfig is Record<string, never>
+    } else if (node.type === "ManualApproval") {
       return {
         type: "ManualApproval",
       } as MessageInterceptorGuardConfig;
     } else {
       // Default fallback - should never happen with proper validation
+      // we should create an error node
       return {
         type: "MessageLog",
         log_level: "Info",
@@ -205,7 +205,7 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
   };
 
   // Filter out static input/output nodes
-  const interceptorNodes = nodes.filter((node) => node.type !== "input" && node.type !== "output");
+  const interceptorNodes = nodes.filter((node) => node.type !== "Input" && node.type !== "Output");
 
   // Find non-static nodes (actual interceptors)
   if (interceptorNodes.length === 0) {
@@ -221,7 +221,7 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
   // Handle case with only a single interceptor node (non-chain)
   if (interceptorNodes.length === 1) {
     const node = interceptorNodes[0];
-    if (node.type !== "chain") {
+    if (node.type !== "Chain") {
       return {
         primary_message_interceptor: getInterceptorFromNode(node),
       };
@@ -229,7 +229,7 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
   }
 
   // Find the chain node
-  const chainNode = interceptorNodes.find((node) => node.type === "chain");
+  const chainNode = interceptorNodes.find((node) => node.type === "Chain");
   if (!chainNode) {
     // If no chain node but we have multiple interceptors, use the first one as primary
     const firstNode = interceptorNodes[0];
@@ -260,9 +260,9 @@ export const convertFlowToProfile = (nodes: Node[], edges: Edge[]): GuardProfile
     const nextNode = nodes.find((node) => node.id === nextNodeId);
 
     // Skip if next node is the output node
-    if (nextNode && nextNode.type === "output") break;
+    if (nextNode && nextNode.type === "Output") break;
 
-    if (nextNode && nextNode.type !== "chain" && nextNode.type !== "input" && nextNode.type !== "output") {
+    if (nextNode && nextNode.type !== "Chain" && nextNode.type !== "Input" && nextNode.type !== "Output") {
       // Extract the interceptor data based on node type
       const interceptor = getInterceptorFromNode(nextNode);
       chainInterceptors.push(interceptor);

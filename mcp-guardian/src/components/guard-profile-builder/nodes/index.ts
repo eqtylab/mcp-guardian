@@ -34,10 +34,9 @@ export type GuardProfileNode =
   | GuardProfileOutputRepresentationNode;
 
 export const guardProfileReactFlowNodeTypes: NodeTypes = {
-  filter: FilterNode,
-  chain: ChainNode,
-  messagelog: MessageLogNode,
-  manualapproval: ManualApprovalNode,
-  inputRepresentation: InputRepresentationNode,
-  outputRepresentation: OutputRepresentationNode,
+  Filter: FilterNode,
+  Chain: ChainNode,
+  MessageLog: MessageLogNode,
+  Input: InputRepresentationNode,
+  Output: OutputRepresentationNode,
 };
