@@ -287,7 +287,7 @@ const FilterNode = ({ data, selected, id }: GuardProfileFilterNodeProps) => {
             <div className="grid grid-cols-2 gap-x-2">
               {/* WE CAN NOT USE THIS SELECT ANY LONGER */}
               {/* CompactSelect is deprecated */}
-              {/* look at way messagelog node works */}
+              {/* look at way MessageLog node works */}
               {/* 
               export type FilterActionGuardConfig = "send" | "drop" | { "intercept": MessageInterceptorGuardConfig };
                */}

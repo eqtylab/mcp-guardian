@@ -130,7 +130,7 @@
 //               // Dispatch event for adding a new node to this container
 //               const event = new CustomEvent("addNodeToContainer", {
 //                 detail: {
-//                   nodeType: "messagelog", // Default to adding a messagelog node
+//                   nodeType: "MessageLog", // Default to adding a MessageLog node
 //                   position: { x: 50, y: 50 }, // Default position within container
 //                   containerId: id,
 //                   containerData: chainData,

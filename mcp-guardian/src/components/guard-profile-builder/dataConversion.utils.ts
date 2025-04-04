@@ -30,7 +30,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
     const nodeId = "node-primary";
     nodes.push({
       id: nodeId,
-      type: profile.primary_message_interceptor.type.toLowerCase(),
+      type: profile.primary_message_interceptor.type,
       position: { x: 300, y: 100 },
       data: { ...profile.primary_message_interceptor } as
         | GuardProfileFilterNodeData
@@ -109,7 +109,7 @@ export const convertProfileToFlow = (profile: GuardProfile): { nodes: Node[]; ed
       // Create node for this interceptor with proper typing
       nodes.push({
         id: nodeId,
-        type: interceptor.type.toLowerCase(),
+        type: interceptor.type,
         position: { x: 300, y: 250 + index * 150 },
         data: { ...interceptor } as
           | GuardProfileFilterNodeData

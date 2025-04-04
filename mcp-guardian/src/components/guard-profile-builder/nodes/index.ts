@@ -37,6 +37,7 @@ export const guardProfileReactFlowNodeTypes: NodeTypes = {
   Filter: FilterNode,
   Chain: ChainNode,
   MessageLog: MessageLogNode,
+  ManualApproval: ManualApprovalNode,
   Input: InputRepresentationNode,
   Output: OutputRepresentationNode,
 };
