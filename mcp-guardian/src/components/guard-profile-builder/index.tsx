@@ -56,7 +56,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
 
   // Setup the flow state
   const [nodes, setNodes, onNodesChange] = useNodesState<GuardProfileNode>([]); // the hook casts it into Node[]
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedNode, setSelectedNode] = useState<GuardProfileNode | null>(null);
 
   // We'll use a more stable approach than forcing re-renders with changing keys
@@ -166,7 +166,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
           }
         }
         return true;
-      });
+      }) as NodeChange<GuardProfileNode>[];
 
       // Use the built-in handler
       onNodesChange(filteredChanges);
@@ -240,7 +240,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
         | GuardProfileManualApprovalNodeData
         | GuardProfileChainNodeData,
     ) => {
-      setNodes((nds) => nds.map((node) => (node.id === nodeId ? { ...node, data } : node)));
+      setNodes((nds) => nds.map((node) => (node.id === nodeId ? { ...node, data } : node)) as GuardProfileNode[]);
       setTimeout(updateProfile, 0);
     },
     [setNodes, updateProfile],
@@ -282,7 +282,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
             },
             match_action: "send",
             non_match_action: "drop",
-          };
+          } as GuardProfileFilterNodeData;
           break;
         case "MessageLog":
           nodeData = {
@@ -290,15 +290,15 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
             log_level: "Info",
           } as GuardProfileMessageLogNodeData;
           break;
-        case "manualapproval":
+        case "ManualApproval":
           nodeData = {
             type: "ManualApproval",
           } as GuardProfileManualApprovalNodeData;
           break;
-        case "chain":
+        case "Chain":
           nodeData = {
             type: "Chain",
-            chain: [],
+            chain: [] as Array<MessageInterceptorGuardConfig>,
           } as GuardProfileChainNodeData;
           break;
         default:
@@ -487,7 +487,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
                     case "chain":
                       nodeData = {
                         type: "Chain",
-                        chain: [],
+                        chain: [] as Array<MessageInterceptorGuardConfig>,
                       } as GuardProfileChainNodeData;
                       break;
                     default:
