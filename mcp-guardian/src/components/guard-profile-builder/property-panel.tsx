@@ -253,7 +253,7 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node }) => {
 
             {/* Configuration tip */}
             <div className="bg-primary/10 rounded-lg p-4 border border-primary/30 mb-5">
-              <div className="flex items-center gap-2 mb-1 text-primary-foreground">
+              <div className="flex items-center gap-2 mb-1 text-muted-foreground">
                 <svg
                   width="16"
                   height="16"
@@ -268,15 +268,11 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node }) => {
                   <line x1="12" y1="16" x2="12" y2="12" />
                   <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                <span className="font-medium text-sm">Configuration Tip</span>
+                <span className="font-medium text-sm text-muted-foreground">Configuration Tip</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Configure this interceptor using the form fields below. Select different nodes in the diagram to edit
                 their respective settings.
-              </p>
-              <p className="text-xs text-muted-foreground mt-2 pt-2 border-t border-primary/20">
-                <strong>NEW:</strong> Node configuration is now available directly in the nodes. Click the dropdown
-                button in each node to access configuration options.
               </p>
             </div>
 
@@ -361,37 +357,39 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node }) => {
         <div className="mb-6">{renderInfo()}</div>
 
         {/* Info about in-node configuration */}
-        <div className="border-t border-border -mx-4 px-4 py-4 bg-muted/30">
-          <div className="flex items-center gap-2 mb-2">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-primary"
-            >
-              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-              <path d="M12 16v.01" />
-              <path d="M12 8v4" />
-            </svg>
-            <h4 className="text-sm font-medium text-primary">In-Node Configuration</h4>
-          </div>
-          <p className="text-sm text-muted-foreground mb-3">
-            This interceptor can be configured directly in the node. Click the dropdown button in the node to expand it
-            and access configuration options.
-          </p>
-          <div className="bg-background/50 border border-border rounded-md p-3 text-xs">
-            <div className="font-medium mb-1">Configuration Tips:</div>
-            <ul className="pl-4 list-disc space-y-1 text-muted-foreground">
-              <li>Click the chevron icon to expand/collapse the node configuration</li>
-              <li>Changes apply immediately - no need to save</li>
-              <li>Complex conditions can only be edited in JSON view</li>
-              <li>Use the node toolbox to add new interceptors</li>
-            </ul>
+        <div className="p-4">
+          <div className="border-t border-border -mx-4 px-4 py-4 bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-primary"
+              >
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                <path d="M12 16v.01" />
+                <path d="M12 8v4" />
+              </svg>
+              <h4 className="text-sm font-medium text-primary">In-Node Configuration</h4>
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">
+              This interceptor can be configured directly in the node. Click the dropdown button in the node to expand
+              it and access configuration options.
+            </p>
+            <div className="bg-background/50 border border-border rounded-md p-3 text-xs">
+              <div className="font-medium mb-1">Configuration Tips:</div>
+              <ul className="pl-4 list-disc space-y-1 text-muted-foreground">
+                <li>Click the chevron icon to expand/collapse the node configuration</li>
+                <li>Changes apply immediately - no need to save</li>
+                <li>Complex conditions can only be edited in JSON view</li>
+                <li>Use the node toolbox to add new interceptors</li>
+              </ul>
+            </div>
           </div>
         </div>
       </>
@@ -408,17 +406,25 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node }) => {
         className="flex-shrink-0 w-12 h-full bg-background hover:bg-muted flex flex-col items-center justify-center border-r border-border text-muted-foreground hover:text-foreground"
       >
         {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-        <div className="text-xs mt-2 font-medium tracking-wide [writing-mode:vertical-lr] rotate-180">
-          {collapsed ? "SEE DOCUMENTATION" : "HIDE DOCUMENTATION"}
+        <div className="text-xs mt-2 font-medium tracking-wide [writing-mode:vertical-rl] rotate-180">
+          {collapsed ? "INFO" : "HIDE"}
         </div>
       </button>
 
       {/* Content panel - only shown when expanded */}
       {!collapsed && (
         <div className="flex-1 h-full overflow-y-auto">
-          {/* Header with node type indicator */}
+          {/* Header with  debug info */}
+          <div className="mt-auto p-4 border-t border-border text-xs text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <div>Node ID: {node.id.substring(0, 8)}</div>
+              <div>Type: {node.type}</div>
+            </div>
+          </div>
+
+          {/* Documentation header with node type indicator */}
           <div
-            className={`sticky top-0 z-10 px-4 py-3 border-b ${colorClasses.borderColor} ${colorClasses.bgColor} flex items-center gap-2`}
+            className={`px-4 py-3 border-b ${colorClasses.borderColor} ${colorClasses.bgColor} flex items-center gap-2`}
           >
             <div className={`w-3 h-3 rounded-full ${colorClasses.textColor} ring-2 ring-current opacity-80`} />
             <h3 className={`text-sm font-medium ${colorClasses.textColor}`}>
@@ -428,14 +434,6 @@ const PropertyPanel: React.FC<PropertyPanelProps> = ({ node }) => {
 
           {/* Documentation only content */}
           {renderDocumentation()}
-
-          {/* Footer with optional debug info */}
-          <div className="mt-auto p-2 border-t border-border text-xs text-muted-foreground">
-            <div className="flex items-center justify-between">
-              <div>Node ID: {node.id.substring(0, 8)}</div>
-              <div>Type: {node.type}</div>
-            </div>
-          </div>
         </div>
       )}
     </div>

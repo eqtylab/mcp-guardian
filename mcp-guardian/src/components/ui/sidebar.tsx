@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { cn } from '../../utils';
-import { Badge } from './badge';
-import { ChevronLeft, ChevronRight, Shield } from 'lucide-react';
+import React, { useState } from "react";
+import { cn } from "../../utils";
+import { Badge } from "./badge";
+import { ChevronLeft, ChevronRight, Shield } from "lucide-react";
 
 interface SidebarProps {
   className?: string;
@@ -10,15 +10,15 @@ interface SidebarProps {
 
 export function Sidebar({ className, children }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
-  
+
   return (
     <div className="h-full relative">
       {/* Main sidebar content */}
-      <div 
+      <div
         className={cn(
-          'border-r border-border h-full bg-card flex flex-col transition-all duration-300 ease-in-out overflow-hidden absolute left-0 top-0', 
-          collapsed ? 'w-12' : 'w-64',
-          className
+          "border-r border-border h-full bg-card flex flex-col transition-all duration-300 ease-in-out overflow-hidden absolute left-0 top-0",
+          collapsed ? "w-12" : "w-64",
+          className,
         )}
       >
         {collapsed ? (
@@ -34,28 +34,23 @@ export function Sidebar({ className, children }: SidebarProps) {
           <>{children}</>
         )}
       </div>
-      
+
       {/* Toggle button - positioned outside the sidebar */}
       <button
         onClick={() => setCollapsed(!collapsed)}
         className={cn(
-          "absolute top-2 h-10 w-6 z-20 bg-primary text-primary-foreground rounded-r-md flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30",
-          collapsed ? "left-12" : "left-64"
+          "cursor-pointer absolute bottom-2 h-10 w-6 z-20 bg-primary text-primary-foreground rounded-r-md flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30",
+          collapsed ? "left-12" : "left-64",
         )}
         title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
-        {collapsed ? (
-          <ChevronRight size={14} />
-        ) : (
-          <ChevronLeft size={14} />
-        )}
+        {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
-      
+
       {/* Spacer div to create room for content based on sidebar width */}
-      <div className={cn(
-        "transition-all duration-300 ease-in-out inline-block h-full",
-        collapsed ? "w-12" : "w-64"
-      )}></div>
+      <div
+        className={cn("transition-all duration-300 ease-in-out inline-block h-full", collapsed ? "w-12" : "w-64")}
+      ></div>
     </div>
   );
 }
@@ -92,10 +87,10 @@ export function SidebarItem({ active, children, onClick }: SidebarItemProps) {
   return (
     <div
       className={cn(
-        'px-2 py-1.5 text-sm rounded-md cursor-pointer flex items-center',
+        "px-2 py-1.5 text-sm rounded-md cursor-pointer flex items-center",
         active
-          ? 'bg-accent text-accent-foreground font-medium'
-          : 'text-foreground hover:bg-accent/50 hover:text-accent-foreground'
+          ? "bg-accent text-accent-foreground font-medium"
+          : "text-foreground hover:bg-accent/50 hover:text-accent-foreground",
       )}
       onClick={onClick}
     >
@@ -105,17 +100,9 @@ export function SidebarItem({ active, children, onClick }: SidebarItemProps) {
 }
 
 export function SidebarHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="p-3 border-b border-border">
-      {children}
-    </div>
-  );
+  return <div className="p-3 border-b border-border">{children}</div>;
 }
 
 export function SidebarFooter({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mt-auto p-3 border-t border-border">
-      {children}
-    </div>
-  );
+  return <div className="mt-auto p-3 border-t border-border">{children}</div>;
 }
