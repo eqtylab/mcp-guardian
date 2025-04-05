@@ -230,22 +230,6 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
     [setEdges, updateProfile],
   );
 
-  // Handle property changes
-  const handlePropertyChange = useCallback(
-    (
-      nodeId: string,
-      data:
-        | GuardProfileFilterNodeData
-        | GuardProfileMessageLogNodeData
-        | GuardProfileManualApprovalNodeData
-        | GuardProfileChainNodeData,
-    ) => {
-      setNodes((nds) => nds.map((node) => (node.id === nodeId ? { ...node, data } : node)) as GuardProfileNode[]);
-      setTimeout(updateProfile, 0);
-    },
-    [setNodes, updateProfile],
-  );
-
   // Handle dropping a node from toolbox
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -620,9 +604,7 @@ const GuardProfileVisualBuilder: React.FC<GuardProfileVisualBuilderProps> = ({
             </ReactFlow>
           </div>
 
-          <div className="flex">
-            {selectedNode && <PropertyPanel node={selectedNode} onChange={handlePropertyChange} disabled={readOnly} />}
-          </div>
+          <div className="flex">{selectedNode && <PropertyPanel node={selectedNode} />}</div>
         </div>
       </div>
     </ReactFlowProvider>

@@ -22,17 +22,15 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
   const coreServers = mcpServers.filter((server) => server.namespace === "mcp-guardian");
   const customServers = mcpServers.filter((server) => server.namespace !== "mcp-guardian");
 
-  const filteredCoreServers = coreServers.filter(server => 
-    `${server.namespace}.${server.name}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  
-  const filteredCustomServers = customServers.filter(server => 
-    `${server.namespace}.${server.name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCoreServers = coreServers.filter((server) =>
+    `${server.namespace}.${server.name}`.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const selectedServer = mcpServers.find(
-    server => `${server.namespace}.${server.name}` === selectedServerId
+  const filteredCustomServers = customServers.filter((server) =>
+    `${server.namespace}.${server.name}`.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  const selectedServer = mcpServers.find((server) => `${server.namespace}.${server.name}` === selectedServerId);
 
   const importClaudeConfig = async () => {
     try {
@@ -54,7 +52,7 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
             <Button
               onClick={() => setIsCreateDialogOpen(true)}
               variant="ghost"
-              size="icon"
+              size="sm"
               title="Create a new MCP server"
             >
               <Plus size={18} />
@@ -123,9 +121,9 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
                 New Server
               </Button>
             )}
-            <Button 
-              onClick={importClaudeConfig} 
-              variant="secondary" 
+            <Button
+              onClick={importClaudeConfig}
+              variant="secondary"
               title="Import Claude's default configuration"
               className="font-medium shadow-sm border-[1px] border-[rgba(0,0,0,0.1)]"
             >
@@ -155,11 +153,10 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
           <div className="text-center p-12 border border-dashed rounded-lg">
             <ServerIcon size={48} className="mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-medium mb-2">No server selected</h3>
-            <p className="text-muted-foreground mb-4">Select a server from the sidebar to view and edit its configuration</p>
-            <Button
-              onClick={() => setIsCreateDialogOpen(true)}
-              variant="success"
-            >
+            <p className="text-muted-foreground mb-4">
+              Select a server from the sidebar to view and edit its configuration
+            </p>
+            <Button onClick={() => setIsCreateDialogOpen(true)} variant="success">
               <Plus size={16} className="mr-2" />
               Create New Server
             </Button>
@@ -170,12 +167,12 @@ const McpServersPage = ({ mcpServers, updateMcpServers }: McpServersPageProps) =
       <CreateMcpServerDialog
         isOpen={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
-        onSuccess={async (newServerId) => {
+        onSuccess={async () => {
           setIsCreateDialogOpen(false);
           await updateMcpServers();
-          if (newServerId) {
-            setSelectedServerId(newServerId);
-          }
+          // if (newServerId) {
+          //   setSelectedServerId(newServerId);
+          // }
         }}
       />
     </div>

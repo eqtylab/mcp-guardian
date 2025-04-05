@@ -17,12 +17,12 @@ const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: S
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const filteredCollections = serverCollections.filter(collection => 
-    `${collection.namespace}.${collection.name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCollections = serverCollections.filter((collection) =>
+    `${collection.namespace}.${collection.name}`.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const selectedCollection = serverCollections.find(
-    collection => `${collection.namespace}.${collection.name}` === selectedCollectionId
+    (collection) => `${collection.namespace}.${collection.name}` === selectedCollectionId,
   );
 
   return (
@@ -35,7 +35,7 @@ const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: S
             <Button
               onClick={() => setIsCreateDialogOpen(true)}
               variant="ghost"
-              size="icon"
+              size="sm"
               title="Create a new server collection"
             >
               <Plus size={18} />
@@ -108,11 +108,10 @@ const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: S
           <div className="text-center p-12 border border-dashed rounded-lg">
             <Library size={48} className="mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-medium mb-2">No collection selected</h3>
-            <p className="text-muted-foreground mb-4">Select a collection from the sidebar to view and edit its configuration</p>
-            <Button
-              onClick={() => setIsCreateDialogOpen(true)}
-              variant="success"
-            >
+            <p className="text-muted-foreground mb-4">
+              Select a collection from the sidebar to view and edit its configuration
+            </p>
+            <Button onClick={() => setIsCreateDialogOpen(true)} variant="success">
               <Plus size={16} className="mr-2" />
               Create New Collection
             </Button>
@@ -123,12 +122,12 @@ const ServerCollectionsPage = ({ serverCollections, updateServerCollections }: S
       <CreateServerCollectionDialog
         isOpen={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
-        onSuccess={async (newCollectionId) => {
+        onSuccess={async () => {
           setIsCreateDialogOpen(false);
           await updateServerCollections();
-          if (newCollectionId) {
-            setSelectedCollectionId(newCollectionId);
-          }
+          // if (newCollectionId) {
+          //   setSelectedCollectionId(newCollectionId);
+          // }
         }}
       />
     </div>

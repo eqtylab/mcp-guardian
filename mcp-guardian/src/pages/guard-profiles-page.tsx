@@ -20,17 +20,17 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
   const coreProfiles = guardProfiles.filter((profile) => profile.namespace === "mcp-guardian");
   const customProfiles = guardProfiles.filter((profile) => profile.namespace !== "mcp-guardian");
 
-  const filteredCoreProfiles = coreProfiles.filter(profile => 
-    `${profile.namespace}.${profile.profile_name}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  
-  const filteredCustomProfiles = customProfiles.filter(profile => 
-    `${profile.namespace}.${profile.profile_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCoreProfiles = coreProfiles.filter((profile) =>
+    `${profile.namespace}.${profile.profile_name}`.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // Find the selected profile 
+  const filteredCustomProfiles = customProfiles.filter((profile) =>
+    `${profile.namespace}.${profile.profile_name}`.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  // Find the selected profile
   const selectedProfile = guardProfiles.find(
-    profile => `${profile.namespace}.${profile.profile_name}` === selectedProfileId
+    (profile) => `${profile.namespace}.${profile.profile_name}` === selectedProfileId,
   );
 
   return (
@@ -43,7 +43,7 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
             <Button
               onClick={() => setIsCreateDialogOpen(true)}
               variant="ghost"
-              size="icon"
+              size="sm"
               title="Create a new guard profile"
             >
               <Plus size={16} strokeWidth={2.5} />
@@ -133,12 +133,10 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
           <div className="text-center p-12 border border-dashed rounded-lg">
             <Shield size={48} strokeWidth={1.5} className="mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-medium mb-2">No profile selected</h3>
-            <p className="text-muted-foreground mb-4">Select a profile from the sidebar to view and edit its configuration</p>
-            <Button
-              onClick={() => setIsCreateDialogOpen(true)}
-              variant="success"
-              size="sm"
-            >
+            <p className="text-muted-foreground mb-4">
+              Select a profile from the sidebar to view and edit its configuration
+            </p>
+            <Button onClick={() => setIsCreateDialogOpen(true)} variant="success" size="sm">
               <Plus size={14} strokeWidth={2.5} className="mr-1" />
               Create New Profile
             </Button>
@@ -149,12 +147,12 @@ const GuardProfilesPage = ({ guardProfiles, updateGuardProfiles }: GuardProfiles
       <CreateGuardProfileDialog
         isOpen={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
-        onSuccess={async (newProfileId) => {
+        onSuccess={async () => {
           setIsCreateDialogOpen(false);
           await updateGuardProfiles();
-          if (newProfileId) {
-            setSelectedProfileId(newProfileId);
-          }
+          // if (newProfileId) {
+          //   setSelectedProfileId(newProfileId);
+          // }
         }}
       />
     </div>

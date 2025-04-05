@@ -67,7 +67,7 @@ export function SidebarSection({ title, count, children }: SidebarSectionProps) 
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{title}</h3>
         {count !== undefined && (
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="primary" className="text-xs">
             {count}
           </Badge>
         )}
