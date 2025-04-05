@@ -2,14 +2,14 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { notifyError, notifySuccess } from "./toast";
 
-import { 
-  CyberDialog as Dialog, 
-  CyberDialogContent as DialogContent, 
-  CyberDialogHeader as DialogHeader, 
-  CyberDialogTitle as DialogTitle, 
+import {
+  CyberDialog as Dialog,
+  CyberDialogContent as DialogContent,
+  CyberDialogHeader as DialogHeader,
+  CyberDialogTitle as DialogTitle,
   CyberDialogClose as DialogClose,
   CyberDialogBody as DialogBody,
-  CyberDialogFooter as DialogFooter
+  CyberDialogFooter as DialogFooter,
 } from "./ui/cyber-dialog";
 import { Button } from "./ui/button";
 import { FormField, FormLabel } from "./ui/form-field";
@@ -27,38 +27,38 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
   const [namespace, setNamespace] = useState("");
   const [name, setName] = useState("");
   const [isValid, setIsValid] = useState(true);
-  
+
   // Default to a valid ManualApproval profile which is the simplest type
   const [config, setConfig] = useState(
     JSON.stringify(
       {
         primary_message_interceptor: {
-          type: "ManualApproval"
-        }
+          type: "ManualApproval",
+        },
       },
       null,
-      2
-    )
+      2,
+    ),
   );
-  
+
   // Let's add template loading buttons to help users
   const setTemplate = (templateType: string) => {
     let newConfig;
-    
-    switch(templateType) {
+
+    switch (templateType) {
       case "ManualApproval":
         newConfig = {
           primary_message_interceptor: {
-            type: "ManualApproval"
-          }
+            type: "ManualApproval",
+          },
         };
         break;
       case "MessageLog":
         newConfig = {
           primary_message_interceptor: {
             type: "MessageLog",
-            log_level: "Info"
-          }
+            log_level: "Info",
+          },
         };
         break;
       case "Filter":
@@ -66,29 +66,29 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
           primary_message_interceptor: {
             type: "Filter",
             filter_logic: {
-              direction: "inbound"
+              direction: "inbound",
             },
             match_action: "send",
-            non_match_action: "drop"
-          }
+            non_match_action: "drop",
+          },
         };
         break;
       case "Chain":
         newConfig = {
           primary_message_interceptor: {
             type: "Chain",
-            chain: []
-          }
+            chain: [],
+          },
         };
         break;
       default:
         newConfig = {
           primary_message_interceptor: {
-            type: "ManualApproval"
-          }
+            type: "ManualApproval",
+          },
         };
     }
-    
+
     setConfig(JSON.stringify(newConfig, null, 2));
   };
 
@@ -160,41 +160,41 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
                 placeholder="e.g., my-profile"
               />
             </FormField>
-            
+
             <FormField>
               <FormLabel htmlFor="profile-template">Choose a Template</FormLabel>
               <div className="flex flex-wrap gap-2 mt-2 mb-3">
-                <Button 
-                  type="button" 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="accent"
                   onClick={() => setTemplate("ManualApproval")}
                   title="Require manual approval for all messages"
                 >
                   Manual Approval
                 </Button>
-                <Button 
-                  type="button" 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="accent"
                   onClick={() => setTemplate("MessageLog")}
                   title="Log all messages for debugging"
                 >
                   Message Log
                 </Button>
-                <Button 
-                  type="button" 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="accent"
                   onClick={() => setTemplate("Filter")}
                   title="Filter messages based on conditions"
                 >
                   Filter
                 </Button>
-                <Button 
-                  type="button" 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="accent"
                   onClick={() => setTemplate("Chain")}
                   title="Chain multiple interceptors together"
                 >
@@ -227,11 +227,7 @@ const CreateGuardProfileDialog = ({ isOpen, onClose, onSuccess }: CreateGuardPro
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button 
-            variant="success" 
-            onClick={handleCreate}
-            disabled={!isValid || !namespace || !name}
-          >
+          <Button variant="success" onClick={handleCreate} disabled={!isValid || !namespace || !name}>
             Create Profile
           </Button>
         </DialogFooter>
