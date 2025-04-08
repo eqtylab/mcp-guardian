@@ -3,6 +3,7 @@ pub mod filter;
 pub mod manual_approval;
 pub mod message_log;
 pub mod profiles;
+pub mod py_func;
 
 use std::{fs, sync::Arc};
 
@@ -30,6 +31,7 @@ pub enum MessageInterceptorGuardConfig {
     Filter(filter::FilterGuardConfig),
     MessageLog(message_log::MessageLogGuardConfig),
     ManualApproval(manual_approval::ManualApprovalGuardConfig),
+    PyFunc(py_func::PyFuncGuardConfig),
 }
 
 impl MessageInterceptorGuardConfig {
@@ -48,6 +50,9 @@ impl MessageInterceptorGuardConfig {
                 config.try_into_message_interceptor(mcp_server_name)?
             }
             MessageInterceptorGuardConfig::ManualApproval(config) => {
+                config.try_into_message_interceptor(mcp_server_name)?
+            }
+            MessageInterceptorGuardConfig::PyFunc(config) => {
                 config.try_into_message_interceptor(mcp_server_name)?
             }
         };

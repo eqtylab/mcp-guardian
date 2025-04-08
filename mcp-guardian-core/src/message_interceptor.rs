@@ -2,6 +2,7 @@ pub mod chain;
 pub mod filter;
 pub mod manual_approval;
 pub mod message_log;
+pub mod py_func;
 
 use anyhow::Result;
 use async_trait::async_trait;

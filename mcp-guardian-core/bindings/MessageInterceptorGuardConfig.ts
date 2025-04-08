@@ -3,5 +3,6 @@ import type { ChainGuardConfig } from "./ChainGuardConfig";
 import type { FilterGuardConfig } from "./FilterGuardConfig";
 import type { ManualApprovalGuardConfig } from "./ManualApprovalGuardConfig";
 import type { MessageLogGuardConfig } from "./MessageLogGuardConfig";
+import type { PyFuncGuardConfig } from "./PyFuncGuardConfig";
 
-export type MessageInterceptorGuardConfig = { "type": "Chain" } & ChainGuardConfig | { "type": "Filter" } & FilterGuardConfig | { "type": "MessageLog" } & MessageLogGuardConfig | { "type": "ManualApproval" } & ManualApprovalGuardConfig;
+export type MessageInterceptorGuardConfig = { "type": "Chain" } & ChainGuardConfig | { "type": "Filter" } & FilterGuardConfig | { "type": "MessageLog" } & MessageLogGuardConfig | { "type": "ManualApproval" } & ManualApprovalGuardConfig | { "type": "PyFunc" } & PyFuncGuardConfig;
