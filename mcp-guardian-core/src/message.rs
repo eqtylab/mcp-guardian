@@ -1,14 +1,15 @@
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(strum::Display, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, strum::Display)]
+#[serde(rename_all = "snake_case")]
 pub enum MessageDirection {
-    #[strum(serialize = "outbound")]
     Outbound,
-    #[strum(serialize = "inbound")]
     Inbound,
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, strum::Display)]
+#[serde(rename_all = "snake_case")]
 pub enum MessageType {
     Request,
     ResponseSuccess,
@@ -17,7 +18,7 @@ pub enum MessageType {
     Unknown,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
     pub type_: MessageType,
     pub raw_msg: Value,

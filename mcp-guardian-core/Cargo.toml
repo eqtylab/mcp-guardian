@@ -13,6 +13,7 @@ dirs = { workspace = true }
 env_logger = { workspace = true }
 humantime = { workspace = true }
 log = { workspace = true }
+rustpython-vm = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 strum = { workspace = true }

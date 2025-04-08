@@ -1,0 +1,37 @@
+{
+    "primary_message_interceptor": {
+      "type": "Filter",
+      "filter_logic": {
+        "and": [
+          {
+            "request_method": "tools/call"
+          },
+          {
+            "direction": "outbound"
+          }
+        ]
+      },
+      "match_action": {
+        "intercept": {
+          "type": "PyFunc",
+          "code_lines": [
+            "import sys",
+            "",
+            "# msg_direction is 'inbound' or 'outbound'",
+            "msg_direction = sys.argv[0]",
+            "# msg_type is 'request', 'response_success', 'response_failure', 'notification', or 'unknown'",
+            "msg_type = sys.argv[1]",
+            "# raw_msg is the raw message content (json string)",
+            "raw_msg = sys.argv[2]",
+            "",
+            "if 'get_current_time' in raw_msg:",
+            "    action = 'drop'",
+            "else:",
+            "    action = 'send'",
+            "    outbound_msg = raw_msg"
+          ]
+        }
+      },
+      "non_match_action": "send"
+    }
+  }
