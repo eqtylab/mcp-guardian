@@ -58,7 +58,7 @@ impl MessageInterceptor for PyFuncInterceptor {
                         .get_item("outbound_msg", vm)
                         .map_err(|_| anyhow!("Failed to get 'outbound_msg' from Python scope."))?;
                     let Some(outbound_msg) = outbound_msg.downcast_ref::<PyStr>() else {
-                        bail!("Failed to downcast 'msg' to PyStr.");
+                        bail!("Failed to downcast 'outbound_msg' to PyStr.");
                     };
 
                     let message = Message {
