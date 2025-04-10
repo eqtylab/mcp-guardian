@@ -58,7 +58,7 @@ impl MessageInterceptor for ManualApprovalInterceptor {
                             "result": {
                                 "content": [
                                     {
-                                        "text": "Acess approval was denied.",
+                                        "text": "Access approval was denied.",
                                         "type": "text"
                                     }
                                 ],
