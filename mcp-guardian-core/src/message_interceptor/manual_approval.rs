@@ -1,11 +1,12 @@
 use anyhow::Result;
 use async_trait::async_trait;
+use serde_json::json;
 use tokio::time::{sleep, Duration};
 use uuid::Uuid;
-use MessageInterceptorAction::{Drop, Send};
+use MessageInterceptorAction::{Return, Send};
 
 use crate::{
-    message::{Message, MessageDirection},
+    message::{Message, MessageDirection, MessageType},
     message_approval::{request_approval, MessageStatus},
     message_interceptor::{MessageInterceptor, MessageInterceptorAction},
 };
@@ -43,7 +44,30 @@ impl MessageInterceptor for ManualApprovalInterceptor {
                     return Ok(Send(message));
                 }
                 MessageStatus::Denied | MessageStatus::Unknown => {
-                    return Ok(Drop);
+                    let id = message
+                        .raw_msg
+                        .get("id")
+                        .ok_or_else(|| anyhow::anyhow!("Request message did not contain an ID"))?
+                        .to_owned();
+
+                    let return_message = Message {
+                        type_: MessageType::ResponseSuccess,
+                        raw_msg: json!({
+                            "id": id,
+                            "jsonrpc": "2.0",
+                            "result": {
+                                "content": [
+                                    {
+                                        "text": "Acess approval was denied.",
+                                        "type": "text"
+                                    }
+                                ],
+                                "isError": false
+                            }
+                        }),
+                    };
+
+                    return Ok(Return(return_message));
                 }
             }
         }

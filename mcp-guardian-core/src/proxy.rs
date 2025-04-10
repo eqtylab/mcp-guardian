@@ -13,7 +13,7 @@ use crate::{
     message::Message,
     message_interceptor::{
         MessageInterceptor,
-        MessageInterceptorAction::{Drop, Send},
+        MessageInterceptorAction::{Drop, Return, Send},
     },
 };
 
@@ -128,6 +128,14 @@ pub async fn proxy_mcp_server(
                         }
                     }
                     Ok(Drop) => {}
+                    Ok(Return(message)) => {
+                        if let Err(e) = writeln!(io::stdout(), "{}", message.raw_msg) {
+                            log::error!("Failed to write to stdout: {e}");
+                        }
+                        if let Err(e) = io::stdout().flush() {
+                            log::error!("Failed to flush stdout: {e}");
+                        }
+                    }
                     Err(e) => {
                         log::error!("Failed to intercept outbound message properly: {e}");
                     }
@@ -161,6 +169,14 @@ pub async fn proxy_mcp_server(
                         }
                     }
                     Ok(Drop) => {}
+                    Ok(Return(message)) => {
+                        if let Err(e) = writeln!(io::stdout(), "{}", message.raw_msg) {
+                            log::error!("Failed to write to stdout: {e}");
+                        }
+                        if let Err(e) = io::stdout().flush() {
+                            log::error!("Failed to flush stdout: {e}");
+                        }
+                    }
                     Err(e) => {
                         log::error!("Failed to intercept outbound message properly: {e}");
                     }

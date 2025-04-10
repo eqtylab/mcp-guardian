@@ -16,6 +16,7 @@ use crate::message::{
 pub enum MessageInterceptorAction {
     Send(Message),
     Drop,
+    Return(Message),
 }
 
 #[async_trait]
