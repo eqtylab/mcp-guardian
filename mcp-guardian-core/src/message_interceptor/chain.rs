@@ -7,7 +7,7 @@ use crate::{
     message::{Message, MessageDirection},
     message_interceptor::{
         MessageInterceptor, MessageInterceptorAction,
-        MessageInterceptorAction::{Drop, Send},
+        MessageInterceptorAction::{Drop, Return, Send},
     },
 };
 pub struct ChainInterceptor {
@@ -35,6 +35,7 @@ impl MessageInterceptor for ChainInterceptor {
             match interceptor.intercept_message(direction, message).await? {
                 Send(new_message) => message = new_message,
                 Drop => return Ok(Drop),
+                Return(return_message) => return Ok(Return(return_message)),
             }
         }
 
