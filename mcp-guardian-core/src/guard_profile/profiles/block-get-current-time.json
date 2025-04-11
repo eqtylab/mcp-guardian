@@ -16,6 +16,7 @@
                 "type": "PyFunc",
                 "code_lines": [
                     "import sys",
+                    "import mcp_guardian",
                     "",
                     "# msg_direction is 'inbound' or 'outbound'",
                     "msg_direction = sys.argv[0]",
@@ -25,10 +26,9 @@
                     "raw_msg = sys.argv[2]",
                     "",
                     "if 'get_current_time' in raw_msg:",
-                    "    action = 'drop'",
+                    "    mcp_guardian.drop()",
                     "else:",
-                    "    action = 'send'",
-                    "    outbound_msg = raw_msg"
+                    "    mcp_guardian.send(raw_msg)"
                 ]
             }
         },
