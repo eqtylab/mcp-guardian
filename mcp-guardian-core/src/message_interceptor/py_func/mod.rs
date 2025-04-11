@@ -1,3 +1,5 @@
+pub mod sys_mcp_guardian;
+
 use anyhow::{anyhow, bail, Result};
 use async_trait::async_trait;
 use rustpython_vm::{builtins::PyStr, Interpreter, Settings};
@@ -39,6 +41,8 @@ impl MessageInterceptor for PyFuncInterceptor {
         settings.argv = args;
 
         let action = Interpreter::without_stdlib(settings).enter(|vm| {
+            sys_mcp_guardian::add_to_vm(vm)?;
+
             let scope = vm.new_scope_with_builtins();
 
             vm.run_code_string(scope.clone(), &code, "<embedded>".to_owned())
@@ -46,24 +50,24 @@ impl MessageInterceptor for PyFuncInterceptor {
 
             let action = scope
                 .globals
-                .get_item("action", vm)
+                .get_item("__action", vm)
                 .map_err(|_| anyhow!("Failed to get 'action' from Python scope."))?;
             let Some(action) = action.downcast_ref::<PyStr>() else {
                 bail!("Failed to downcast 'action' to PyStr.");
             };
             let action = match action.as_str() {
                 "send" => {
-                    let outbound_msg = scope
+                    let msg = scope
                         .globals
-                        .get_item("outbound_msg", vm)
-                        .map_err(|_| anyhow!("Failed to get 'outbound_msg' from Python scope."))?;
-                    let Some(outbound_msg) = outbound_msg.downcast_ref::<PyStr>() else {
-                        bail!("Failed to downcast 'outbound_msg' to PyStr.");
+                        .get_item("__msg", vm)
+                        .map_err(|_| anyhow!("Failed to get '__msg' from Python scope."))?;
+                    let Some(msg) = msg.downcast_ref::<PyStr>() else {
+                        bail!("Failed to downcast '__msg' to PyStr.");
                     };
 
                     let message = Message {
                         type_: message.type_,
-                        raw_msg: serde_json::from_str(outbound_msg.as_str())?,
+                        raw_msg: serde_json::from_str(msg.as_str())?,
                     };
 
                     Send(message)
