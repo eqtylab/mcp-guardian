@@ -31,7 +31,10 @@ const GuardProfileComponent = ({
   hideCollapsible = false,
 }: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
-  const [configText, setConfigText] = useState("");
+  // Initialize with the actual profile data to prevent Monaco from seeing empty string
+  const [configText, setConfigText] = useState(() => 
+    JSON.stringify(guard_profile, null, 2)
+  );
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Update local state when the profile changes from props

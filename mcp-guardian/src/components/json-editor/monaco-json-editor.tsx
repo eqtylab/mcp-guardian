@@ -197,12 +197,14 @@ const MonacoJsonEditor: React.FC<MonacoJsonEditorProps> = ({
       validateJson(editor.getValue());
     });
 
-    // Set initial validation state (ensure we have valid JSON)
+    // Set initial validation state (only default to {} if truly empty)
     let initialValue = value;
     if (!initialValue || initialValue.trim() === "") {
       initialValue = "{}";
-      // Update parent component's state with valid JSON
-      onChange(initialValue);
+      // Only update parent state if we actually need to change it
+      if (value !== initialValue) {
+        onChange(initialValue);
+      }
     }
 
     // Validate and ensure proper formatting
