@@ -32,26 +32,16 @@ const GuardProfileComponent = ({
 }: GuardProfileComponentProps) => {
   const { namespace, profile_name, guard_profile } = namedGuardProfile;
   const [configText, setConfigText] = useState("");
-  const [currentGuardProfile, setCurrentGuardProfile] = useState<GuardProfile>(guard_profile);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Update local state when the profile changes from props
   useEffect(() => {
-    // Reset all state completely when profile identity changes
-    setCurrentGuardProfile(guard_profile);
     setConfigText(JSON.stringify(guard_profile, null, 2));
   }, [guard_profile, namespace, profile_name]);
 
-
-  // Update profile when JSON text changes
+  // Handle JSON editor changes
   const handleJsonEditorChange = (newText: string) => {
     setConfigText(newText);
-    try {
-      const parsedProfile = JSON.parse(newText) as GuardProfile;
-      setCurrentGuardProfile(parsedProfile);
-    } catch (e) {
-      // JSON is invalid, keep current profile unchanged
-    }
   };
 
   const handleDelete = async () => {
@@ -66,11 +56,12 @@ const GuardProfileComponent = ({
 
   const handleSave = async () => {
     try {
-      // Save the current guard profile object
+      // Parse and validate JSON before saving
+      const parsedProfile = JSON.parse(configText) as GuardProfile;
       await invoke("set_guard_profile", {
         namespace,
         name: profile_name,
-        guardProfile: currentGuardProfile,
+        guardProfile: parsedProfile,
       });
       onUpdateSuccess();
       notifySuccess(`Profile "${namespace}.${profile_name}" updated`);
