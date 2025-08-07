@@ -1,5 +1,4 @@
 import React from "react";
-import { Shield } from "lucide-react";
 import { cn } from "../utils";
 import { ThemeToggle } from "./theme-toggle";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
@@ -82,8 +81,7 @@ export default function HeaderNavigation({
       <div className="h-1 w-full dark:bg-zinc-900 bg-zinc-200"></div>
       <header className="flex h-14 items-center justify-between dark:bg-zinc-900 bg-zinc-200 px-6 border-b border-border">
         {/* Left section - Logo */}
-        <div className="flex items-center gap-2">
-          <Shield size={20} className="text-primary" />
+        <div className="flex items-center">
           <span className="dark:text-white text-zinc-800 font-medium">MCP Guardian</span>
         </div>
 
