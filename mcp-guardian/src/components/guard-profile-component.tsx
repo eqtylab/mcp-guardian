@@ -3,14 +3,12 @@ import { invoke } from "@tauri-apps/api/core";
 import { NamedGuardProfile } from "../bindings/NamedGuardProfile";
 import { GuardProfile } from "../bindings/GuardProfile";
 import { notifyError, notifySuccess } from "./toast";
-import { ChevronDown, ChevronRight, Save, Trash2, Shield, Code, Webhook } from "lucide-react";
+import { ChevronDown, ChevronRight, Save, Trash2, Shield, Code } from "lucide-react";
 import ConfirmDialog from "./confirm-dialog";
 import MonacoJsonEditor from "./json-editor/monaco-json-editor";
-import GuardProfileVisualBuilder from "./guard-profile-builder";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import guardProfileSchema from "./json-editor/schemas/guard_profile_schema.json";
 
 interface GuardProfileComponentProps {
@@ -36,7 +34,6 @@ const GuardProfileComponent = ({
   const [configText, setConfigText] = useState("");
   const [currentGuardProfile, setCurrentGuardProfile] = useState<GuardProfile>(guard_profile);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [currentTab, setCurrentTab] = useState<string>("visual");
 
   // Update local state when the profile changes from props
   useEffect(() => {
@@ -45,20 +42,15 @@ const GuardProfileComponent = ({
     setConfigText(JSON.stringify(guard_profile, null, 2));
   }, [guard_profile, namespace, profile_name]);
 
-  // Update JSON text when the visual builder changes the profile
-  const handleVisualBuilderChange = (updatedProfile: GuardProfile) => {
-    setCurrentGuardProfile(updatedProfile);
-    setConfigText(JSON.stringify(updatedProfile, null, 2));
-  };
 
-  // Update visual builder when JSON text changes
+  // Update profile when JSON text changes
   const handleJsonEditorChange = (newText: string) => {
     setConfigText(newText);
     try {
       const parsedProfile = JSON.parse(newText) as GuardProfile;
       setCurrentGuardProfile(parsedProfile);
     } catch (e) {
-      // JSON is invalid, don't update the visual builder
+      // JSON is invalid, keep current profile unchanged
     }
   };
 
@@ -74,7 +66,7 @@ const GuardProfileComponent = ({
 
   const handleSave = async () => {
     try {
-      // Always save from the current guard profile object, which is synced with both views
+      // Save the current guard profile object
       await invoke("set_guard_profile", {
         namespace,
         name: profile_name,
@@ -91,38 +83,21 @@ const GuardProfileComponent = ({
   if (hideCollapsible) {
     return (
       <>
-        <Tabs value={currentTab} onValueChange={setCurrentTab} className="mb-4">
-          <TabsList className="grid grid-cols-2 mb-4">
-            <TabsTrigger value="visual" className="flex items-center gap-2">
-              <Webhook size={14} strokeWidth={2.5} />
-              Visual Editor
-            </TabsTrigger>
-            <TabsTrigger value="json" className="flex items-center gap-2">
-              <Code size={14} strokeWidth={2.5} />
-              JSON Editor
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="visual" className="mt-0">
-            <GuardProfileVisualBuilder
-              profile={currentGuardProfile}
-              onChange={handleVisualBuilderChange}
-              readOnly={!enableEdit}
-            />
-          </TabsContent>
-          
-          <TabsContent value="json" className="mt-0">
-            <MonacoJsonEditor
-              value={configText}
-              onChange={handleJsonEditorChange}
-              disabled={!enableEdit}
-              placeholder="Enter guard profile configuration"
-              schema={guardProfileSchema}
-              schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
-              label="Guard Profile Configuration"
-            />
-          </TabsContent>
-        </Tabs>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Code size={14} strokeWidth={2.5} className="text-colors-accent-primary" />
+            <span className="text-sm font-medium">JSON Configuration</span>
+          </div>
+          <MonacoJsonEditor
+            value={configText}
+            onChange={handleJsonEditorChange}
+            disabled={!enableEdit}
+            placeholder="Enter guard profile configuration"
+            schema={guardProfileSchema}
+            schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
+            label="Guard Profile Configuration"
+          />
+        </div>
 
         {enableEdit && (
           <div className="flex justify-end gap-4">
@@ -174,38 +149,21 @@ const GuardProfileComponent = ({
         </CardHeader>
         <CollapsibleContent>
           <CardContent className="p-4">
-            <Tabs value={currentTab} onValueChange={setCurrentTab} className="mb-4">
-              <TabsList className="grid grid-cols-2 mb-4">
-                <TabsTrigger value="visual" className="flex items-center gap-2">
-                  <Webhook size={14} strokeWidth={2.5} />
-                  Visual Editor
-                </TabsTrigger>
-                <TabsTrigger value="json" className="flex items-center gap-2">
-                  <Code size={14} strokeWidth={2.5} />
-                  JSON Editor
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="visual" className="mt-0">
-                <GuardProfileVisualBuilder
-                  profile={currentGuardProfile}
-                  onChange={handleVisualBuilderChange}
-                  readOnly={!enableEdit}
-                />
-              </TabsContent>
-              
-              <TabsContent value="json" className="mt-0">
-                <MonacoJsonEditor
-                  value={configText}
-                  onChange={handleJsonEditorChange}
-                  disabled={!enableEdit}
-                  placeholder="Enter guard profile configuration"
-                  schema={guardProfileSchema}
-                  schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
-                  label="Guard Profile Configuration"
-                />
-              </TabsContent>
-            </Tabs>
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Code size={14} strokeWidth={2.5} className="text-colors-accent-primary" />
+                <span className="text-sm font-medium">JSON Configuration</span>
+              </div>
+              <MonacoJsonEditor
+                value={configText}
+                onChange={handleJsonEditorChange}
+                disabled={!enableEdit}
+                placeholder="Enter guard profile configuration"
+                schema={guardProfileSchema}
+                schemaUri="http://mcp-guardian/schemas/guard_profile_schema.json"
+                label="Guard Profile Configuration"
+              />
+            </div>
 
             {enableEdit && (
               <div className="flex justify-end gap-4">
